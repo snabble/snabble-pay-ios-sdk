@@ -8,5 +8,5 @@
 import Foundation
 
 public struct Example {
-    public private(set) var text = "Hello, World!"
+    public private(set) static var text = "Hello, World!"
 }
