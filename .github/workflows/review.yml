@@ -1,0 +1,31 @@
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/review.yml'
+      - '.swiftlint.yml'
+      - 'Dangerfile.swift'
+      - '**/*.swift'
+
+name: Review
+jobs:
+  SDK:
+    name: Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+        with:
+          args: --strict
+
+      - name: Danger
+        uses: danger/swift@3.15.0
+        with:
+            args: -b main --failOnErrors --no-publish-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
