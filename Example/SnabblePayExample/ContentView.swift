@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  SnabblePay
+//  SnabblePayExample
 //
 //  Created by Andreas Osberghaus on 2022-12-08.
 //

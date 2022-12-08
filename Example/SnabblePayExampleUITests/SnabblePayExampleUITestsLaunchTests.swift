@@ -1,13 +1,13 @@
 //
-//  SnabblePayUITestsLaunchTests.swift
-//  SnabblePayUITests
+//  SnabblePayExampleUITestsLaunchTests.swift
+//  SnabblePayExampleUITests
 //
 //  Created by Andreas Osberghaus on 2022-12-08.
 //
 
 import XCTest
 
-final class SnabblePayUITestsLaunchTests: XCTestCase {
+final class SnabblePayExampleUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

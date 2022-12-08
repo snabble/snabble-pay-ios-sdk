@@ -1,13 +1,13 @@
 //
-//  SnabblePayUITests.swift
-//  SnabblePayUITests
+//  SnabblePayExampleUITests.swift
+//  SnabblePayExampleUITests
 //
 //  Created by Andreas Osberghaus on 2022-12-08.
 //
 
 import XCTest
 
-final class SnabblePayUITests: XCTestCase {
+final class SnabblePayExampleUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
