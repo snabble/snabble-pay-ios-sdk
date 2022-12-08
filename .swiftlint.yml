@@ -1,5 +1,6 @@
 included:
  - Sources
+ - Example/SnabblePay
 
 disabled_rules:
  - todo
