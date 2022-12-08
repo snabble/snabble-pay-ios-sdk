@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct Example {
-    public private(set) var text = "Hello, World!"
+public enum Example {
+    public private(set) static var text = "Hello, World!"
 }
