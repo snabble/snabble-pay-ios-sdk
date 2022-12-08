@@ -62,3 +62,4 @@ jobs:
         run: |
           cd Example
           bundle exec fastlane test
+          
