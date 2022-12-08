@@ -10,3 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * Initital project setup APPS-569
 * Add Example APPS-581
+
+### Updated
+* realm/SwiftLint 0.50.1 (was 0.50.0)
