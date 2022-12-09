@@ -1,0 +1,610 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */; };
+		E193765C2941E7AA001C8866 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193765B2941E7AA001C8866 /* ContentView.swift */; };
+		E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E193765D2941E7AB001C8866 /* Assets.xcassets */; };
+		E19376612941E7AB001C8866 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E19376602941E7AB001C8866 /* Preview Assets.xcassets */; };
+		E193766B2941E7AB001C8866 /* SnabblePayExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193766A2941E7AB001C8866 /* SnabblePayExampleTests.swift */; };
+		E19376752941E7AB001C8866 /* SnabblePayExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376742941E7AB001C8866 /* SnabblePayExampleUITests.swift */; };
+		E19376772941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376762941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift */; };
+		E19376862941E7CA001C8866 /* SnabblePay in Frameworks */ = {isa = PBXBuildFile; productRef = E19376852941E7CA001C8866 /* SnabblePay */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E19376672941E7AB001C8866 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E193764E2941E7AA001C8866 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E19376552941E7AA001C8866;
+			remoteInfo = SnabblePayExample;
+		};
+		E19376712941E7AB001C8866 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E193764E2941E7AA001C8866 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E19376552941E7AA001C8866;
+			remoteInfo = SnabblePayExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E19376562941E7AA001C8866 /* SnabblePayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnabblePayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleApp.swift; sourceTree = "<group>"; };
+		E193765B2941E7AA001C8866 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E193765D2941E7AB001C8866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E19376602941E7AB001C8866 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E19376662941E7AB001C8866 /* SnabblePayExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnabblePayExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E193766A2941E7AB001C8866 /* SnabblePayExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleTests.swift; sourceTree = "<group>"; };
+		E19376702941E7AB001C8866 /* SnabblePayExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnabblePayExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E19376742941E7AB001C8866 /* SnabblePayExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleUITests.swift; sourceTree = "<group>"; };
+		E19376762941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E19376832941E7C0001C8866 /* snabble-pay-ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "snabble-pay-ios-sdk"; path = ..; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E19376532941E7AA001C8866 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19376862941E7CA001C8866 /* SnabblePay in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E19376632941E7AB001C8866 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E193766D2941E7AB001C8866 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E193764D2941E7AA001C8866 = {
+			isa = PBXGroup;
+			children = (
+				E19376832941E7C0001C8866 /* snabble-pay-ios-sdk */,
+				E19376582941E7AA001C8866 /* SnabblePayExample */,
+				E19376692941E7AB001C8866 /* SnabblePayExampleTests */,
+				E19376732941E7AB001C8866 /* SnabblePayExampleUITests */,
+				E19376572941E7AA001C8866 /* Products */,
+				E19376842941E7CA001C8866 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E19376572941E7AA001C8866 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E19376562941E7AA001C8866 /* SnabblePayExample.app */,
+				E19376662941E7AB001C8866 /* SnabblePayExampleTests.xctest */,
+				E19376702941E7AB001C8866 /* SnabblePayExampleUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
+			isa = PBXGroup;
+			children = (
+				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
+				E193765B2941E7AA001C8866 /* ContentView.swift */,
+				E193765D2941E7AB001C8866 /* Assets.xcassets */,
+				E193765F2941E7AB001C8866 /* Preview Content */,
+			);
+			path = SnabblePayExample;
+			sourceTree = "<group>";
+		};
+		E193765F2941E7AB001C8866 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E19376602941E7AB001C8866 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E19376692941E7AB001C8866 /* SnabblePayExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				E193766A2941E7AB001C8866 /* SnabblePayExampleTests.swift */,
+			);
+			path = SnabblePayExampleTests;
+			sourceTree = "<group>";
+		};
+		E19376732941E7AB001C8866 /* SnabblePayExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E19376742941E7AB001C8866 /* SnabblePayExampleUITests.swift */,
+				E19376762941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift */,
+			);
+			path = SnabblePayExampleUITests;
+			sourceTree = "<group>";
+		};
+		E19376842941E7CA001C8866 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E19376552941E7AA001C8866 /* SnabblePayExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E193767A2941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExample" */;
+			buildPhases = (
+				E19376522941E7AA001C8866 /* Sources */,
+				E19376532941E7AA001C8866 /* Frameworks */,
+				E19376542941E7AA001C8866 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SnabblePayExample;
+			packageProductDependencies = (
+				E19376852941E7CA001C8866 /* SnabblePay */,
+			);
+			productName = SnabblePayExample;
+			productReference = E19376562941E7AA001C8866 /* SnabblePayExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E19376652941E7AB001C8866 /* SnabblePayExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E193767D2941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExampleTests" */;
+			buildPhases = (
+				E19376622941E7AB001C8866 /* Sources */,
+				E19376632941E7AB001C8866 /* Frameworks */,
+				E19376642941E7AB001C8866 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E19376682941E7AB001C8866 /* PBXTargetDependency */,
+			);
+			name = SnabblePayExampleTests;
+			productName = SnabblePayExampleTests;
+			productReference = E19376662941E7AB001C8866 /* SnabblePayExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E193766F2941E7AB001C8866 /* SnabblePayExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E19376802941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExampleUITests" */;
+			buildPhases = (
+				E193766C2941E7AB001C8866 /* Sources */,
+				E193766D2941E7AB001C8866 /* Frameworks */,
+				E193766E2941E7AB001C8866 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E19376722941E7AB001C8866 /* PBXTargetDependency */,
+			);
+			name = SnabblePayExampleUITests;
+			productName = SnabblePayExampleUITests;
+			productReference = E19376702941E7AB001C8866 /* SnabblePayExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E193764E2941E7AA001C8866 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					E19376552941E7AA001C8866 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					E19376652941E7AB001C8866 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = E19376552941E7AA001C8866;
+					};
+					E193766F2941E7AB001C8866 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = E19376552941E7AA001C8866;
+					};
+				};
+			};
+			buildConfigurationList = E19376512941E7AA001C8866 /* Build configuration list for PBXProject "SnabblePayExample" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E193764D2941E7AA001C8866;
+			productRefGroup = E19376572941E7AA001C8866 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E19376552941E7AA001C8866 /* SnabblePayExample */,
+				E19376652941E7AB001C8866 /* SnabblePayExampleTests */,
+				E193766F2941E7AB001C8866 /* SnabblePayExampleUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E19376542941E7AA001C8866 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19376612941E7AB001C8866 /* Preview Assets.xcassets in Resources */,
+				E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E19376642941E7AB001C8866 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E193766E2941E7AB001C8866 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E19376522941E7AA001C8866 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E193765C2941E7AA001C8866 /* ContentView.swift in Sources */,
+				E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E19376622941E7AB001C8866 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E193766B2941E7AB001C8866 /* SnabblePayExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E193766C2941E7AB001C8866 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19376772941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift in Sources */,
+				E19376752941E7AB001C8866 /* SnabblePayExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E19376682941E7AB001C8866 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E19376552941E7AA001C8866 /* SnabblePayExample */;
+			targetProxy = E19376672941E7AB001C8866 /* PBXContainerItemProxy */;
+		};
+		E19376722941E7AB001C8866 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E19376552941E7AA001C8866 /* SnabblePayExample */;
+			targetProxy = E19376712941E7AB001C8866 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E19376782941E7AB001C8866 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E19376792941E7AB001C8866 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E193767B2941E7AB001C8866 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnabblePayExample/Preview Content\"";
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E193767C2941E7AB001C8866 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnabblePayExample/Preview Content\"";
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E193767E2941E7AB001C8866 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnabblePayExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SnabblePayExample";
+			};
+			name = Debug;
+		};
+		E193767F2941E7AB001C8866 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnabblePayExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SnabblePayExample";
+			};
+			name = Release;
+		};
+		E19376812941E7AB001C8866 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SnabblePayExample;
+			};
+			name = Debug;
+		};
+		E19376822941E7AB001C8866 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 53K7JS449L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.snabble.SnabblePayExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SnabblePayExample;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E19376512941E7AA001C8866 /* Build configuration list for PBXProject "SnabblePayExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E19376782941E7AB001C8866 /* Debug */,
+				E19376792941E7AB001C8866 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E193767A2941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E193767B2941E7AB001C8866 /* Debug */,
+				E193767C2941E7AB001C8866 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E193767D2941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E193767E2941E7AB001C8866 /* Debug */,
+				E193767F2941E7AB001C8866 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E19376802941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E19376812941E7AB001C8866 /* Debug */,
+				E19376822941E7AB001C8866 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E19376852941E7CA001C8866 /* SnabblePay */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnabblePay;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E193764E2941E7AA001C8866 /* Project object */;
+}
