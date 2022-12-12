@@ -8,7 +8,12 @@
 import Foundation
 
 extension Endpoint {
-    static func token(with appIdentifier: String, appSecret: String, scope: Token.Scope = .all, onEnvironment environment: Environmentable = Environment.production) throws -> Endpoint<Token> {
+    static func token(
+        with appIdentifier: String,
+        appSecret: String,
+        scope: Token.Scope = .all,
+        onEnvironment environment: Environmentable = Environment.production
+    ) throws -> Endpoint<Token> {
         return .init(path: "/apps/token", method: .get([
             .init(name: "grant_type", value: "client_credentials"),
             .init(name: "client_id", value: appIdentifier),
