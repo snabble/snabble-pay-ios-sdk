@@ -22,9 +22,9 @@ enum Environment: Environmentable {
     case staging
     case production
 
-    var headers: [String : String]? {
+    var headers: [String: String]? {
         return [
-            "Content-Type" : "application/json"
+            "Content-Type": "application/json"
         ]
     }
 

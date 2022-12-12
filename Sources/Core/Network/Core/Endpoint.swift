@@ -7,26 +7,19 @@
 
 import Foundation
 
-protocol Endpoint<Result> {
-    associatedtype Result
+struct Endpoint<Response> {
+    let method: HTTPMethod
+    let path: String
 
-    var path: String { get }
+    let environment: Environmentable
 
-    var environment: Environmentable { get }
+    var headerFields: [String: String]?
+    var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
-    var method: HTTPMethod { get }
-    var headerFields: [String: String]? { get }
-
-    var cachePolicy: URLRequest.CachePolicy { get }
-}
-
-extension Endpoint {
-    var cachePolicy: URLRequest.CachePolicy {
-        .useProtocolCachePolicy
-    }
-
-    var environment: Environmentable {
-        Environment.development
+    public init(path: String, method: HTTPMethod, environment: Environmentable = Environment.production) {
+        self.path = path
+        self.method = method
+        self.environment = environment
     }
 }
 
@@ -58,8 +51,8 @@ extension Endpoint {
             break
         }
 
-        request.allHTTPHeaderFields = environment.headers ?? [:]
-        request.allHTTPHeaderFields?.merge(headerFields ?? [:], uniquingKeysWith: { _, new in new })
+        let headerFields = (environment.headers ?? [:]).merging(headerFields ?? [:], uniquingKeysWith: { _, new in new })
+        request.allHTTPHeaderFields = headerFields
         request.httpMethod = method.value
         request.cachePolicy = cachePolicy
 

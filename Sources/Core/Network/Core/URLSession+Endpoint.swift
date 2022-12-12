@@ -16,7 +16,7 @@ extension URLSession {
     }
 
     @available(iOS 13, watchOS 6, OSX 10.15, *)
-    func publisher(for endpoint: any Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
+    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
         dataTaskPublisher(for: endpoint.urlRequest)
             .mapError(Error.networking)
             .map(\.data)
@@ -25,7 +25,7 @@ extension URLSession {
 
     @available(iOS 13, watchOS 6, OSX 10.15, *)
         func publisher<Response: Decodable>(
-            for endpoint: any Endpoint<Response>,
+            for endpoint: Endpoint<Response>,
             using decoder: JSONDecoder = .init()
         ) -> AnyPublisher<Response, Swift.Error> {
             dataTaskPublisher(for: endpoint.urlRequest)
@@ -39,7 +39,7 @@ extension URLSession {
 
 extension URLSession {
     func dataTask(
-        for endpoint: any Endpoint<Data>,
+        for endpoint: Endpoint<Data>,
         completionHandler: @escaping (Swift.Result<Data, Swift.Error>) -> Void
     ) -> URLSessionDataTask {
         dataTask(with: endpoint.urlRequest) { data, _, error in
@@ -60,7 +60,7 @@ extension URLSession {
     }
 
     func dataTask<Response: Decodable>(
-        for endpoint: any Endpoint<Response>,
+        for endpoint: Endpoint<Response>,
         using decoder: JSONDecoder = .init(),
         completionHandler: @escaping (Swift.Result<Response, Swift.Error>) -> Void
     ) -> URLSessionDataTask {
