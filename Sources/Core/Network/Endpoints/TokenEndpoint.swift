@@ -29,7 +29,7 @@ struct Token: Decodable {
     }
 
     enum `Type`: String, Decodable {
-        case Bearer
+        case bearer = "Bearer"
     }
 
     let accessToken: String
