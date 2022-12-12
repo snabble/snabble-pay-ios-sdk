@@ -14,8 +14,10 @@ extension URLSession {
         case decoding(Swift.Error)
         case unknown(String)
     }
+}
 
-    @available(iOS 13, watchOS 6, OSX 10.15, *)
+extension URLSession {
+    @available(iOS 13, *)
     func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
         dataTaskPublisher(for: endpoint.urlRequest)
             .mapError(Error.networking)
@@ -23,7 +25,7 @@ extension URLSession {
             .eraseToAnyPublisher()
     }
 
-    @available(iOS 13, watchOS 6, OSX 10.15, *)
+    @available(iOS 13, *)
         func publisher<Response: Decodable>(
             for endpoint: Endpoint<Response>,
             using decoder: JSONDecoder = .init()
@@ -80,5 +82,21 @@ extension URLSession {
                 completionHandler(.failure(error))
             }
         }
+    }
+}
+
+@available(iOS 15.0, *)
+extension URLSession {
+    func data(for endpoint: Endpoint<Data>) async throws -> Data {
+        let (data, _) = try await self.data(for: endpoint.urlRequest)
+        return data
+    }
+
+    func object<Response: Decodable>(
+        for endpoint: Endpoint<Response>,
+        using decoder: JSONDecoder = .init()
+    ) async throws -> Response {
+        let (data, _) = try await self.data(for: endpoint.urlRequest)
+        return try decoder.decode(Response.self, from: data)
     }
 }
