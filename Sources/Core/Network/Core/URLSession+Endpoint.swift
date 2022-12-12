@@ -29,10 +29,6 @@ extension URLSession {
 }
 
 extension URLSession {
-    enum Error: Swift.Error {
-        case unknown(String)
-    }
-
     func dataTask(
         for endpoint: Endpoint<Data>,
         completionHandler: @escaping (Swift.Result<Data, Swift.Error>) -> Void
@@ -44,7 +40,7 @@ extension URLSession {
                 }
 
                 guard let data = data else {
-                    throw URLSession.Error.unknown("no data")
+                    throw URLError(.badServerResponse)
                 }
 
                 completionHandler(.success(data))
@@ -66,7 +62,7 @@ extension URLSession {
                 }
 
                 guard let data = data else {
-                    throw URLSession.Error.unknown("no data")
+                    throw URLError(.badServerResponse)
                 }
 
                 let response = try decoder.decode(Response.self, from: data)
