@@ -9,18 +9,9 @@ import Foundation
 import Combine
 
 extension URLSession {
-    enum Error: Swift.Error {
-        case networking(URLError)
-        case decoding(Swift.Error)
-        case unknown(String)
-    }
-}
-
-extension URLSession {
     @available(iOS 13, *)
-    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
+    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, URLError> {
         dataTaskPublisher(for: endpoint.urlRequest)
-            .mapError(Error.networking)
             .map(\.data)
             .eraseToAnyPublisher()
     }
@@ -31,15 +22,17 @@ extension URLSession {
             using decoder: JSONDecoder = .init()
         ) -> AnyPublisher<Response, Swift.Error> {
             dataTaskPublisher(for: endpoint.urlRequest)
-                .mapError(Error.networking)
                 .map(\.data)
                 .decode(type: Response.self, decoder: decoder)
-                .mapError(Error.decoding)
                 .eraseToAnyPublisher()
         }
 }
 
 extension URLSession {
+    enum Error: Swift.Error {
+        case unknown(String)
+    }
+
     func dataTask(
         for endpoint: Endpoint<Data>,
         completionHandler: @escaping (Swift.Result<Data, Swift.Error>) -> Void
