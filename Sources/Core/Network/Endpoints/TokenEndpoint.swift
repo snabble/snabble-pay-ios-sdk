@@ -14,12 +14,14 @@ extension Endpoint {
         scope: Token.Scope = .all,
         onEnvironment environment: Environment = .production
     ) throws -> Endpoint<Token> {
-        return .init(path: "/apps/token", method: .get([
-            .init(name: "grant_type", value: "client_credentials"),
-            .init(name: "client_id", value: appIdentifier),
-            .init(name: "client_secret", value: appSecret),
-            .init(name: "scope", value: scope.rawValue)
-        ]))
+        return .init(path: "/apps/token",
+                     method: .get([
+                        .init(name: "grant_type", value: "client_credentials"),
+                        .init(name: "client_id", value: appIdentifier),
+                        .init(name: "client_secret", value: appSecret),
+                        .init(name: "scope", value: scope.rawValue)
+                     ]),
+                     environment: environment)
     }
 }
 

@@ -8,8 +8,8 @@
 import Foundation
 
 extension Endpoint {
-    static func credentials(onEnvironment environment: Environment = .production) throws -> Endpoint<Credentials> {
-        return .init(path: "/apps/credentials", method: .get(nil))
+    static func credentials(onEnvironment environment: Environment = .production) -> Endpoint<Credentials> {
+        return .init(path: "/apps/credentials", method: .get(nil), environment: environment)
     }
 }
 
