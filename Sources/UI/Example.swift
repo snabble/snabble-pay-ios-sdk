@@ -7,6 +7,6 @@
 
 import UIKit
 
-struct Example {
+enum Example {
     static var text = "Example"
 }
