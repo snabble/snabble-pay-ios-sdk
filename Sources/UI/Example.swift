@@ -2,11 +2,11 @@
 //  Example.swift
 //  
 //
-//  Created by Andreas Osberghaus on 2022-12-06.
+//  Created by Andreas Osberghaus on 2022-12-13.
 //
 
-import Foundation
+import UIKit
 
-public struct Example {
-    public private(set) var text = "Hello, World!"
+struct Example {
+    static var text = "Example"
 }
