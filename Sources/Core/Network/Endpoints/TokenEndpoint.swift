@@ -12,7 +12,7 @@ extension Endpoint {
         with appIdentifier: String,
         appSecret: String,
         scope: Token.Scope = .all,
-        onEnvironment environment: Environmentable = Environment.production
+        onEnvironment environment: Environment = .production
     ) throws -> Endpoint<Token> {
         return .init(path: "/apps/token", method: .get([
             .init(name: "grant_type", value: "client_credentials"),

@@ -7,17 +7,7 @@
 
 import Foundation
 
-/// Protocol to which environments must conform
-protocol Environmentable {
-
-    /// The default HTTP request headers for the environment.
-    var headers: [String: String]? { get }
-
-    /// The base URL of the environment.
-    var baseURL: URL { get }
-}
-
-enum Environment: Environmentable {
+enum Environment {
     case development
     case staging
     case production
@@ -35,7 +25,7 @@ enum Environment: Environmentable {
         case .staging:
             return "https://api.snabble-staging.io"
         case .production:
-            return "https://api.snabble-production.io"
+            return "https://api.snabble.io"
         }
     }
 }

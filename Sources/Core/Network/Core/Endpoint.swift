@@ -11,12 +11,12 @@ struct Endpoint<Response> {
     let method: HTTPMethod
     let path: String
 
-    let environment: Environmentable
+    let environment: Environment
 
     var headerFields: [String: String]?
     var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
-    public init(path: String, method: HTTPMethod, environment: Environmentable = Environment.production) {
+    public init(path: String, method: HTTPMethod, environment: Environment = .production) {
         self.path = path
         self.method = method
         self.environment = environment

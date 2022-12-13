@@ -8,7 +8,7 @@
 import Foundation
 
 extension Endpoint {
-    static func credentials(with appIdentifier: String, onEnvironment environment: Environmentable = Environment.production) throws -> Endpoint<Credentials> {
+    static func credentials(with appIdentifier: String, onEnvironment environment: Environment = .production) throws -> Endpoint<Credentials> {
         let jsonObject = ["appIdentifier": appIdentifier]
         let jsonData = try JSONSerialization.data(withJSONObject: jsonObject)
         return .init(path: "/apps/credentials", method: .post(jsonData))
