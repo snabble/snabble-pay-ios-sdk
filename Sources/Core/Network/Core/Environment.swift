@@ -21,11 +21,11 @@ enum Environment {
     var baseURL: URL {
         switch self {
         case .development:
-            return "https://api.snabble-testing.io"
+            return "https://payment.snabble-testing.io"
         case .staging:
-            return "https://api.snabble-staging.io"
+            return "https://payment.snabble-staging.io"
         case .production:
-            return "https://api.snabble.io"
+            return "https://payment.snabble.io"
         }
     }
 }

@@ -26,16 +26,16 @@ final class EnvironmentTests: XCTestCase {
 
     func testDevelopmentBaseURL() throws {
         let environment: Environment = .development
-        XCTAssertEqual(environment.baseURL, "https://api.snabble-testing.io")
+        XCTAssertEqual(environment.baseURL, "https://payment.snabble-testing.io")
     }
 
     func testStagingBaseURL() throws {
         let environment: Environment = .staging
-        XCTAssertEqual(environment.baseURL, "https://api.snabble-staging.io")
+        XCTAssertEqual(environment.baseURL, "https://payment.snabble-staging.io")
     }
 
     func testProductionBaseURL() throws {
         let environment: Environment = .production
-        XCTAssertEqual(environment.baseURL, "https://api.snabble.io")
+        XCTAssertEqual(environment.baseURL, "https://payment.snabble.io")
     }
 }
