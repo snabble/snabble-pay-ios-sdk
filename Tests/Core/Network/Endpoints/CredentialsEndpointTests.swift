@@ -8,7 +8,7 @@
 import XCTest
 @testable import SnabblePayCore
 
-final class CredentialsEndpointTest: XCTestCase {
+final class CredentialsEndpointTests: XCTestCase {
     func testEndpoint() throws {
         let endpoint = Endpoint<Any>.credentials()
         XCTAssertEqual(endpoint.path, "/apps/credentials")
@@ -18,13 +18,9 @@ final class CredentialsEndpointTest: XCTestCase {
 
     func testEnvironment() throws {
         var endpoint = Endpoint<Any>.credentials(onEnvironment: .staging)
-        XCTAssertEqual(endpoint.path, "/apps/credentials")
-        XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .staging)
 
         endpoint = Endpoint<Any>.credentials(onEnvironment: .development)
-        XCTAssertEqual(endpoint.path, "/apps/credentials")
-        XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .development)
     }
 

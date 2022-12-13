@@ -9,11 +9,11 @@ import Foundation
 
 extension Endpoint {
     static func token(
-        with appIdentifier: String,
+        withAppIdentifier appIdentifier: String,
         appSecret: String,
         scope: Token.Scope = .all,
         onEnvironment environment: Environment = .production
-    ) throws -> Endpoint<Token> {
+    ) -> Endpoint<Token> {
         return .init(path: "/apps/token",
                      method: .get([
                         .init(name: "grant_type", value: "client_credentials"),
