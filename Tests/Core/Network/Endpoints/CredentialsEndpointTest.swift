@@ -27,4 +27,11 @@ final class CredentialsEndpointTest: XCTestCase {
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .development)
     }
+
+    func testDecodingCredentials() throws {
+        let credentialsData = try loadResource(filename: "credentials", withExtension: "json")
+        let credentials = try JSONDecoder().decode(Credentials.self, from: credentialsData)
+        XCTAssertEqual(credentials.appIdentifier, "1l2z79uvnKU18hJ621hDti2Q1mckTs8633HFlUz7PCG1OalckFyKf/TzJlGcOUC4WPInc+RrKCAPLc0loJCtRw==")
+        XCTAssertEqual(credentials.appSecret, "qPgwvqkVCFn+aFxljTClV7+kTe+18rOQ7Qrdp5YSethhi2X9Sp97UiDkAO3qzXgcdDi/+VazutfHxbA4SZKYWA==")
+    }
 }
