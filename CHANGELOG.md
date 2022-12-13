@@ -13,4 +13,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Network Layer APPS-588
 
 ### Updated
-* realm/SwiftLint 0.50.1 (was 0.50.0)
+* realm/SwiftLint 0.50.3 (was 0.50.0)
