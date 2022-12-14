@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "SnabblePay",
+    platforms: [
+        .iOS(.v15)
+    ],
     products: [
         .library(
             name: "SnabblePay",
@@ -31,7 +34,10 @@ let package = Package(
         .testTarget(
             name: "SnabblePayCoreTests",
             dependencies: ["SnabblePayCore"],
-            path: "Tests/Core"
+            path: "Tests/Core",
+            resources: [
+                .process("Resources")
+            ]
         ),
         .target(
             name: "SnabblePayUI",
