@@ -51,10 +51,7 @@ let package = Package(
         .testTarget(
             name: "SnabblePayUITests",
             dependencies: ["SnabblePayCore", "SnabblePayUI"],
-            path: "Tests/UI",
-            resources: [
-                .process("Resources")
-            ]
+            path: "Tests/UI"
         ),
     ]
 )
