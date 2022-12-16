@@ -6,19 +6,20 @@
 //
 
 import Foundation
+import Tagged
 
 extension Endpoint {
     static func token(
-        withAppIdentifier appIdentifier: String,
-        appSecret: String,
+        withAppIdentifier appIdentifier: Credentials.AppIdenitifer,
+        appSecret: Credentials.AppSecret,
         scope: Token.Scope = .all,
         onEnvironment environment: Environment = .production
     ) -> Endpoint<Token> {
         return .init(path: "/apps/token",
                      method: .get([
                         .init(name: "grant_type", value: "client_credentials"),
-                        .init(name: "client_id", value: appIdentifier),
-                        .init(name: "client_secret", value: appSecret),
+                        .init(name: "client_id", value: appIdentifier.rawValue),
+                        .init(name: "client_secret", value: appSecret.rawValue),
                         .init(name: "scope", value: scope.rawValue)
                      ]),
                      environment: environment)
@@ -34,7 +35,7 @@ struct Token: Decodable {
         case bearer = "Bearer"
     }
 
-    let accessToken: String
+    let accessToken: AccessToken
     let expiresIn: TimeInterval
     let scope: Scope
     let tokenType: `Type`
@@ -45,4 +46,6 @@ struct Token: Decodable {
         case scope
         case tokenType = "token_type"
     }
+
+    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
 }
