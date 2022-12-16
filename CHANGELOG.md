@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Initital project setup APPS-569
 * Add Example APPS-581
 * Network Layer APPS-588
+* Phrase Integration APPS APPS-583
 
 ### Updated
 * realm/SwiftLint 0.50.3 (was 0.50.0)

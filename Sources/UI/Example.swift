@@ -8,5 +8,5 @@
 import UIKit
 
 enum Example {
-    static var text = "Example"
+    static var text = String(localized: "SnabblePay.Example", bundle: .module)
 }
