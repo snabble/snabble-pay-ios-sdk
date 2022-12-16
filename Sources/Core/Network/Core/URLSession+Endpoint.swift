@@ -16,7 +16,6 @@ extension URLSession {
             .eraseToAnyPublisher()
     }
 
-
     func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>,
         using decoder: JSONDecoder = .init()
