@@ -8,24 +8,24 @@
 import Foundation
 import Combine
 
+@available(iOS 13, *)
 extension URLSession {
-    @available(iOS 13, *)
     func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, URLError> {
         dataTaskPublisher(for: endpoint.urlRequest)
             .map(\.data)
             .eraseToAnyPublisher()
     }
 
-    @available(iOS 13, *)
-        func publisher<Response: Decodable>(
-            for endpoint: Endpoint<Response>,
-            using decoder: JSONDecoder = .init()
-        ) -> AnyPublisher<Response, Swift.Error> {
-            dataTaskPublisher(for: endpoint.urlRequest)
-                .map(\.data)
-                .decode(type: Response.self, decoder: decoder)
-                .eraseToAnyPublisher()
-        }
+
+    func publisher<Response: Decodable>(
+        for endpoint: Endpoint<Response>,
+        using decoder: JSONDecoder = .init()
+    ) -> AnyPublisher<Response, Swift.Error> {
+        dataTaskPublisher(for: endpoint.urlRequest)
+            .map(\.data)
+            .decode(type: Response.self, decoder: decoder)
+            .eraseToAnyPublisher()
+    }
 }
 
 extension URLSession {
