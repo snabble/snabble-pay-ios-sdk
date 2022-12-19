@@ -18,6 +18,24 @@ struct NetworkManager {
         self.authenticator = Authenticator(session: session)
     }
 
+    func publisher<Response: Decodable>(
+        for endpoint: Endpoint<Response>,
+        using decoder: JSONDecoder = .init()
+    ) -> AnyPublisher<Response, Swift.Error> {
+        return authenticator.validToken()
+            .flatMap { token in
+                publisher(for: endpoint, using: decoder)
+            }
+            .tryCatch { error -> AnyPublisher<Response, Error> in
+                return authenticator.validToken(forceRefresh: true)
+                    .flatMap { token in
+                        publisher(for: endpoint, using: decoder)
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+
 //    func performRequest<Response>(with endpoint: Endpoint<Response>) -> AnyPublisher<Response, Error> {
 //        return authenticator.validate()
 //            .flatMap({ token in
