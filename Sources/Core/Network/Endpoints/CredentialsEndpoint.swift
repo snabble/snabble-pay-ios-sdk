@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Tagged
 
 extension Endpoint {
     static func credentials(onEnvironment environment: Environment = .production) -> Endpoint<Credentials> {
@@ -14,6 +15,9 @@ extension Endpoint {
 }
 
 struct Credentials: Decodable {
-    let appIdentifier: String
-    let appSecret: String
+    let appIdentifier: AppIdenitifer
+    let appSecret: AppSecret
+
+    typealias AppIdenitifer = Tagged<(Credentials, identifier: ()), String>
+    typealias AppSecret = Tagged<(Credentials, secret: ()), String>
 }

@@ -23,10 +23,14 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0")
     ],
     targets: [
         .target(
             name: "SnabblePayCore",
+            dependencies: [
+                .product(name: "Tagged", package: "swift-tagged")
+            ],
             path: "Sources/Core",
             resources: [
                 .process("Resources")
@@ -34,7 +38,9 @@ let package = Package(
         ),
         .testTarget(
             name: "SnabblePayCoreTests",
-            dependencies: ["SnabblePayCore"],
+            dependencies: [
+                "SnabblePayCore",
+            ],
             path: "Tests/Core",
             resources: [
                 .process("Resources")
@@ -42,7 +48,9 @@ let package = Package(
         ),
         .target(
             name: "SnabblePayUI",
-            dependencies: ["SnabblePayCore"],
+            dependencies: [
+                "SnabblePayCore"
+            ],
             path: "Sources/UI",
             resources: [
                 .process("Resources")
