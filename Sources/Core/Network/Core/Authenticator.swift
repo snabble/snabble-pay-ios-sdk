@@ -34,6 +34,8 @@ class Authenticator {
 
     init(session: URLSession = .shared) {
         self.session = session
+        self.credentials = nil // load credentials
+        self.token = nil // load token
     }
 
     func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, Swift.Error> {
@@ -43,7 +45,14 @@ class Authenticator {
                 return publisher
             }
 
-            // scenario 1: we have to register the app instance
+            // scenario 2: app instance is registered
+            if let credentials = self?.credentials {
+                return Just(credentials)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+
+            // scenario 3: we have to register the app instance
             let endpoint: Endpoint<Credentials> = .credentials(onEnvironment: environment)
             let publisher = session.publisher(for: endpoint)
                 .handleEvents(receiveOutput: { credentials in
@@ -67,7 +76,7 @@ class Authenticator {
                 return publisher
             }
 
-            // scenario 2: we don't have a token at all, the user should probably log in
+            // scenario 2: we don't have a token at all, the app instance needs to be registered
             guard let credentials = self?.credentials else {
                 return Fail(error: AuthenticatorError.registrationRequired)
                     .eraseToAnyPublisher()
@@ -81,7 +90,11 @@ class Authenticator {
             }
 
             // scenario 4: we need a new token
-            let endpoint = Endpoint<Token>.token(withAppIdentifier: credentials.appIdentifier, appSecret: credentials.appSecret)
+            let endpoint: Endpoint<Token> = .token(
+                withAppIdentifier: credentials.appIdentifier,
+                appSecret: credentials.appSecret,
+                onEnvironment: environment
+            )
             let publisher = session.publisher(for: endpoint)
                 .share()
                 .handleEvents(receiveOutput: { token in
