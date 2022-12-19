@@ -10,23 +10,20 @@ import Dispatch
 import Combine
 
 class Authenticator {
-
-    enum AuthenticatorError: Error {
-        case registrationRequired
-        case loginRequired
-    }
-
     let session: URLSession
+
     private(set) var token: Token? {
         didSet {
             print("save token")
         }
     }
+
     private(set) var credentials: Credentials? {
         didSet {
             print("save credentials")
         }
     }
+
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?

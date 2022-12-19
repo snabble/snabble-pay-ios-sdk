@@ -33,7 +33,12 @@ struct NetworkManager {
             }
             .tryCatch { error -> AnyPublisher<Response, Error> in
                 authenticator.validToken(forceRefresh: true)
-                    .flatMap { token in
+                    .map { token in
+                        var endpoint = endpoint
+                        endpoint.token = token
+                        return endpoint
+                    }
+                    .flatMap { endpoint in
                         publisher(for: endpoint, using: decoder)
                     }
                     .eraseToAnyPublisher()
