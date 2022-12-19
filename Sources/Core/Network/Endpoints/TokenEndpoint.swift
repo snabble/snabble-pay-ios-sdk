@@ -38,13 +38,13 @@ struct Token: Decodable {
     let accessToken: AccessToken
     let expiresIn: TimeInterval
     let scope: Scope
-    let tokenType: `Type`
+    let type: `Type`
 
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
         case expiresIn = "expires_in"
         case scope
-        case tokenType = "token_type"
+        case type = "token_type"
     }
 
     typealias AccessToken = Tagged<(Token, accessToken: ()), String>

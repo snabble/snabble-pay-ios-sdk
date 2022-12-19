@@ -37,6 +37,6 @@ final class TokenEndpointTests: XCTestCase {
         XCTAssertEqual(decodedObject.accessToken, "ZMNBLHLDNJM6JI-LSW8X-Q")
         XCTAssertEqual(decodedObject.expiresIn, 7200)
         XCTAssertEqual(decodedObject.scope, .all)
-        XCTAssertEqual(decodedObject.tokenType, .bearer)
+        XCTAssertEqual(decodedObject.type, .bearer)
     }
 }

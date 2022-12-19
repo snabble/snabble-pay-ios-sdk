@@ -13,7 +13,9 @@ struct Endpoint<Response> {
 
     let environment: Environment
 
-    var headerFields: [String: String]?
+    var token: Token?
+
+    var headerFields: [String: String] = [:]
     var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
     init(path: String, method: HTTPMethod, environment: Environment = .production) {
@@ -51,8 +53,13 @@ extension Endpoint {
             break
         }
 
-        let headerFields = (environment.headers ?? [:]).merging(headerFields ?? [:], uniquingKeysWith: { _, new in new })
+        let headerFields = environment.headerFields.merging(headerFields, uniquingKeysWith: { _, new in new })
         request.allHTTPHeaderFields = headerFields
+
+        if let token = token {
+            request.setValue("\(token.type.rawValue) \(token.accessToken.rawValue)", forHTTPHeaderField: "Authentication")
+        }
+
         request.httpMethod = method.value
         request.cachePolicy = cachePolicy
 

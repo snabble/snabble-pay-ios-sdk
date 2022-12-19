@@ -12,7 +12,7 @@ enum Environment {
     case staging
     case production
 
-    var headers: [String: String]? {
+    var headerFields: [String: String] {
         return [
             "Content-Type": "application/json"
         ]
