@@ -10,7 +10,6 @@ import Foundation
 
 struct NetworkManager {
     let session: URLSession
-
     let authenticator: Authenticator
 
     init(session: URLSession = .shared) {
