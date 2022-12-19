@@ -35,23 +35,22 @@ class Authenticator {
     }
 
     private func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, Swift.Error> {
-        return queue.sync { [weak self] in
-            // scenario 1: app instance is registered
-            if let credentials = self?.credentials {
-                return Just(credentials)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
-
-            // scenario 2: we have to register the app instance
-            let endpoint: Endpoint<Credentials> = .credentials(onEnvironment: environment)
-            let publisher = session.publisher(for: endpoint)
-                .handleEvents(receiveOutput: { credentials in
-                    self?.credentials = credentials
-                }, receiveCompletion: { _ in })
+        // scenario 1: app instance is registered
+        if let credentials = self.credentials {
+            return Just(credentials)
+                .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
-            return publisher
         }
+
+        // scenario 2: we have to register the app instance
+        let endpoint: Endpoint<Credentials> = .credentials(onEnvironment: environment)
+        let publisher = session.publisher(for: endpoint)
+            .handleEvents(receiveOutput: { [weak self] credentials in
+                print("credentials:", credentials)
+                self?.credentials = credentials
+            }, receiveCompletion: { _ in })
+            .eraseToAnyPublisher()
+        return publisher
     }
 
 
@@ -83,6 +82,7 @@ class Authenticator {
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
+                    print("token:", token)
                     self?.token = token
                 }, receiveCompletion: { _ in
                     self?.queue.sync {

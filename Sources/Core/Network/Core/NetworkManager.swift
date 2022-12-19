@@ -21,24 +21,24 @@ struct NetworkManager {
         for endpoint: Endpoint<Response>,
         using decoder: JSONDecoder = .init()
     ) -> AnyPublisher<Response, Swift.Error> {
-        return authenticator.validToken()
+        return authenticator.validToken(onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
                 endpoint.token = token
                 return endpoint
             }
             .flatMap { token in
-                publisher(for: endpoint, using: decoder)
+                session.publisher(for: endpoint, using: decoder)
             }
             .tryCatch { error -> AnyPublisher<Response, Error> in
-                authenticator.validToken(forceRefresh: true)
+                authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                     .map { token in
                         var endpoint = endpoint
                         endpoint.token = token
                         return endpoint
                     }
                     .flatMap { endpoint in
-                        publisher(for: endpoint, using: decoder)
+                        session.publisher(for: endpoint, using: decoder)
                     }
                     .eraseToAnyPublisher()
             }
