@@ -48,4 +48,8 @@ struct Token: Decodable {
     }
 
     typealias AccessToken = Tagged<(Token, accessToken: ()), String>
+
+    func isValid() -> Bool {
+        return true
+    }
 }
