@@ -30,7 +30,7 @@ struct NetworkManager {
             .flatMap { token in
                 session.publisher(for: endpoint, using: decoder)
             }
-            .tryCatch { error -> AnyPublisher<Response, Error> in
+            .tryCatch { error in
                 authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                     .map { token in
                         var endpoint = endpoint
@@ -40,7 +40,6 @@ struct NetworkManager {
                     .flatMap { endpoint in
                         session.publisher(for: endpoint, using: decoder)
                     }
-                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
