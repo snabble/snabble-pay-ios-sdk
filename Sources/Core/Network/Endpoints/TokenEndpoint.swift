@@ -26,12 +26,12 @@ extension Endpoint {
     }
 }
 
-struct Token: Decodable {
-    enum Scope: String, Decodable {
+struct Token: Codable {
+    enum Scope: String, Codable {
         case all
     }
 
-    enum `Type`: String, Decodable {
+    enum `Type`: String, Codable {
         case bearer = "Bearer"
     }
 

@@ -14,7 +14,7 @@ extension Endpoint {
     }
 }
 
-struct App: Decodable {
+struct App: Codable {
     let identifier: Idenitifer
     let secret: Secret
 

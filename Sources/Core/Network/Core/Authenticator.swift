@@ -8,21 +8,16 @@
 import Foundation
 import Dispatch
 import Combine
+import KeychainAccess
 
 class Authenticator {
     let session: URLSession
 
-    private(set) var token: Token? {
-        didSet {
-            print("save token")
-        }
-    }
+    @KeychainStorage("token", service: "io.snabble.pay.authenticator")
+    private(set) var token: Token?
 
-    private(set) var app: App? {
-        didSet {
-            print("save credentials")
-        }
-    }
+    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
+    private(set) var app: App?
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
 
