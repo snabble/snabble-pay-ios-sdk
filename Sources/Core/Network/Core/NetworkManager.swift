@@ -27,10 +27,10 @@ struct NetworkManager {
                 endpoint.token = token
                 return endpoint
             }
-            .flatMap { token in
+            .flatMap { endpoint in
                 session.publisher(for: endpoint, using: decoder)
             }
-            .tryCatch { error in
+            .tryCatch { _ in
                 authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                     .map { token in
                         var endpoint = endpoint

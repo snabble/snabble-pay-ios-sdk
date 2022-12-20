@@ -48,8 +48,10 @@ class Authenticator {
         return publisher
     }
 
-
-    func validToken(forceRefresh: Bool = false, onEnvironment environment: Environment = .production) -> AnyPublisher<Token, Swift.Error> {
+    func validToken(
+        forceRefresh: Bool = false,
+        onEnvironment environment: Environment = .production
+    ) -> AnyPublisher<Token, Swift.Error> {
         return queue.sync { [weak self] in
             // scenario 1: we're already loading a new token
             if let publisher = self?.refreshPublisher {
@@ -85,7 +87,6 @@ class Authenticator {
                     }
                 })
                 .eraseToAnyPublisher()
-
 
             self?.refreshPublisher = publisher
             return publisher
