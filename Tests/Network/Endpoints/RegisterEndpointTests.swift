@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import SnabblePayCore
+@testable import SnabblePayNetwork
 
 final class CredentialsEndpointTests: XCTestCase {
     func testEndpoint() throws {

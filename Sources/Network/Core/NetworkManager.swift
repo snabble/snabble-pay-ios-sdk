@@ -8,16 +8,16 @@
 import Combine
 import Foundation
 
-struct NetworkManager {
-    let session: URLSession
+public struct NetworkManager {
+    public let session: URLSession
     let authenticator: Authenticator
 
-    init(session: URLSession = .shared) {
+    public init(session: URLSession = .shared) {
         self.session = session
         self.authenticator = Authenticator(session: session)
     }
 
-    func publisher<Response: Decodable>(
+    public func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>,
         using decoder: JSONDecoder = .init()
     ) -> AnyPublisher<Response, Swift.Error> {

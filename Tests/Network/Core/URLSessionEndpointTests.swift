@@ -7,7 +7,7 @@
 
 import XCTest
 import Combine
-@testable import SnabblePayCore
+@testable import SnabblePayNetwork
 
 final class URLSessionEndpointTests: XCTestCase {
 

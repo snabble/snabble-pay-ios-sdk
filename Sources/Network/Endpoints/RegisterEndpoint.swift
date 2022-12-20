@@ -8,18 +8,18 @@
 import Foundation
 import Tagged
 
-extension Endpoint {
+public extension Endpoint {
     static func register(onEnvironment environment: Environment = .production) -> Endpoint<App> {
         return .init(path: "/apps/register", method: .get(nil), environment: environment)
     }
 }
 
-struct App: Codable {
-    let identifier: Idenitifer
-    let secret: Secret
+public struct App: Codable {
+    public let identifier: Idenitifer
+    public let secret: Secret
 
-    typealias Idenitifer = Tagged<(App, identifier: ()), String>
-    typealias Secret = Tagged<(App, secret: ()), String>
+    public typealias Idenitifer = Tagged<(App, identifier: ()), String>
+    public typealias Secret = Tagged<(App, secret: ()), String>
 
     enum CodingKeys: String, CodingKey {
         case identifier = "appIdentifier"

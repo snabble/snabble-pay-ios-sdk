@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 import Combine
 
-extension Endpoint {
+public extension Endpoint {
     static func paymentValidations(onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
         .init(path: "/apps/payment-validations", method: .post(nil), environment: environment)
     }
@@ -19,14 +19,14 @@ extension Endpoint {
     }
 }
 
-struct PaymentValidation: Decodable {
-    let id: ID
-    let state: State
-    let credential: Credential?
+public struct PaymentValidation: Decodable {
+    public let id: ID
+    public let state: State
+    public let credential: Credential?
 
-    typealias ID = Tagged<PaymentValidation, String>
+    public typealias ID = Tagged<PaymentValidation, String>
 
-    enum State: String, Decodable {
+    public enum State: String, Decodable {
         case pending = "PENDING"
         case successful = "SUCCESSFUL"
         case failed = "FAILED"
@@ -34,11 +34,11 @@ struct PaymentValidation: Decodable {
     }
 }
 
-struct Credential: Decodable {
-    let id: ID
-    let createdAt: String
-    let iban: IBAN
+public struct Credential: Decodable {
+    public let id: ID
+    public let createdAt: String
+    public let iban: IBAN
 
-    typealias ID = Tagged<Credential, String>
-    typealias IBAN = Tagged<(Credential, iban: ()), String>
+    public typealias ID = Tagged<Credential, String>
+    public typealias IBAN = Tagged<(Credential, iban: ()), String>
 }

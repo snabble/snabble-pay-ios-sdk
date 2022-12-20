@@ -28,10 +28,27 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SnabblePayCore",
+            name: "SnabblePayNetwork",
             dependencies: [
                 .product(name: "Tagged", package: "swift-tagged"),
                 "KeychainAccess"
+            ],
+            path: "Sources/Network"
+        ),
+        .testTarget(
+            name: "SnabblePayNetworkTests",
+            dependencies: [
+                "SnabblePayNetwork",
+            ],
+            path: "Tests/Network",
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
+            name: "SnabblePayCore",
+            dependencies: [
+                "SnabblePayNetwork",
             ],
             path: "Sources/Core",
             resources: [
