@@ -10,8 +10,8 @@ import Tagged
 
 extension Endpoint {
     static func token(
-        withAppIdentifier appIdentifier: Credentials.AppIdenitifer,
-        appSecret: Credentials.AppSecret,
+        withAppIdentifier appIdentifier: App.Idenitifer,
+        appSecret: App.Secret,
         scope: Token.Scope = .all,
         onEnvironment environment: Environment = .production
     ) -> Endpoint<Token> {

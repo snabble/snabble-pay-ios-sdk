@@ -19,7 +19,7 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.path, "/apps/mock")
         XCTAssertEqual(endpoint.environment, .production)
         XCTAssertEqual(endpoint.cachePolicy, .useProtocolCachePolicy)
-        XCTAssertNil(endpoint.headerFields)
+        XCTAssertEqual(endpoint.headerFields, [:])
     }
 
     func testEnvironmentParameter() throws {

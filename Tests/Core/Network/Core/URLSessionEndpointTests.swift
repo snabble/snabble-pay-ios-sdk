@@ -11,9 +11,9 @@ import Combine
 
 final class URLSessionEndpointTests: XCTestCase {
 
-    let resourceData = try! loadResource(filename: "credentials", withExtension: "json")
-    let endpointCredentials: Endpoint<Credentials> = .credentials()
-    let endpointData: Endpoint<Data> = .init(path: "/apps/credentials", method: .get(nil))
+    let resourceData = try! loadResource(filename: "register", withExtension: "json")
+    let endpointRegister: Endpoint<App> = .register()
+    let endpointData: Endpoint<Data> = .init(path: "/apps/register", method: .get(nil))
     var cancellables = Set<AnyCancellable>()
 
     // MARK: - Decodable
@@ -22,7 +22,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
@@ -30,9 +30,9 @@ final class URLSessionEndpointTests: XCTestCase {
             return (response, resourceData)
         }
 
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
-        session.publisher(for: endpointCredentials)
+        session.publisher(for: endpointRegister)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -53,9 +53,9 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = URLError(.unknown)
         MockURLProtocol.requestHandler = nil
 
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
-        session.publisher(for: endpointCredentials)
+        session.publisher(for: endpointRegister)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -78,7 +78,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
@@ -87,7 +87,7 @@ final class URLSessionEndpointTests: XCTestCase {
         }
 
         let session = URLSession.mockSession
-        let decodableObject = try await session.object(for: endpointCredentials)
+        let decodableObject = try await session.object(for: endpointRegister)
 
         XCTAssertNotNil(decodableObject)
     }
@@ -98,7 +98,7 @@ final class URLSessionEndpointTests: XCTestCase {
 
         do {
             let session = URLSession.mockSession
-            let decodableObject = try await session.object(for: endpointCredentials)
+            let decodableObject = try await session.object(for: endpointRegister)
             XCTAssertNil(decodableObject)
         } catch {
             XCTAssertNotNil(error)
@@ -111,16 +111,16 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
             return (response, resourceData)
         }
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
-        let dataTask = session.dataTask(for: endpointCredentials) { result in
+        let dataTask = session.dataTask(for: endpointRegister) { result in
             switch result {
             case .failure(let error):
                 XCTAssertNil(error)
@@ -139,9 +139,9 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = URLError(.unknown)
         MockURLProtocol.requestHandler = nil
 
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
-        let dataTask = session.dataTask(for: endpointCredentials) { result in
+        let dataTask = session.dataTask(for: endpointRegister) { result in
             switch result {
             case .failure(let error):
                 XCTAssertNotNil(error)
@@ -164,7 +164,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: [:]
@@ -172,9 +172,9 @@ final class URLSessionEndpointTests: XCTestCase {
             return (response, resourceData)
         }
 
-        let endpoint: Endpoint<Data> = .init(path: "/apps/credentials", method: .get(nil))
+        let endpoint: Endpoint<Data> = .init(path: "/apps/register", method: .get(nil))
 
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
         session.publisher(for: endpoint)
             .sink { completion in
@@ -197,7 +197,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = URLError(.unknown)
         MockURLProtocol.requestHandler = nil
 
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let session = URLSession.mockSession
         session.publisher(for: endpointData)
             .sink { completion in
@@ -221,7 +221,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: [:]
@@ -254,7 +254,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/credentials")!,
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: [:]
@@ -263,7 +263,7 @@ final class URLSessionEndpointTests: XCTestCase {
         }
 
         let session = URLSession.mockSession
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let dataTask = session.dataTask(for: endpointData) { result in
             switch result {
             case .failure(let error):
@@ -284,7 +284,7 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.requestHandler = nil
 
         let session = URLSession.mockSession
-        let expectation = expectation(description: "credentials")
+        let expectation = expectation(description: "register")
         let dataTask = session.dataTask(for: endpointData) { result in
             switch result {
             case .failure(let error):

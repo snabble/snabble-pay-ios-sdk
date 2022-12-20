@@ -18,7 +18,7 @@ class Authenticator {
         }
     }
 
-    private(set) var credentials: Credentials? {
+    private(set) var app: App? {
         didSet {
             print("save credentials")
         }
@@ -30,24 +30,24 @@ class Authenticator {
 
     init(session: URLSession = .shared) {
         self.session = session
-        self.credentials = nil // load credentials
+        self.app = nil // load app
         self.token = nil // load token
     }
 
-    private func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, Swift.Error> {
+    private func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
         // scenario 1: app instance is registered
-        if let credentials = self.credentials {
-            return Just(credentials)
+        if let app = self.app {
+            return Just(app)
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
 
         // scenario 2: we have to register the app instance
-        let endpoint: Endpoint<Credentials> = .credentials(onEnvironment: environment)
+        let endpoint: Endpoint<App> = .register(onEnvironment: environment)
         let publisher = session.publisher(for: endpoint)
-            .handleEvents(receiveOutput: { [weak self] credentials in
-                print("credentials:", credentials)
-                self?.credentials = credentials
+            .handleEvents(receiveOutput: { [weak self] app in
+                print("app:", app)
+                self?.app = app
             }, receiveCompletion: { _ in })
             .eraseToAnyPublisher()
         return publisher
@@ -70,10 +70,10 @@ class Authenticator {
 
             // scenario 3: we need a new token
             let publisher = validateApp(onEnvironment: environment)
-                .map { credentials -> Endpoint<Token> in
+                .map { app -> Endpoint<Token> in
                     .token(
-                        withAppIdentifier: credentials.appIdentifier,
-                        appSecret: credentials.appSecret,
+                        withAppIdentifier: app.identifier,
+                        appSecret: app.secret,
                         onEnvironment: environment
                     )
                 }
