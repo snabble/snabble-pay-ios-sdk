@@ -25,7 +25,7 @@ final class NetworkManagerTests: XCTestCase {
     }
 
     func testExample() throws {
-        let endpoint: Endpoint<PaymentValidations> = .paymentValidations(onEnvironment: .development)
+        let endpoint: Endpoint<PaymentValidation> = .paymentValidations(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
         networkManager.publisher(for: endpoint, using: .init())
