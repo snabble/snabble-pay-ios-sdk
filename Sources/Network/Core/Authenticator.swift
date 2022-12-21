@@ -25,15 +25,13 @@ class Authenticator {
 
     init(session: URLSession = .shared) {
         self.session = session
-        self.app = nil // load app
-        self.token = nil // load token
     }
 
     private func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
         // scenario 1: app instance is registered
         if let app = self.app {
             return Just(app)
-                .setFailureType(to: Error.self)
+                .setFailureType(to: Swift.Error.self)
                 .eraseToAnyPublisher()
         }
 
@@ -41,7 +39,6 @@ class Authenticator {
         let endpoint: Endpoint<App> = .register(onEnvironment: environment)
         let publisher = session.publisher(for: endpoint)
             .handleEvents(receiveOutput: { [weak self] app in
-                print("app:", app)
                 self?.app = app
             }, receiveCompletion: { _ in })
             .eraseToAnyPublisher()
@@ -61,7 +58,7 @@ class Authenticator {
             // scenario 2: we already have a valid token and don't want to force a refresh
             if let token = token, token.isValid(), !forceRefresh {
                 return Just(token)
-                    .setFailureType(to: Error.self)
+                    .setFailureType(to: Swift.Error.self)
                     .eraseToAnyPublisher()
             }
 
@@ -79,7 +76,6 @@ class Authenticator {
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
-                    print("token:", token)
                     self?.token = token
                 }, receiveCompletion: { _ in
                     self?.queue.sync {
