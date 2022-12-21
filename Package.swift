@@ -20,6 +20,10 @@ let package = Package(
         .library(
             name: "SnabblePayUI",
             targets: ["SnabblePayUI"]
+        ),
+        .library(
+            name: "SnabblePayNetwork",
+            targets: ["SnabblePayNetwork"]
         )
     ],
     dependencies: [
