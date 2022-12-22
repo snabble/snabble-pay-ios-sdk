@@ -78,6 +78,7 @@ class Authenticator {
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
+                    print("Token:", token)
                     self?.token = token
                 }, receiveCompletion: { _ in
                     self?.queue.sync {

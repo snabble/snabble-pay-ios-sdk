@@ -36,7 +36,7 @@ public struct Token: Codable {
     }
 
     public let accessToken: AccessToken
-    public let expiresAt: String
+    public let expiresAt: Date
     public let scope: Scope
     public let type: `Type`
 
@@ -45,6 +45,14 @@ public struct Token: Codable {
         case expiresAt
         case scope
         case type = "tokenType"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accessToken = try container.decode(Token.AccessToken.self, forKey: .accessToken)
+        self.expiresAt = try container.decode(Date.self, forKey: .expiresAt)
+        self.scope = try container.decode(Scope.self, forKey: .scope)
+        self.type = try container.decode(`Type`.self, forKey: .type)
     }
 
     public typealias AccessToken = Tagged<(Token, accessToken: ()), String>

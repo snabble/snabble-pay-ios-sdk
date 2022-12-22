@@ -15,8 +15,17 @@ struct KeychainStorage<Value: Codable> {
     let keychain: Keychain
     let initialValue: Value?
 
-    var encoder = JSONEncoder()
-    var decoder = JSONDecoder()
+    var encoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }
+    
+    var decoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }
 
     init(wrappedValue initialValue: Value? = nil, _ key: String, service: String) {
         self.initialValue = initialValue

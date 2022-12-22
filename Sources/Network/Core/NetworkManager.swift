@@ -12,6 +12,12 @@ public struct NetworkManager {
     public let session: URLSession
     let authenticator: Authenticator
 
+    public static let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
+
     public init(session: URLSession = .shared) {
         self.session = session
         self.authenticator = Authenticator(session: session)
@@ -19,7 +25,7 @@ public struct NetworkManager {
 
     public func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>,
-        using decoder: JSONDecoder = .init()
+        using decoder: JSONDecoder = Self.decoder
     ) -> AnyPublisher<Response, Swift.Error> {
         return authenticator.validToken(onEnvironment: endpoint.environment)
             .map { token in

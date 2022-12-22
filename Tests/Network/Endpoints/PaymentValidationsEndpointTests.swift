@@ -49,13 +49,13 @@ final class PaymentValidationsEndpointTests: XCTestCase {
 
     func testDecodingWithCredentials() throws {
         let data = try loadResource(filename: "payment-validation-credential", withExtension: "json")
-        let instance = try JSONDecoder().decode(PaymentValidation.self, from: data)
+        let instance = try TestingDefaults.jsonDecoder.decode(PaymentValidation.self, from: data)
         XCTAssertEqual(instance.id, "1")
         XCTAssertEqual(instance.state, PaymentValidation.State.successful)
         XCTAssertNotNil(instance.credential)
 
         XCTAssertEqual(instance.credential?.id, "1")
-        XCTAssertEqual(instance.credential?.createdAt, "2022-12-22T09:24:38.784640482Z")
+        XCTAssertEqual(instance.credential?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.credential?.iban, "DE123**********")
     }
 

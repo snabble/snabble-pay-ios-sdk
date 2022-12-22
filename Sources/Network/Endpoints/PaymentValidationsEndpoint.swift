@@ -36,7 +36,7 @@ public struct PaymentValidation: Decodable {
 
 public struct Credential: Decodable {
     public let id: ID
-    public let createdAt: String
+    public let createdAt: Date
     public let iban: IBAN
 
     public typealias ID = Tagged<Credential, String>
