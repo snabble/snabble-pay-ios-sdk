@@ -16,7 +16,7 @@ class Authenticator {
     @KeychainStorage("token", service: "io.snabble.pay.authenticator")
     private(set) var token: Token?
 
-//    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
+    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
     private(set) var app: App?
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
