@@ -55,7 +55,7 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         XCTAssertNotNil(instance.credential)
 
         XCTAssertEqual(instance.credential?.id, "1")
-        XCTAssertEqual(instance.credential?.createdAt, "rfc3339")
+        XCTAssertEqual(instance.credential?.createdAt, "2022-12-22T09:24:38.784640482Z")
         XCTAssertEqual(instance.credential?.iban, "DE123**********")
     }
 

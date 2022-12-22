@@ -35,7 +35,7 @@ final class TokenEndpointTests: XCTestCase {
         let data = try loadResource(filename: "token", withExtension: "json")
         let decodedObject = try JSONDecoder().decode(Token.self, from: data)
         XCTAssertEqual(decodedObject.accessToken, "ZMNBLHLDNJM6JI-LSW8X-Q")
-        XCTAssertEqual(decodedObject.expiresAt, Date())
+        XCTAssertEqual(decodedObject.expiresAt, "2022-12-22T09:22:57.570273492Z")
         XCTAssertEqual(decodedObject.scope, .all)
         XCTAssertEqual(decodedObject.type, .bearer)
     }

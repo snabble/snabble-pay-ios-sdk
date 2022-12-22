@@ -36,7 +36,7 @@ public struct Token: Codable {
     }
 
     public let accessToken: AccessToken
-    public let expiresAt: Date
+    public let expiresAt: String
     public let scope: Scope
     public let type: `Type`
 
