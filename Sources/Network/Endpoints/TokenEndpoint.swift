@@ -36,15 +36,15 @@ public struct Token: Codable {
     }
 
     public let accessToken: AccessToken
-    public let expiresIn: TimeInterval
+    public let expiresAt: Date
     public let scope: Scope
     public let type: `Type`
 
     enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-        case expiresIn = "expires_in"
+        case accessToken
+        case expiresAt
         case scope
-        case type = "token_type"
+        case type = "tokenType"
     }
 
     public typealias AccessToken = Tagged<(Token, accessToken: ()), String>

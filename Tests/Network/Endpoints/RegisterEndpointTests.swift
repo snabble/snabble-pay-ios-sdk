@@ -16,11 +16,13 @@ final class CredentialsEndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.environment, .production)
     }
 
-    func testEnvironment() throws {
-        var endpoint = Endpoint<Any>.register(onEnvironment: .staging)
+    func testEnvironmentStaging() throws {
+        let endpoint = Endpoint<Any>.register(onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
+    }
 
-        endpoint = Endpoint<Any>.register(onEnvironment: .development)
+    func testEnvironmentDevelopment() throws {
+        let endpoint = Endpoint<Any>.register(onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

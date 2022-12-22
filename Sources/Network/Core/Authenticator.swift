@@ -16,7 +16,7 @@ class Authenticator {
     @KeychainStorage("token", service: "io.snabble.pay.authenticator")
     private(set) var token: Token?
 
-    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
+//    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
     private(set) var app: App?
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
@@ -65,14 +65,16 @@ class Authenticator {
             // scenario 3: we need a new token
             let publisher = validateApp(onEnvironment: environment)
                 .map { app -> Endpoint<Token> in
-                    .token(
+                    print("app:", app)
+                    return .token(
                         withAppIdentifier: app.identifier,
                         appSecret: app.secret,
                         onEnvironment: environment
                     )
                 }
                 .flatMap { endpoint in
-                    self!.session.publisher(for: endpoint)
+                    print("endpoint:", endpoint.urlRequest)
+                    return self!.session.publisher(for: endpoint)
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
