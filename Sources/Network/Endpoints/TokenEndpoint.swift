@@ -47,14 +47,6 @@ public struct Token: Codable {
         case type = "tokenType"
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accessToken = try container.decode(Token.AccessToken.self, forKey: .accessToken)
-        self.expiresAt = try container.decode(Date.self, forKey: .expiresAt)
-        self.scope = try container.decode(Scope.self, forKey: .scope)
-        self.type = try container.decode(`Type`.self, forKey: .type)
-    }
-
     public typealias AccessToken = Tagged<(Token, accessToken: ()), String>
 
     func isValid() -> Bool {
