@@ -21,6 +21,7 @@ final class TokenEndpointTests: XCTestCase {
             ]
         ))
         XCTAssertEqual(endpoint.environment, .production)
+        XCTAssertEqual(endpoint.urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/token?client_id=random_app_identifier&client_secret=random_app_secret&grant_type=client_credentials&scope=all")
     }
 
     func testEnvironment() throws {
