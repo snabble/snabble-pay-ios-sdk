@@ -23,29 +23,26 @@ public struct NetworkManager {
         self.authenticator = Authenticator(session: session)
     }
 
-    public func publisher<Response: Decodable>(
-        for endpoint: Endpoint<Response>,
-        using decoder: JSONDecoder = Self.decoder
-    ) -> AnyPublisher<Response, Swift.Error> {
-        return authenticator.validToken(onEnvironment: endpoint.environment)
+    public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {
+        return authenticator.validToken(using: Self.decoder, onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
                 endpoint.token = token
                 return endpoint
             }
             .flatMap { endpoint in
-                session.publisher(for: endpoint, using: decoder)
+                session.publisher(for: endpoint, using: Self.decoder)
             }
             .tryCatch { error in
                 if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
-                    return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
+                    return authenticator.validToken(using: Self.decoder, forceRefresh: true, onEnvironment: endpoint.environment)
                         .map { token in
                             var endpoint = endpoint
                             endpoint.token = token
                             return endpoint
                         }
                         .flatMap { endpoint in
-                            session.publisher(for: endpoint, using: decoder)
+                            session.publisher(for: endpoint, using: Self.decoder)
                         }
                 }
                 throw error

@@ -62,8 +62,39 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertTrue(true)
                 case .failure(let error):
                     XCTAssertNotNil(error)
-                    XCTAssertNotNil(error as? URLError)
-                    XCTAssertEqual((error as! URLError).code, .unknown)
+                    XCTAssertNotNil(error is URLError)
+                }
+                expectation.fulfill()
+            } receiveValue: { credentials in
+                XCTAssertNil(credentials)
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 5.0)
+    }
+
+    func testDecodableCombineInvalidResponse() async throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { [unowned self] request in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
+                statusCode: 400,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, resourceData)
+        }
+
+        let expectation = expectation(description: "register")
+        let session = URLSession.mockSession
+        session.publisher(for: endpointRegister)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    XCTAssertTrue(true)
+                case .failure(let error):
+                    XCTAssertNotNil(error)
+                    XCTAssertTrue(error is HTTPError)
                 }
                 expectation.fulfill()
             } receiveValue: { credentials in
@@ -102,8 +133,29 @@ final class URLSessionEndpointTests: XCTestCase {
             XCTAssertNil(decodableObject)
         } catch {
             XCTAssertNotNil(error)
-            XCTAssertNotNil(error as? URLError)
-            XCTAssertEqual((error as! URLError).code, .unknown)
+            XCTAssertNotNil(error is URLError)
+        }
+    }
+
+    func testDecodableAsyncInvalidResponse() async throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { [unowned self] request in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
+                statusCode: 400,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, resourceData)
+        }
+
+        do {
+            let session = URLSession.mockSession
+            let decodableObject = try await session.object(for: endpointRegister)
+            XCTAssertNil(decodableObject)
+        } catch {
+            XCTAssertNotNil(error)
+            XCTAssertNotNil(error is HTTPError)
         }
     }
 
@@ -165,6 +217,38 @@ final class URLSessionEndpointTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
 
+    func testDataCombineInvalidResponse() async throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { [unowned self] request in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
+                statusCode: 400,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, resourceData)
+        }
+
+        let expectation = expectation(description: "register")
+        let session = URLSession.mockSession
+        session.publisher(for: endpointData)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    XCTAssertTrue(true)
+                case .failure(let error):
+                    XCTAssertNotNil(error)
+                    XCTAssertTrue(error is HTTPError)
+                }
+                expectation.fulfill()
+            } receiveValue: { credentials in
+                XCTAssertNil(credentials)
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 5.0)
+    }
+
     func testDataAsync() async throws {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [unowned self] request in
@@ -179,7 +263,6 @@ final class URLSessionEndpointTests: XCTestCase {
 
         let session = URLSession.mockSession
         let response = try await session.data(for: endpointData)
-
         XCTAssertNotNil(response)
     }
 
@@ -193,9 +276,29 @@ final class URLSessionEndpointTests: XCTestCase {
             XCTAssertNil(decodableObject)
         } catch {
             XCTAssertNotNil(error)
-            XCTAssertNotNil(error as? URLError)
-            XCTAssertEqual((error as! URLError).code, .unknown)
+            XCTAssertNotNil(error is URLError)
         }
     }
 
+    func testDataAsyncInvalidResponse() async throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { [unowned self] request in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
+                statusCode: 400,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, resourceData)
+        }
+
+        do {
+            let session = URLSession.mockSession
+            let decodableObject = try await session.object(for: endpointData)
+            XCTAssertNil(decodableObject)
+        } catch {
+            XCTAssertNotNil(error)
+            XCTAssertNotNil(error is HTTPError)
+        }
+    }
 }

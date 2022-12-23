@@ -27,7 +27,7 @@ class Authenticator {
         self.session = session
     }
 
-    private func validateApp(onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
+    private func validateApp(using decoder: JSONDecoder, onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
         // scenario 1: app instance is registered
         if let app = self.app {
             return Just(app)
@@ -37,7 +37,7 @@ class Authenticator {
 
         // scenario 2: we have to register the app instance
         let endpoint: Endpoint<App> = .register(onEnvironment: environment)
-        let publisher = session.publisher(for: endpoint)
+        let publisher = session.publisher(for: endpoint, using: decoder)
             .handleEvents(receiveOutput: { [weak self] app in
                 self?.app = app
             }, receiveCompletion: { _ in })
@@ -46,6 +46,7 @@ class Authenticator {
     }
 
     func validToken(
+        using decoder: JSONDecoder,
         forceRefresh: Bool = false,
         onEnvironment environment: Environment = .production
     ) -> AnyPublisher<Token, Swift.Error> {
@@ -63,9 +64,8 @@ class Authenticator {
             }
 
             // scenario 3: we need a new token
-            let publisher = validateApp(onEnvironment: environment)
+            let publisher = validateApp(using: decoder, onEnvironment: environment)
                 .map { app -> Endpoint<Token> in
-                    print("app:", app)
                     return .token(
                         withAppIdentifier: app.identifier,
                         appSecret: app.secret,
@@ -73,12 +73,10 @@ class Authenticator {
                     )
                 }
                 .flatMap { endpoint in
-                    print("endpoint:", endpoint.urlRequest)
-                    return self!.session.publisher(for: endpoint)
+                    return self!.session.publisher(for: endpoint, using: decoder)
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
-                    print("Token:", token)
                     self?.token = token
                 }, receiveCompletion: { _ in
                     self?.queue.sync {
