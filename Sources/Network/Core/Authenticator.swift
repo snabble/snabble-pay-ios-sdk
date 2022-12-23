@@ -13,6 +13,10 @@ import KeychainAccess
 class Authenticator {
     let session: URLSession
 
+    enum Error: Swift.Error {
+        case unknown
+    }
+
     @KeychainStorage("token", service: "io.snabble.pay.authenticator")
     private(set) var token: Token?
 
@@ -72,8 +76,14 @@ class Authenticator {
                         onEnvironment: environment
                     )
                 }
-                .flatMap { endpoint in
-                    return self!.session.publisher(for: endpoint, using: decoder)
+                .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
+                    guard let session = self?.session else {
+                        throw Error.unknown
+                    }
+                    return (session, endpoint)
+                }
+                .flatMap { session, endpoint in
+                    return session.publisher(for: endpoint, using: decoder)
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
