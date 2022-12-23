@@ -24,6 +24,17 @@ extension HTTPError: LocalizedError {
     }
 }
 
+extension URLSession {
+    func verifyResponse(_ response: URLResponse) throws -> Void {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw HTTPError.unknownResponse(response)
+        }
+        guard httpResponse.httpStatusCode.responseType == .success else {
+            throw HTTPError.invalidResponse(statusCode: httpResponse.httpStatusCode)
+        }
+    }
+}
+
 private extension Publisher where Output == (data: Data, response: URLResponse), Failure == any Error {
     func tryVerifyResponse() -> AnyPublisher<Output, Failure> {
         tryMap { (data, response) throws -> Output in
@@ -65,7 +76,8 @@ extension URLSession {
 @available(iOS 15.0, *)
 extension URLSession {
     func data(for endpoint: Endpoint<Data>) async throws -> Data {
-        let (data, _) = try await self.data(for: endpoint.urlRequest)
+        let (data, response) = try await self.data(for: endpoint.urlRequest)
+        try verifyResponse(response)
         return data
     }
 
@@ -73,7 +85,8 @@ extension URLSession {
         for endpoint: Endpoint<Response>,
         using decoder: JSONDecoder = .init()
     ) async throws -> Response {
-        let (data, _) = try await self.data(for: endpoint.urlRequest)
+        let (data, response) = try await self.data(for: endpoint.urlRequest)
+        try verifyResponse(response)
         return try decoder.decode(Response.self, from: data)
     }
 }

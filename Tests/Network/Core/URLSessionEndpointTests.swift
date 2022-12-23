@@ -107,57 +107,6 @@ final class URLSessionEndpointTests: XCTestCase {
         }
     }
 
-    func testDecodable() async throws {
-        MockURLProtocol.error = nil
-        MockURLProtocol.requestHandler = { [unowned self] request in
-            let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/register")!,
-                statusCode: 200,
-                httpVersion: nil,
-                headerFields: ["Content-Type": "application/json"]
-            )!
-            return (response, resourceData)
-        }
-        let expectation = expectation(description: "register")
-        let session = URLSession.mockSession
-        let dataTask = session.dataTask(for: endpointRegister) { result in
-            switch result {
-            case .failure(let error):
-                XCTAssertNil(error)
-            case .success(let credentials):
-                XCTAssertNotNil(credentials)
-            }
-            expectation.fulfill()
-        }
-
-        dataTask.resume()
-
-        wait(for: [expectation], timeout: 5.0)
-    }
-
-    func testDecodableError() async throws {
-        MockURLProtocol.error = URLError(.unknown)
-        MockURLProtocol.requestHandler = nil
-
-        let expectation = expectation(description: "register")
-        let session = URLSession.mockSession
-        let dataTask = session.dataTask(for: endpointRegister) { result in
-            switch result {
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                XCTAssertNotNil(error as? URLError)
-                XCTAssertEqual((error as! URLError).code, .unknown)
-            case .success(let credentials):
-                XCTAssertNil(credentials)
-            }
-            expectation.fulfill()
-        }
-
-        dataTask.resume()
-
-        wait(for: [expectation], timeout: 5.0)
-    }
-
     // MARK: - Data
 
     func testDataCombine() async throws {
@@ -206,7 +155,6 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertTrue(true)
                 case .failure(let error):
                     XCTAssertNotNil(error)
-                    XCTAssertEqual(error.code, .unknown)
                 }
                 expectation.fulfill()
             } receiveValue: { data in
@@ -248,58 +196,6 @@ final class URLSessionEndpointTests: XCTestCase {
             XCTAssertNotNil(error as? URLError)
             XCTAssertEqual((error as! URLError).code, .unknown)
         }
-    }
-
-    func testData() async throws {
-        MockURLProtocol.error = nil
-        MockURLProtocol.requestHandler = { [unowned self] request in
-            let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/register")!,
-                statusCode: 200,
-                httpVersion: nil,
-                headerFields: [:]
-            )!
-            return (response, resourceData)
-        }
-
-        let session = URLSession.mockSession
-        let expectation = expectation(description: "register")
-        let dataTask = session.dataTask(for: endpointData) { result in
-            switch result {
-            case .failure(let error):
-                XCTAssertNil(error)
-            case .success(let response):
-                XCTAssertNotNil(response)
-            }
-            expectation.fulfill()
-        }
-
-        dataTask.resume()
-
-        wait(for: [expectation], timeout: 5.0)
-    }
-
-    func testDataError() async throws {
-        MockURLProtocol.error = URLError(.unknown)
-        MockURLProtocol.requestHandler = nil
-
-        let session = URLSession.mockSession
-        let expectation = expectation(description: "register")
-        let dataTask = session.dataTask(for: endpointData) { result in
-            switch result {
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                XCTAssertNotNil(error as? URLError)
-                XCTAssertEqual((error as! URLError).code, .unknown)
-            case .success(let credentials):
-                XCTAssertNil(credentials)
-            }
-            expectation.fulfill()
-        }
-
-        dataTask.resume()
-
-        wait(for: [expectation], timeout: 5.0)
     }
 
 }

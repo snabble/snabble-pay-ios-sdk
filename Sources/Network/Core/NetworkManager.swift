@@ -37,16 +37,18 @@ public struct NetworkManager {
                 session.publisher(for: endpoint, using: decoder)
             }
             .tryCatch { error in
-                print("error:", error)
-                return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
-                    .map { token in
-                        var endpoint = endpoint
-                        endpoint.token = token
-                        return endpoint
-                    }
-                    .flatMap { endpoint in
-                        session.publisher(for: endpoint, using: decoder)
-                    }
+                if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
+                    return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
+                        .map { token in
+                            var endpoint = endpoint
+                            endpoint.token = token
+                            return endpoint
+                        }
+                        .flatMap { endpoint in
+                            session.publisher(for: endpoint, using: decoder)
+                        }
+                }
+                throw error
             }
             .eraseToAnyPublisher()
     }
