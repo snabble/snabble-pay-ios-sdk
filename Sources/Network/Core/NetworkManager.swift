@@ -36,7 +36,8 @@ public struct NetworkManager {
             .flatMap { endpoint in
                 session.publisher(for: endpoint, using: decoder)
             }
-            .tryCatch { _ in
+            .tryCatch { error in
+                print("error:", error)
                 return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                     .map { token in
                         var endpoint = endpoint

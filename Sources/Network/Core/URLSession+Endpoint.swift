@@ -8,10 +8,43 @@
 import Foundation
 import Combine
 
+enum HTTPError: Equatable {
+    case invalidResponse(statusCode: HTTPStatusCode)
+    case unknownResponse(URLResponse)
+}
+
+extension HTTPError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidResponse(let statusCode):
+            return "Error: \(statusCode)"
+        case .unknownResponse(let response):
+            return "Error: unknown \(response)"
+        }
+    }
+}
+
+private extension Publisher where Output == (data: Data, response: URLResponse), Failure == any Error {
+    func tryVerifyResponse() -> AnyPublisher<Output, Failure> {
+        tryMap { (data, response) throws -> Output in
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw HTTPError.unknownResponse(response)
+            }
+            guard httpResponse.httpStatusCode.responseType == .success else {
+                throw HTTPError.invalidResponse(statusCode: httpResponse.httpStatusCode)
+            }
+            return (data, response)
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
 @available(iOS 13, *)
 extension URLSession {
-    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, URLError> {
+    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
         dataTaskPublisher(for: endpoint.urlRequest)
+            .mapError({ $0 as Swift.Error })
+            .tryVerifyResponse()
             .map(\.data)
             .eraseToAnyPublisher()
     }
@@ -21,55 +54,11 @@ extension URLSession {
         using decoder: JSONDecoder = .init()
     ) -> AnyPublisher<Response, Swift.Error> {
         dataTaskPublisher(for: endpoint.urlRequest)
+            .mapError({ $0 as Swift.Error })
+            .tryVerifyResponse()
             .map(\.data)
             .decode(type: Response.self, decoder: decoder)
             .eraseToAnyPublisher()
-    }
-}
-
-extension URLSession {
-    func dataTask(
-        for endpoint: Endpoint<Data>,
-        completionHandler: @escaping (Swift.Result<Data, Swift.Error>) -> Void
-    ) -> URLSessionDataTask {
-        dataTask(with: endpoint.urlRequest) { data, _, error in
-            do {
-                if let error = error {
-                    throw error
-                }
-
-                guard let data = data else {
-                    throw URLError(.badServerResponse)
-                }
-
-                completionHandler(.success(data))
-            } catch {
-                completionHandler(.failure(error))
-            }
-        }
-    }
-
-    func dataTask<Response: Decodable>(
-        for endpoint: Endpoint<Response>,
-        using decoder: JSONDecoder = .init(),
-        completionHandler: @escaping (Swift.Result<Response, Swift.Error>) -> Void
-    ) -> URLSessionDataTask {
-        dataTask(with: endpoint.urlRequest) { data, _, error in
-            do {
-                if let error = error {
-                    throw error
-                }
-
-                guard let data = data else {
-                    throw URLError(.badServerResponse)
-                }
-
-                let response = try decoder.decode(Response.self, from: data)
-                completionHandler(.success(response))
-            } catch {
-                completionHandler(.failure(error))
-            }
-        }
     }
 }
 

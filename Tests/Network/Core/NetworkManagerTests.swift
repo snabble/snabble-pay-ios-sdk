@@ -16,7 +16,7 @@ final class NetworkManagerTests: XCTestCase {
 
     override func setUpWithError() throws {
         cancellables = Set<AnyCancellable>()
-        networkManager = NetworkManager()
+        networkManager = NetworkManager(session: .mockSession)
     }
 
     override func tearDownWithError() throws {
@@ -25,12 +25,28 @@ final class NetworkManagerTests: XCTestCase {
     }
 
     func testExample() throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { _ in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/payment-validations")!,
+                statusCode: 401,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data())
+        }
+        
         let endpoint: Endpoint<PaymentValidation> = .paymentValidations(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
         networkManager.publisher(for: endpoint, using: .init())
             .sink { completion in
-                print(completion)
+                switch completion {
+                case .failure(let error):
+                    print("error:", error.localizedDescription)
+                case .finished:
+                    print("finished")
+                }
                 expectation.fulfill()
             } receiveValue: { validation in
                 print(validation)
