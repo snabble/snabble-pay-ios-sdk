@@ -10,19 +10,19 @@ import XCTest
 
 final class CredentialsEndpointTests: XCTestCase {
     func testEndpoint() throws {
-        let endpoint = Endpoint<Any>.register()
+        let endpoint = Endpoints.register()
         XCTAssertEqual(endpoint.path, "/apps/register")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironmentStaging() throws {
-        let endpoint = Endpoint<Any>.register(onEnvironment: .staging)
+        let endpoint = Endpoints.register(onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
     }
 
     func testEnvironmentDevelopment() throws {
-        let endpoint = Endpoint<Any>.register(onEnvironment: .development)
+        let endpoint = Endpoints.register(onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

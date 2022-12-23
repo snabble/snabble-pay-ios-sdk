@@ -8,7 +8,7 @@
 import Foundation
 import Tagged
 
-public extension Endpoint {
+extension Endpoints {
     static func register(onEnvironment environment: Environment = .production) -> Endpoint<App> {
         return .init(path: "/apps/register", method: .get(nil), environment: environment)
     }

@@ -7,6 +7,11 @@
 
 import Foundation
 
+/// A namespace for types that serve as `Endpoint`.
+///
+/// The various endpoints defined as extensions on ``Endpoint``.
+public enum Endpoints {}
+
 public struct Endpoint<Response> {
     public let method: HTTPMethod
     public let path: String

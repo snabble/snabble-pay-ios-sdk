@@ -11,24 +11,24 @@ import XCTest
 final class PaymentValidationsEndpointTests: XCTestCase {
 
     func testPostEndpoint() throws {
-        let endpoint = Endpoint<Any>.paymentValidations()
+        let endpoint = Endpoints.paymentValidations()
         XCTAssertEqual(endpoint.path, "/apps/payment-validations")
         XCTAssertEqual(endpoint.method, .post(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testGetEndpoint() throws {
-        let endpoint = Endpoint<Any>.paymentValidations(withID: "1", onEnvironment: .staging)
+        let endpoint = Endpoints.paymentValidations(withID: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint.path, "/apps/payment-validations/1")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .staging)
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoint<Any>.paymentValidations(onEnvironment: .staging)
+        var endpoint = Endpoints.paymentValidations(onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoint<Any>.paymentValidations(onEnvironment: .development)
+        endpoint = Endpoints.paymentValidations(onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

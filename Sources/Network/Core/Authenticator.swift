@@ -36,7 +36,7 @@ class Authenticator {
         }
 
         // scenario 2: we have to register the app instance
-        let endpoint: Endpoint<App> = .register(onEnvironment: environment)
+        let endpoint = Endpoints.register(onEnvironment: environment)
         let publisher = session.publisher(for: endpoint, using: decoder)
             .handleEvents(receiveOutput: { [weak self] app in
                 self?.app = app
@@ -66,7 +66,7 @@ class Authenticator {
             // scenario 3: we need a new token
             let publisher = validateApp(using: decoder, onEnvironment: environment)
                 .map { app -> Endpoint<Token> in
-                    return .token(
+                    Endpoints.token(
                         withAppIdentifier: app.identifier,
                         appSecret: app.secret,
                         onEnvironment: environment

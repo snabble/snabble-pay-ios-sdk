@@ -36,7 +36,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, Data())
         }
         
-        let endpoint: Endpoint<PaymentValidation> = .paymentValidations(onEnvironment: .development)
+        let endpoint = Endpoints.paymentValidations(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
         networkManager.publisher(for: endpoint)
@@ -87,7 +87,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, try! loadResource(filename: "payment-validation-no-credential", withExtension: "json"))
         }
 
-        let endpoint: Endpoint<PaymentValidation> = .paymentValidations(onEnvironment: .development)
+        let endpoint = Endpoints.paymentValidations(onEnvironment: .development)
 
         let expectation = expectation(description: "payment-validations")
         var validation: PaymentValidation?

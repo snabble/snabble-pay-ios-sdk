@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 import Combine
 
-public extension Endpoint {
+extension Endpoints {
     static func paymentValidations(onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
         .init(path: "/apps/payment-validations", method: .post(nil), environment: environment)
     }
