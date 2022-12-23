@@ -39,7 +39,7 @@ final class NetworkManagerTests: XCTestCase {
         let endpoint: Endpoint<PaymentValidation> = .paymentValidations(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
-        networkManager.publisher(for: endpoint, using: .init())
+        networkManager.publisher(for: endpoint)
             .sink { completion in
                 switch completion {
                 case .failure:
