@@ -19,6 +19,7 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.path, "/apps/mock")
         XCTAssertEqual(endpoint.environment, .production)
         XCTAssertEqual(endpoint.headerFields, [:])
+        XCTAssertNil(endpoint.token)
     }
 
     func testEnvironmentParameter() throws {
@@ -49,6 +50,16 @@ final class EndpointTests: XCTestCase {
 
         endpoint = .init(path: "/foobar/mock2", method: .head)
         XCTAssertEqual(endpoint.method, .head)
+    }
+
+    func testToken() throws {
+        var endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .get(nil))
+        XCTAssertNil(endpoint.token)
+        XCTAssertNil(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"])
+        
+        endpoint.token = .init(accessToken: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
+        XCTAssertNotNil(endpoint.token)
+        XCTAssertEqual(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"], "Bearer accessToken")
     }
 
     func testGETURLRequestWithQueryItems() throws {

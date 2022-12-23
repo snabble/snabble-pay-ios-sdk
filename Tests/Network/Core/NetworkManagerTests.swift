@@ -24,7 +24,7 @@ final class NetworkManagerTests: XCTestCase {
         networkManager = nil
     }
 
-    func testExample() throws {
+    func testRequestWithError() throws {
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { _ in
             let response = HTTPURLResponse(
@@ -42,17 +42,17 @@ final class NetworkManagerTests: XCTestCase {
         networkManager.publisher(for: endpoint, using: .init())
             .sink { completion in
                 switch completion {
-                case .failure(let error):
-                    print("error:", error.localizedDescription)
+                case .failure:
+                    expectation.fulfill()
                 case .finished:
-                    print("finished")
+                    break
                 }
-                expectation.fulfill()
             } receiveValue: { validation in
-                print(validation)
-            }.store(in: &cancellables)
+                XCTAssertNil(validation)
+            }
+            .store(in: &cancellables)
 
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 3.0)
     }
 
 }
