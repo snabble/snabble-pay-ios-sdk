@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    static func token(
+    public static func token(
         withAppIdentifier appIdentifier: App.Idenitifer,
         appSecret: App.Secret,
         scope: Token.Scope = .all,

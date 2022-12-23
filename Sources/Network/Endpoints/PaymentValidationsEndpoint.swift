@@ -10,11 +10,11 @@ import Tagged
 import Combine
 
 extension Endpoints {
-    static func paymentValidations(onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
+    public static func paymentValidations(onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
         .init(path: "/apps/payment-validations", method: .post(nil), environment: environment)
     }
 
-    static func paymentValidations(withID id: PaymentValidation.ID, onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
+    public static func paymentValidations(withID id: PaymentValidation.ID, onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
         .init(path: "/apps/payment-validations/\(id.rawValue)", method: .get(nil), environment: environment)
     }
 }
