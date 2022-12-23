@@ -24,10 +24,10 @@ extension HTTPError: LocalizedError {
     }
 }
 
-extension URLSession {
-    func verifyResponse(_ response: URLResponse) throws -> Void {
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw HTTPError.unknownResponse(response)
+private extension URLResponse {
+    func verify() throws {
+        guard let httpResponse = self as? HTTPURLResponse else {
+            throw HTTPError.unknownResponse(self)
         }
         guard httpResponse.httpStatusCode.responseType == .success else {
             throw HTTPError.invalidResponse(statusCode: httpResponse.httpStatusCode)
@@ -38,12 +38,7 @@ extension URLSession {
 private extension Publisher where Output == (data: Data, response: URLResponse), Failure == any Error {
     func tryVerifyResponse() -> AnyPublisher<Output, Failure> {
         tryMap { (data, response) throws -> Output in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw HTTPError.unknownResponse(response)
-            }
-            guard httpResponse.httpStatusCode.responseType == .success else {
-                throw HTTPError.invalidResponse(statusCode: httpResponse.httpStatusCode)
-            }
+            try response.verify()
             return (data, response)
         }
         .eraseToAnyPublisher()
@@ -77,7 +72,7 @@ extension URLSession {
 extension URLSession {
     func data(for endpoint: Endpoint<Data>) async throws -> Data {
         let (data, response) = try await self.data(for: endpoint.urlRequest)
-        try verifyResponse(response)
+        try response.verify()
         return data
     }
 
@@ -86,7 +81,7 @@ extension URLSession {
         using decoder: JSONDecoder = .init()
     ) async throws -> Response {
         let (data, response) = try await self.data(for: endpoint.urlRequest)
-        try verifyResponse(response)
+        try response.verify()
         return try decoder.decode(Response.self, from: data)
     }
 }
