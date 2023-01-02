@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import SnabblePayCore
+@testable import SnabblePayNetwork
 
 struct Mock: Decodable {
     let name: String
@@ -18,8 +18,8 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.path, "/apps/mock")
         XCTAssertEqual(endpoint.environment, .production)
-        XCTAssertEqual(endpoint.cachePolicy, .useProtocolCachePolicy)
-        XCTAssertNil(endpoint.headerFields)
+        XCTAssertEqual(endpoint.headerFields, [:])
+        XCTAssertNil(endpoint.token)
     }
 
     func testEnvironmentParameter() throws {
@@ -52,6 +52,16 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.method, .head)
     }
 
+    func testToken() throws {
+        var endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .get(nil))
+        XCTAssertNil(endpoint.token)
+        XCTAssertNil(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"])
+        
+        endpoint.token = .init(accessToken: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
+        XCTAssertNotNil(endpoint.token)
+        XCTAssertEqual(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"], "Bearer accessToken")
+    }
+
     func testGETURLRequestWithQueryItems() throws {
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .get([
             .init(name: "foobar", value: "1"),
@@ -62,7 +72,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock?barfoo=100&foobar=1")
         XCTAssertEqual(urlRequest.httpBody, nil)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testGETURLRequestWithQueryItemsOverwriteHeaderfields() throws {
@@ -76,7 +85,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/text"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock?barfoo=100&foobar=1")
         XCTAssertEqual(urlRequest.httpBody, nil)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testPOSTURLRequest() throws {
@@ -99,7 +107,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
         XCTAssertEqual(urlRequest.httpBody, jsonData)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testPUTURLRequest() throws {
@@ -122,7 +129,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
         XCTAssertEqual(urlRequest.httpBody, jsonData)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testPATCHURLRequest() throws {
@@ -145,7 +151,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
         XCTAssertEqual(urlRequest.httpBody, jsonData)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testDELETEURLRequest() throws {
@@ -155,7 +160,6 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
         XCTAssertEqual(urlRequest.httpBody, nil)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 
     func testHEADURLRequest() throws {
@@ -165,6 +169,5 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
         XCTAssertEqual(urlRequest.httpBody, nil)
-        XCTAssertEqual(urlRequest.cachePolicy, endpoint.cachePolicy)
     }
 }

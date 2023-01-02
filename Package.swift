@@ -20,16 +20,39 @@ let package = Package(
         .library(
             name: "SnabblePayUI",
             targets: ["SnabblePayUI"]
+        ),
+        .library(
+            name: "SnabblePayNetwork",
+            targets: ["SnabblePayNetwork"]
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0")
+        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0"),
+        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2")
     ],
     targets: [
         .target(
+            name: "SnabblePayNetwork",
+            dependencies: [
+                .product(name: "Tagged", package: "swift-tagged"),
+                "KeychainAccess"
+            ],
+            path: "Sources/Network"
+        ),
+        .testTarget(
+            name: "SnabblePayNetworkTests",
+            dependencies: [
+                "SnabblePayNetwork",
+            ],
+            path: "Tests/Network",
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
             name: "SnabblePayCore",
             dependencies: [
-                .product(name: "Tagged", package: "swift-tagged")
+                "SnabblePayNetwork",
             ],
             path: "Sources/Core",
             resources: [

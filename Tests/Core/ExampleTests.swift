@@ -2,11 +2,10 @@
 //  ExampleTests.swift
 //  
 //
-//  Created by Andreas Osberghaus on 2022-12-16.
+//  Created by Andreas Osberghaus on 2022-12-20.
 //
 
 import XCTest
-@testable import SnabblePayUI
 
 final class ExampleTests: XCTestCase {
 

@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum Environment {
+public enum Environment {
     case development
     case staging
     case production
 
-    var headers: [String: String]? {
+    var headerFields: [String: String] {
         return [
             "Content-Type": "application/json"
         ]

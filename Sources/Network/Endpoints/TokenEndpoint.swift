@@ -8,10 +8,10 @@
 import Foundation
 import Tagged
 
-extension Endpoint {
-    static func token(
-        withAppIdentifier appIdentifier: Credentials.AppIdenitifer,
-        appSecret: Credentials.AppSecret,
+extension Endpoints {
+    public static func token(
+        withAppIdentifier appIdentifier: App.Idenitifer,
+        appSecret: App.Secret,
         scope: Token.Scope = .all,
         onEnvironment environment: Environment = .production
     ) -> Endpoint<Token> {
@@ -26,26 +26,30 @@ extension Endpoint {
     }
 }
 
-struct Token: Decodable {
-    enum Scope: String, Decodable {
+public struct Token: Codable {
+    public enum Scope: String, Codable {
         case all
     }
 
-    enum `Type`: String, Decodable {
+    public enum `Type`: String, Codable {
         case bearer = "Bearer"
     }
 
-    let accessToken: AccessToken
-    let expiresIn: TimeInterval
-    let scope: Scope
-    let tokenType: `Type`
+    public let accessToken: AccessToken
+    public let expiresAt: Date
+    public let scope: Scope
+    public let type: `Type`
 
     enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-        case expiresIn = "expires_in"
+        case accessToken
+        case expiresAt
         case scope
-        case tokenType = "token_type"
+        case type = "tokenType"
     }
 
-    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
+    public typealias AccessToken = Tagged<(Token, accessToken: ()), String>
+
+    func isValid() -> Bool {
+        return true
+    }
 }

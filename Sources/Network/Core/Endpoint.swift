@@ -7,14 +7,19 @@
 
 import Foundation
 
-struct Endpoint<Response> {
-    let method: HTTPMethod
-    let path: String
+/// A namespace for types that serve as `Endpoint`.
+///
+/// The various endpoints defined as extensions on ``Endpoint``.
+public enum Endpoints {}
 
-    let environment: Environment
+public struct Endpoint<Response> {
+    public let method: HTTPMethod
+    public let path: String
+    public let environment: Environment
 
-    var headerFields: [String: String]?
-    var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
+    var token: Token?
+
+    var headerFields: [String: String] = [:]
 
     init(path: String, method: HTTPMethod, environment: Environment = .production) {
         self.path = path
@@ -24,7 +29,7 @@ struct Endpoint<Response> {
 }
 
 extension Endpoint {
-    var urlRequest: URLRequest {
+    public var urlRequest: URLRequest {
         var components = URLComponents(
             url: environment.baseURL,
             resolvingAgainstBaseURL: false
@@ -51,10 +56,15 @@ extension Endpoint {
             break
         }
 
-        let headerFields = (environment.headers ?? [:]).merging(headerFields ?? [:], uniquingKeysWith: { _, new in new })
+        let headerFields = environment.headerFields.merging(headerFields, uniquingKeysWith: { _, new in new })
         request.allHTTPHeaderFields = headerFields
+
+        if let token = token {
+            request.setValue("\(token.type.rawValue) \(token.accessToken.rawValue)", forHTTPHeaderField: "Authentication")
+        }
+
         request.httpMethod = method.value
-        request.cachePolicy = cachePolicy
+        request.cachePolicy = .useProtocolCachePolicy
 
         return request
     }

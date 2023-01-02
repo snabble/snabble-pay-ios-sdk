@@ -6,11 +6,11 @@
 //
 
 import XCTest
-@testable import SnabblePayCore
+@testable import SnabblePayNetwork
 
 final class TokenEndpointTests: XCTestCase {
     func testEndpoint() throws {
-        let endpoint = Endpoint<Any>.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret")
+        let endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret")
         XCTAssertEqual(endpoint.path, "/apps/token")
         XCTAssertEqual(endpoint.method, .get(
             [
@@ -21,22 +21,23 @@ final class TokenEndpointTests: XCTestCase {
             ]
         ))
         XCTAssertEqual(endpoint.environment, .production)
+        XCTAssertEqual(endpoint.urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/token?client_id=random_app_identifier&client_secret=random_app_secret&grant_type=client_credentials&scope=all")
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoint<Any>.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .staging)
+        var endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoint<Any>.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .development)
+        endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 
     func testDecodingCredentials() throws {
         let data = try loadResource(filename: "token", withExtension: "json")
-        let decodedObject = try JSONDecoder().decode(Token.self, from: data)
+        let decodedObject = try TestingDefaults.jsonDecoder.decode(Token.self, from: data)
         XCTAssertEqual(decodedObject.accessToken, "ZMNBLHLDNJM6JI-LSW8X-Q")
-        XCTAssertEqual(decodedObject.expiresIn, 7200)
+        XCTAssertEqual(decodedObject.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T12:53:55+02:00"))
         XCTAssertEqual(decodedObject.scope, .all)
-        XCTAssertEqual(decodedObject.tokenType, .bearer)
+        XCTAssertEqual(decodedObject.type, .bearer)
     }
 }

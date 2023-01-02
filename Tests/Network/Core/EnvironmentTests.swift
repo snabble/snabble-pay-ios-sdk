@@ -6,22 +6,22 @@
 //
 
 import XCTest
-@testable import SnabblePayCore
+@testable import SnabblePayNetwork
 
 final class EnvironmentTests: XCTestCase {
     func testDevelopmentHeaders() throws {
         let environment: Environment = .development
-        XCTAssertEqual(environment.headers, ["Content-Type": "application/json"])
+        XCTAssertEqual(environment.headerFields, ["Content-Type": "application/json"])
     }
 
     func testStagingHeaders() throws {
         let environment: Environment = .staging
-        XCTAssertEqual(environment.headers, ["Content-Type": "application/json"])
+        XCTAssertEqual(environment.headerFields, ["Content-Type": "application/json"])
     }
 
     func testProductionHeaders() throws {
         let environment: Environment = .production
-        XCTAssertEqual(environment.headers, ["Content-Type": "application/json"])
+        XCTAssertEqual(environment.headerFields, ["Content-Type": "application/json"])
     }
 
     func testDevelopmentBaseURL() throws {

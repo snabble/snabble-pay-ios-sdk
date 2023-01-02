@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Network Layer APPS-588
 * Phrase Integration APPS-583
 * pointfreeco/swift-tagged 0.9.0
+* Bearer Token Flow APPS-591
 
 ### Updated
 * realm/SwiftLint 0.50.3 (was 0.50.0)

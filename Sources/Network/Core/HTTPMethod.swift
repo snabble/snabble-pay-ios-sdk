@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HTTPMethod: Equatable {
+public enum HTTPMethod: Equatable {
     case get([URLQueryItem]?)
     case patch(Data?)
     case post(Data?)
