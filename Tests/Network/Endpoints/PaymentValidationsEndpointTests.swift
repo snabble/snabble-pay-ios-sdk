@@ -10,18 +10,11 @@ import XCTest
 
 final class PaymentValidationsEndpointTests: XCTestCase {
 
-    func testPostEndpoint() throws {
+    func testGetEndpoint() throws {
         let endpoint = Endpoints.paymentValidations()
         XCTAssertEqual(endpoint.path, "/apps/payment-validations")
-        XCTAssertEqual(endpoint.method, .post(nil))
-        XCTAssertEqual(endpoint.environment, .production)
-    }
-
-    func testGetEndpoint() throws {
-        let endpoint = Endpoints.paymentValidations(withID: "1", onEnvironment: .staging)
-        XCTAssertEqual(endpoint.path, "/apps/payment-validations/1")
         XCTAssertEqual(endpoint.method, .get(nil))
-        XCTAssertEqual(endpoint.environment, .staging)
+        XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironment() throws {
@@ -36,27 +29,52 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         XCTAssertEqual(PaymentValidation.State.pending.rawValue, "PENDING")
         XCTAssertEqual(PaymentValidation.State.successful.rawValue, "SUCCESSFUL")
         XCTAssertEqual(PaymentValidation.State.failed.rawValue, "FAILED")
-        XCTAssertEqual(PaymentValidation.State.errored.rawValue, "ERRORED")
+        XCTAssertEqual(PaymentValidation.State.error.rawValue, "ERROR")
     }
 
-    func testDecodingWithoutCredentials() throws {
-        let data = try loadResource(filename: "payment-validation-no-credential", withExtension: "json")
+    func testDecodingFailed() throws {
+        let data = try loadResource(filename: "payment-validation-failed", withExtension: "json")
         let instance = try JSONDecoder().decode(PaymentValidation.self, from: data)
-        XCTAssertEqual(instance.id, "1")
-        XCTAssertEqual(instance.state, PaymentValidation.State.pending)
-        XCTAssertNil(instance.credential)
+        XCTAssertEqual(instance.state, PaymentValidation.State.failed)
+        XCTAssertNil(instance.credentials)
+        XCTAssertNil(instance.validationLink)
+        XCTAssertNotNil(instance.message)
+        XCTAssertEqual(instance.message, "some error message")
     }
 
-    func testDecodingWithCredentials() throws {
-        let data = try loadResource(filename: "payment-validation-credential", withExtension: "json")
-        let instance = try TestingDefaults.jsonDecoder.decode(PaymentValidation.self, from: data)
-        XCTAssertEqual(instance.id, "1")
-        XCTAssertEqual(instance.state, PaymentValidation.State.successful)
-        XCTAssertNotNil(instance.credential)
+    func testDecodingError() throws {
+        let data = try loadResource(filename: "payment-validation-error", withExtension: "json")
+        let instance = try JSONDecoder().decode(PaymentValidation.self, from: data)
+        XCTAssertEqual(instance.state, PaymentValidation.State.error)
+        XCTAssertNil(instance.credentials)
+        XCTAssertNil(instance.validationLink)
+        XCTAssertNotNil(instance.message)
+        XCTAssertEqual(instance.message, "some error message")
+    }
 
-        XCTAssertEqual(instance.credential?.id, "1")
-        XCTAssertEqual(instance.credential?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
-        XCTAssertEqual(instance.credential?.iban, "DE123**********")
+    func testDecodingPending() throws {
+        let data = try loadResource(filename: "payment-validation-pending", withExtension: "json")
+        let instance = try JSONDecoder().decode(PaymentValidation.self, from: data)
+        XCTAssertEqual(instance.state, PaymentValidation.State.pending)
+        XCTAssertNil(instance.credentials)
+        XCTAssertNotNil(instance.validationLink)
+        XCTAssertEqual(instance.validationLink?.absoluteString, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
+        XCTAssertNil(instance.credentials)
+    }
+
+    func testDecodingSuccessful() throws {
+        let data = try loadResource(filename: "payment-validation-successful", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(PaymentValidation.self, from: data)
+        XCTAssertEqual(instance.state, PaymentValidation.State.successful)
+        XCTAssertNotNil(instance.credentials)
+
+        XCTAssertEqual(instance.credentials?.id, "1")
+        XCTAssertEqual(instance.credentials?.name, "John Doe's Account")
+        XCTAssertEqual(instance.credentials?.holderName, "John Doe")
+        XCTAssertEqual(instance.credentials?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.credentials?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.credentials?.bank, "Bank Name")
+        XCTAssertEqual(instance.credentials?.iban, "DE123**********")
     }
 
 }

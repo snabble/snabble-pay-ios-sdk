@@ -84,7 +84,7 @@ final class NetworkManagerTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(filename: "payment-validation-no-credential", withExtension: "json"))
+            return (response, try! loadResource(filename: "payment-validation-pending", withExtension: "json"))
         }
 
         let endpoint = Endpoints.paymentValidations(onEnvironment: .development)
