@@ -11,6 +11,7 @@ import Tagged
 extension Endpoints {
     public static func register(customUrlScheme: String, apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<App> {
         let jsonObject = ["appUrlScheme": customUrlScheme]
+        // swiftlint:disable:next force_try
         let dataObject = try! JSONSerialization.data(withJSONObject: jsonObject)
         var endpoint: Endpoint<App> = .init(path: "/apps/register", method: .post(dataObject), environment: environment)
         endpoint.headerFields = ["snabblePayKey": apiKeyValue]
