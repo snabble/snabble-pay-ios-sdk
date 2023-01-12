@@ -8,9 +8,15 @@
 import Combine
 import Foundation
 
+public struct NetworkConfig {
+    let customUrlScheme: String
+    let apiKeyValue: String
+}
+
 public struct NetworkManager {
     public let session: URLSession
     let authenticator: Authenticator
+    let config: NetworkConfig
 
     public static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -18,9 +24,14 @@ public struct NetworkManager {
         return decoder
     }()
 
-    public init(session: URLSession = .shared) {
+    public init(session: URLSession = .shared, config: NetworkConfig) {
         self.session = session
-        self.authenticator = Authenticator(session: session)
+        self.config = config
+        self.authenticator = Authenticator(
+            session: session,
+            customUrlScheme: config.customUrlScheme,
+            apiKeyValue: config.apiKeyValue
+        )
     }
 
     public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {

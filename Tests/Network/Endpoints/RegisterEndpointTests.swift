@@ -10,19 +10,22 @@ import XCTest
 
 final class CredentialsEndpointTests: XCTestCase {
     func testEndpoint() throws {
-        let endpoint = Endpoints.register()
+        let endpoint = Endpoints.register(customUrlScheme: "snabble-pay", apiKeyValue: "123456")
         XCTAssertEqual(endpoint.path, "/apps/register")
-        XCTAssertEqual(endpoint.method, .get(nil))
+        let jsonObject = ["appUrlScheme": "snabble-pay"]
+        let dataObject = try! JSONSerialization.data(withJSONObject: jsonObject)
+        XCTAssertEqual(endpoint.method, .post(dataObject))
+        XCTAssertEqual(endpoint.headerFields["snabblePayKey"], "123456")
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironmentStaging() throws {
-        let endpoint = Endpoints.register(onEnvironment: .staging)
+        let endpoint = Endpoints.register(customUrlScheme: "snabble-pay", apiKeyValue: "123456", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
     }
 
     func testEnvironmentDevelopment() throws {
-        let endpoint = Endpoints.register(onEnvironment: .development)
+        let endpoint = Endpoints.register(customUrlScheme: "snabble-pay", apiKeyValue: "123456", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 
