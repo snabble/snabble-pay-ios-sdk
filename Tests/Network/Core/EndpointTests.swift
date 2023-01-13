@@ -59,7 +59,7 @@ final class EndpointTests: XCTestCase {
         
         endpoint.token = .init(accessToken: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
         XCTAssertNotNil(endpoint.token)
-        XCTAssertEqual(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"], "Bearer accessToken")
+        XCTAssertEqual(endpoint.urlRequest.allHTTPHeaderFields?["Authorization"], "Bearer accessToken")
     }
 
     func testGETURLRequestWithQueryItems() throws {
