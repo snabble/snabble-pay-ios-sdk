@@ -50,6 +50,6 @@ public struct Token: Codable {
     public typealias AccessToken = Tagged<(Token, accessToken: ()), String>
 
     func isValid() -> Bool {
-        return true
+        return expiresAt.timeIntervalSinceNow.sign == .plus
     }
 }

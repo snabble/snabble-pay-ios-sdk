@@ -40,4 +40,12 @@ final class TokenEndpointTests: XCTestCase {
         XCTAssertEqual(decodedObject.scope, .all)
         XCTAssertEqual(decodedObject.type, .bearer)
     }
+
+    func testTokenIsValid() throws {
+        let tokenIsValid = Token(accessToken: "123", expiresAt: Date.init(timeIntervalSinceNow: -5), scope: .all, type: .bearer)
+        XCTAssertFalse(tokenIsValid.isValid())
+
+        let tokenIsInvalid = Token(accessToken: "1234", expiresAt: Date.init(timeIntervalSinceNow: 5), scope: .all, type: .bearer)
+        XCTAssertTrue(tokenIsInvalid.isValid())
+    }
 }
