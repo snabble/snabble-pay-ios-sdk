@@ -9,14 +9,20 @@ import Combine
 import Foundation
 
 public struct NetworkConfig {
-    let customUrlScheme: String
-    let apiKey: String
+    public let customUrlScheme: String
+    public let apiKey: String
+
+    public init(customUrlScheme: String, apiKey: String) {
+        self.customUrlScheme = customUrlScheme
+        self.apiKey = apiKey
+    }
 }
 
 public struct NetworkManager {
     public let session: URLSession
+    public let config: NetworkConfig
+
     let authenticator: Authenticator
-    let config: NetworkConfig
 
     public static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()

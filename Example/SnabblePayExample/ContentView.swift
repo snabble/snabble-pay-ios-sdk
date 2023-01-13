@@ -7,8 +7,11 @@
 
 import SwiftUI
 import SnabblePayCore
+import SnabblePayNetwork
 
 struct ContentView: View {
+    var networkManager: NetworkManager
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -22,6 +25,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(networkManager: .init(config: .init(customUrlScheme: "snabble-pay", apiKey: "12345")))
     }
 }
