@@ -10,11 +10,6 @@ import Dispatch
 import Combine
 import KeychainAccess
 
-public struct AuthenticatorConfig {
-    let customUrlScheme: String
-    let apiKeyValue: String
-}
-
 class Authenticator {
     let session: URLSession
     let customUrlScheme: String
