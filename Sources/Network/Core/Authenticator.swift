@@ -13,7 +13,7 @@ import KeychainAccess
 class Authenticator {
     let session: URLSession
     let customUrlScheme: String
-    let apiKeyValue: String
+    let apiKey: String
 
     enum Error: Swift.Error {
         case unknown
@@ -29,10 +29,10 @@ class Authenticator {
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
 
-    init(session: URLSession = .shared, customUrlScheme: String, apiKeyValue: String) {
+    init(session: URLSession = .shared, customUrlScheme: String, apiKey: String) {
         self.session = session
         self.customUrlScheme = customUrlScheme
-        self.apiKeyValue = apiKeyValue
+        self.apiKey = apiKey
     }
 
     private func validateApp(using decoder: JSONDecoder, onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
@@ -46,7 +46,7 @@ class Authenticator {
         // scenario 2: we have to register the app instance
         let endpoint = Endpoints.register(
             customUrlScheme: customUrlScheme,
-            apiKeyValue: apiKeyValue,
+            apiKeyValue: apiKey,
             onEnvironment: environment
         )
         let publisher = session.publisher(for: endpoint, using: decoder)

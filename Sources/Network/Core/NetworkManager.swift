@@ -10,7 +10,7 @@ import Foundation
 
 public struct NetworkConfig {
     let customUrlScheme: String
-    let apiKeyValue: String
+    let apiKey: String
 }
 
 public struct NetworkManager {
@@ -30,7 +30,7 @@ public struct NetworkManager {
         self.authenticator = Authenticator(
             session: session,
             customUrlScheme: config.customUrlScheme,
-            apiKeyValue: config.apiKeyValue
+            apiKey: config.apiKey
         )
     }
 

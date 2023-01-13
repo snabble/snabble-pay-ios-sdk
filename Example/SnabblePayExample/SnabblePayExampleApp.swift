@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-
-let DEMO_API_KEY = "IO2wX69CsqZUQ3HshOnRkO4y5Gy/kRar6Fnvkp94piA2ivUun7TC7MjukrgUKlu7g8W8/enVsPDT7Kvq28ycw=="
+import SnabblePayCore
 
 @main
 struct SnabblePayExampleApp: App {
