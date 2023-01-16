@@ -89,7 +89,7 @@ final class NetworkManagerTests: XCTestCase {
 
         let endpoint = Endpoints.account(onEnvironment: .development)
 
-        let expectation = expectation(description: "payment-validations")
+        let expectation = expectation(description: "account-pending")
         var validation: Account?
         networkManager.publisher(for: endpoint)
             .sink { completion in
@@ -108,5 +108,4 @@ final class NetworkManagerTests: XCTestCase {
 
         XCTAssertNotNil(validation)
     }
-
 }

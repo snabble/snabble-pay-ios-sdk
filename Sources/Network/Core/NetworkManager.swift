@@ -66,4 +66,8 @@ public struct NetworkManager {
             }
             .eraseToAnyPublisher()
     }
+
+    public func reset() {
+        authenticator.reset()
+    }
 }

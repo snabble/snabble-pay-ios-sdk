@@ -37,7 +37,7 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         let instance = try JSONDecoder().decode(Account.self, from: data)
         XCTAssertEqual(instance.state, Account.State.failed)
         XCTAssertNil(instance.credentials)
-        XCTAssertNil(instance.validationLink)
+        XCTAssertNil(instance.validationURL)
         XCTAssertNotNil(instance.message)
         XCTAssertEqual(instance.message, "some error message")
     }
@@ -47,7 +47,7 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         let instance = try JSONDecoder().decode(Account.self, from: data)
         XCTAssertEqual(instance.state, Account.State.error)
         XCTAssertNil(instance.credentials)
-        XCTAssertNil(instance.validationLink)
+        XCTAssertNil(instance.validationURL)
         XCTAssertNotNil(instance.message)
         XCTAssertEqual(instance.message, "some error message")
     }
@@ -57,8 +57,8 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         let instance = try JSONDecoder().decode(Account.self, from: data)
         XCTAssertEqual(instance.state, Account.State.pending)
         XCTAssertNil(instance.credentials)
-        XCTAssertNotNil(instance.validationLink)
-        XCTAssertEqual(instance.validationLink?.absoluteString, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
+        XCTAssertNotNil(instance.validationURL)
+        XCTAssertEqual(instance.validationURL?.absoluteString, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
         XCTAssertNil(instance.credentials)
     }
 

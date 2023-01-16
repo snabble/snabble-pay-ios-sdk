@@ -35,6 +35,11 @@ class ViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+
+    func removeAppId() {
+        networkManager.reset()
+        objectWillChange.send()
+    }
 }
 
 struct ContentView: View {
@@ -47,7 +52,7 @@ struct ContentView: View {
             Button {
                 viewModel.accountValidation()
             } label: {
-                Text("Payment Validation")
+                Text("Account Validation")
             }
             .sheet(
                 isPresented: $presentingSafariView,
@@ -55,6 +60,11 @@ struct ContentView: View {
                     SafariView(url: viewModel.validationURL!)
                 }
             )
+            Button {
+                viewModel.removeAppId()
+            } label: {
+                Text("Remove AppId")
+            }
         }
         .onChange(of: viewModel.validationURL) { newValue in
             presentingSafariView = newValue != nil
