@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E17B754E2975474E00392861 /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = E17B754D2975474E00392861 /* BetterSafariView */; };
 		E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */; };
 		E193765C2941E7AA001C8866 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193765B2941E7AA001C8866 /* ContentView.swift */; };
 		E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E193765D2941E7AB001C8866 /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E19376862941E7CA001C8866 /* SnabblePay in Frameworks */,
+				E17B754E2975474E00392861 /* BetterSafariView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +159,7 @@
 			name = SnabblePayExample;
 			packageProductDependencies = (
 				E19376852941E7CA001C8866 /* SnabblePay */,
+				E17B754D2975474E00392861 /* BetterSafariView */,
 			);
 			productName = SnabblePayExample;
 			productReference = E19376562941E7AA001C8866 /* SnabblePayExample.app */;
@@ -230,6 +233,9 @@
 				Base,
 			);
 			mainGroup = E193764D2941E7AA001C8866;
+			packageReferences = (
+				E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
+			);
 			productRefGroup = E19376572941E7AA001C8866 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -599,7 +605,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stleamist/BetterSafariView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		E17B754D2975474E00392861 /* BetterSafariView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */;
+			productName = BetterSafariView;
+		};
 		E19376852941E7CA001C8866 /* SnabblePay */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SnabblePay;

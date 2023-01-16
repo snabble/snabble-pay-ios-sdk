@@ -18,7 +18,7 @@ extension Endpoints {
 public struct Account: Decodable {
     public let state: State
     public let credentials: Credential?
-    public let validationLink: URL?
+    public let validationURL: URL?
     public let message: String?
 
     public typealias ID = Tagged<Account, String>
@@ -30,11 +30,11 @@ public struct Account: Decodable {
         case error = "ERROR"
     }
 
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case state
         case credentials
-        case validationLink
+        case validationURL = "validationLink"
         case message
     }
 
@@ -43,15 +43,15 @@ public struct Account: Decodable {
         self.state = try container.decode(Account.State.self, forKey: .state)
         switch state {
         case .pending:
-            self.validationLink = try container.decode(URL.self, forKey: .validationLink)
+            self.validationURL = try container.decode(URL.self, forKey: .validationURL)
             self.credentials = nil
             self.message = nil
         case .successful:
-            self.validationLink = nil
+            self.validationURL = nil
             self.credentials = try container.decode(Credential.self, forKey: .credentials)
             self.message = nil
         case .error, .failed:
-            self.validationLink = nil
+            self.validationURL = nil
             self.credentials = nil
             self.message = try container.decode(String.self, forKey: .message)
         }
