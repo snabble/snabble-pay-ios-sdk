@@ -1,5 +1,5 @@
 //
-//  PaymentValidationsEndpoint.swift
+//  AccountEndpoint.swift
 //  
 //
 //  Created by Andreas Osberghaus on 2022-12-19.
@@ -10,18 +10,18 @@ import Tagged
 import Combine
 
 extension Endpoints {
-    public static func paymentValidations(onEnvironment environment: Environment = .production) -> Endpoint<PaymentValidation> {
-        .init(path: "/apps/payment-validations", method: .get(nil), environment: environment)
+    public static func account(onEnvironment environment: Environment = .production) -> Endpoint<Account> {
+        .init(path: "/apps/account", method: .get(nil), environment: environment)
     }
 }
 
-public struct PaymentValidation: Decodable {
+public struct Account: Decodable {
     public let state: State
     public let credentials: Credential?
     public let validationLink: URL?
     public let message: String?
 
-    public typealias ID = Tagged<PaymentValidation, String>
+    public typealias ID = Tagged<Account, String>
 
     public enum State: String, Decodable {
         case pending = "PENDING"
@@ -40,7 +40,7 @@ public struct PaymentValidation: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.state = try container.decode(PaymentValidation.State.self, forKey: .state)
+        self.state = try container.decode(Account.State.self, forKey: .state)
         switch state {
         case .pending:
             self.validationLink = try container.decode(URL.self, forKey: .validationLink)

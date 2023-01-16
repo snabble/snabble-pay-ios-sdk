@@ -36,7 +36,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, Data())
         }
         
-        let endpoint = Endpoints.paymentValidations(onEnvironment: .development)
+        let endpoint = Endpoints.account(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
         networkManager.publisher(for: endpoint)
@@ -84,13 +84,13 @@ final class NetworkManagerTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(filename: "payment-validation-pending", withExtension: "json"))
+            return (response, try! loadResource(filename: "account-pending", withExtension: "json"))
         }
 
-        let endpoint = Endpoints.paymentValidations(onEnvironment: .development)
+        let endpoint = Endpoints.account(onEnvironment: .development)
 
         let expectation = expectation(description: "payment-validations")
-        var validation: PaymentValidation?
+        var validation: Account?
         networkManager.publisher(for: endpoint)
             .sink { completion in
                 switch completion {

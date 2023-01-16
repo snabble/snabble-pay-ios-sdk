@@ -18,7 +18,7 @@ struct SnabblePayExampleApp: SwiftUI.App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(networkManager: .init(config: networkConfig))
+            ContentView(viewModel: .init())
         }
     }
 }
