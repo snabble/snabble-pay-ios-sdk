@@ -67,6 +67,15 @@ public struct Account: Decodable {
     }
 }
 
+extension Account: Equatable {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        lhs.state == rhs.state &&
+        lhs.credentials == rhs.credentials &&
+        lhs.validationURL == rhs.validationURL &&
+        lhs.message == rhs.message
+    }
+}
+
 public struct Credential: Decodable {
     public let id: ID
     public let name: String
@@ -79,4 +88,10 @@ public struct Credential: Decodable {
     public typealias ID = Tagged<Credential, String>
     public typealias IBAN = Tagged<(Credential, iban: ()), String>
     public typealias CurrencyCode = Tagged<(Credential, currencyCode: ()), String>
+}
+
+extension Credential: Equatable {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

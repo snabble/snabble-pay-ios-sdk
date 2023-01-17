@@ -19,15 +19,14 @@ class ViewModel: ObservableObject {
         )
     )
 
-    @Published var validationURL: URL?
+    @Published var account: Account?
     @Published var errorOccured: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
 
-    func accountValidation() {
+    func loadAccount() {
         let endpoint = Endpoints.account(onEnvironment: .development)
         networkManager.publisher(for: endpoint)
-            .map(\.validationURL)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -37,7 +36,7 @@ class ViewModel: ObservableObject {
                     self.errorOccured = true
                 }
             } receiveValue: {
-                self.validationURL = $0
+                self.account = $0
             }
             .store(in: &cancellables)
     }
@@ -47,38 +46,54 @@ class ViewModel: ObservableObject {
         objectWillChange.send()
     }
 
-    func validateCallbackURL(_ url: URL) {
+    func validateCallbackURL(_ url: URL) -> Bool {
         guard Account.validateCallbackURL(url, forScheme: networkManager.config.customUrlScheme) else {
-            return
+            return false
         }
-        validationURL = nil
+        return true
     }
 }
 
 struct ContentView: View {
     @ObservedObject var viewModel: ViewModel
+
+    @State var validationURL: URL?
+    @State var iban: Credential.IBAN?
     
     var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             Button {
-                viewModel.accountValidation()
+                viewModel.loadAccount()
             } label: {
-                Text("Account Validation")
+                Text("Fetch Account")
             }
-            .sheet(item: $viewModel.validationURL) { url in
+            .sheet(item: $validationURL) { url in
                 SafariView(url: url)
             }
+
+            if let iban = iban {
+                Text(iban.rawValue)
+            }
+
             Button {
                 viewModel.removeAppId()
             } label: {
                 Text("Remove AppId")
             }
         }
+        .onChange(of: viewModel.account, perform: { newValue in
+            validationURL = newValue?.validationURL
+            iban = newValue?.credentials?.iban
+        })
         .alert(isPresented: $viewModel.errorOccured, content: {
             Alert(title: Text("Error occured"))
         })
         .onOpenURL {
-            viewModel.validateCallbackURL($0)
+            if viewModel.validateCallbackURL($0) {
+                validationURL = nil
+                viewModel.loadAccount()
+            }
+
         }
         .padding()
     }
