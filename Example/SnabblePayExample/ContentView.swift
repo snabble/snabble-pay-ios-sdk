@@ -31,6 +31,7 @@ class ViewModel: ObservableObject {
                     print("error: ", error.localizedDescription)
                 }
             } receiveValue: { validationURL in
+                print("validationURL: ", validationURL?.absoluteString ?? "nil")
                 self.validationURL = validationURL
             }
             .store(in: &cancellables)
@@ -44,8 +45,6 @@ class ViewModel: ObservableObject {
 
 struct ContentView: View {
     @ObservedObject var viewModel: ViewModel
-
-    @State var presentingSafariView: Bool = false
     
     var body: some View {
         VStack {
@@ -54,20 +53,14 @@ struct ContentView: View {
             } label: {
                 Text("Account Validation")
             }
-            .sheet(
-                isPresented: $presentingSafariView,
-                content: {
-                    SafariView(url: viewModel.validationURL!)
-                }
-            )
+            .sheet(item: $viewModel.validationURL) { url in
+                SafariView(url: url)
+            }
             Button {
                 viewModel.removeAppId()
             } label: {
                 Text("Remove AppId")
             }
-        }
-        .onChange(of: viewModel.validationURL) { newValue in
-            presentingSafariView = newValue != nil
         }
         .padding()
     }

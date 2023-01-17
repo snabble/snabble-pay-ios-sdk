@@ -15,6 +15,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        print("foobar")
         if url.host == "authorize" {
             guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
                 let queryItems = components.queryItems else {
