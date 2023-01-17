@@ -43,9 +43,7 @@ class ViewModel: ObservableObject {
     }
 
     func validateCallbackURL(_ url: URL) {
-        guard url.scheme == "snabble-pay",
-              url.host == "account",
-              url.lastPathComponent == "validation" else {
+        guard Account.validateCallbackURL(url, forScheme: networkManager.config.customUrlScheme) else {
             return
         }
         validationURL = nil

@@ -56,6 +56,15 @@ public struct Account: Decodable {
             self.message = try container.decode(String.self, forKey: .message)
         }
     }
+
+    public static func validateCallbackURL(_ url: URL, forScheme scheme: String) -> Bool {
+        guard url.scheme == scheme,
+              url.host == "account",
+              url.lastPathComponent == "validation" else {
+            return false
+        }
+        return true
+    }
 }
 
 public struct Credential: Decodable {

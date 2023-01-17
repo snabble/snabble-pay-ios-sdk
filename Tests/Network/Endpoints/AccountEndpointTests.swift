@@ -77,4 +77,18 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.credentials?.iban, "DE123**********")
     }
 
+    func testValidationCallbackURL() throws {
+        let url: URL = .init(string: "snabble-pay://account/validation")!
+        XCTAssertTrue(Account.validateCallbackURL(url, forScheme: "snabble-pay"))
+        XCTAssertFalse(Account.validateCallbackURL(url, forScheme: "snabble"))
+
+        var falseURL: URL = .init(string: "snabble-pay://AccOunT/ValidAtion")!
+        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+
+        falseURL = .init(string: "snabble-pay://account/ValidAtion")!
+        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+
+        falseURL = .init(string: "snabble-pay://account2/validation")!
+        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+    }
 }
