@@ -17,6 +17,7 @@ class ViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     @Published var validationURL: URL?
+    @Published var errorOccured: Bool = false
 
     func accountValidation() {
         let endpoint = Endpoints.account(onEnvironment: .development)
@@ -26,13 +27,12 @@ class ViewModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print("finished")
-                case .failure(let error):
-                    print("error: ", error.localizedDescription)
+                    break
+                case .failure:
+                    self.errorOccured = true
                 }
-            } receiveValue: { validationURL in
-                print("validationURL: ", validationURL?.absoluteString ?? "nil")
-                self.validationURL = validationURL
+            } receiveValue: {
+                self.validationURL = $0
             }
             .store(in: &cancellables)
     }
@@ -40,6 +40,15 @@ class ViewModel: ObservableObject {
     func removeAppId() {
         networkManager.reset()
         objectWillChange.send()
+    }
+
+    func validateCallbackURL(_ url: URL) {
+        guard url.scheme == "snabble-pay",
+              url.host == "account",
+              url.lastPathComponent == "validation" else {
+            return
+        }
+        validationURL = nil
     }
 }
 
@@ -61,6 +70,12 @@ struct ContentView: View {
             } label: {
                 Text("Remove AppId")
             }
+        }
+        .alert(isPresented: $viewModel.errorOccured, content: {
+            Alert(title: Text("Error occured"))
+        })
+        .onOpenURL {
+            viewModel.validateCallbackURL($0)
         }
         .padding()
     }
