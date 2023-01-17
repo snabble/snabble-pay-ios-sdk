@@ -68,7 +68,7 @@ public struct Account: Decodable {
 }
 
 extension Account: Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.state == rhs.state &&
         lhs.credentials == rhs.credentials &&
         lhs.validationURL == rhs.validationURL &&
@@ -91,7 +91,7 @@ public struct Credential: Decodable {
 }
 
 extension Credential: Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }
 }
