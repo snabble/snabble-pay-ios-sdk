@@ -18,7 +18,7 @@ extension Endpoints {
 public struct Account: Decodable {
     public let state: State
     public let credentials: Credential?
-    public let validationLink: URL?
+    public let validationURL: URL?
     public let message: String?
 
     public typealias ID = Tagged<Account, String>
@@ -30,11 +30,11 @@ public struct Account: Decodable {
         case error = "ERROR"
     }
 
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case state
         case credentials
-        case validationLink
+        case validationURL = "validationLink"
         case message
     }
 
@@ -43,18 +43,36 @@ public struct Account: Decodable {
         self.state = try container.decode(Account.State.self, forKey: .state)
         switch state {
         case .pending:
-            self.validationLink = try container.decode(URL.self, forKey: .validationLink)
+            self.validationURL = try container.decode(URL.self, forKey: .validationURL)
             self.credentials = nil
             self.message = nil
         case .successful:
-            self.validationLink = nil
+            self.validationURL = nil
             self.credentials = try container.decode(Credential.self, forKey: .credentials)
             self.message = nil
         case .error, .failed:
-            self.validationLink = nil
+            self.validationURL = nil
             self.credentials = nil
             self.message = try container.decode(String.self, forKey: .message)
         }
+    }
+
+    public static func validateCallbackURL(_ url: URL, forScheme scheme: String) -> Bool {
+        guard url.scheme == scheme,
+              url.host == "account",
+              url.lastPathComponent == "validation" else {
+            return false
+        }
+        return true
+    }
+}
+
+extension Account: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.state == rhs.state &&
+        lhs.credentials == rhs.credentials &&
+        lhs.validationURL == rhs.validationURL &&
+        lhs.message == rhs.message
     }
 }
 
@@ -70,4 +88,10 @@ public struct Credential: Decodable {
     public typealias ID = Tagged<Credential, String>
     public typealias IBAN = Tagged<(Credential, iban: ()), String>
     public typealias CurrencyCode = Tagged<(Credential, currencyCode: ()), String>
+}
+
+extension Credential: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

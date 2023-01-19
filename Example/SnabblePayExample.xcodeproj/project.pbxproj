@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E17B754E2975474E00392861 /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = E17B754D2975474E00392861 /* BetterSafariView */; };
+		E17B7550297550B200392861 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17B754F297550B200392861 /* AppDelegate.swift */; };
 		E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */; };
 		E193765C2941E7AA001C8866 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193765B2941E7AA001C8866 /* ContentView.swift */; };
 		E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E193765D2941E7AB001C8866 /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E17B754F297550B200392861 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E17B75512975514D00392861 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E19376562941E7AA001C8866 /* SnabblePayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnabblePayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleApp.swift; sourceTree = "<group>"; };
 		E193765B2941E7AA001C8866 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -54,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E19376862941E7CA001C8866 /* SnabblePay in Frameworks */,
+				E17B754E2975474E00392861 /* BetterSafariView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,10 +104,12 @@
 		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
 			isa = PBXGroup;
 			children = (
+				E17B75512975514D00392861 /* Info.plist */,
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
 				E193765B2941E7AA001C8866 /* ContentView.swift */,
 				E193765D2941E7AB001C8866 /* Assets.xcassets */,
 				E193765F2941E7AB001C8866 /* Preview Content */,
+				E17B754F297550B200392861 /* AppDelegate.swift */,
 			);
 			path = SnabblePayExample;
 			sourceTree = "<group>";
@@ -157,6 +164,7 @@
 			name = SnabblePayExample;
 			packageProductDependencies = (
 				E19376852941E7CA001C8866 /* SnabblePay */,
+				E17B754D2975474E00392861 /* BetterSafariView */,
 			);
 			productName = SnabblePayExample;
 			productReference = E19376562941E7AA001C8866 /* SnabblePayExample.app */;
@@ -230,6 +238,9 @@
 				Base,
 			);
 			mainGroup = E193764D2941E7AA001C8866;
+			packageReferences = (
+				E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
+			);
 			productRefGroup = E19376572941E7AA001C8866 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -272,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E193765C2941E7AA001C8866 /* ContentView.swift in Sources */,
 				E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */,
 			);
@@ -435,6 +447,7 @@
 				DEVELOPMENT_TEAM = 53K7JS449L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SnabblePayExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -464,6 +477,7 @@
 				DEVELOPMENT_TEAM = 53K7JS449L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SnabblePayExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -599,7 +613,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stleamist/BetterSafariView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		E17B754D2975474E00392861 /* BetterSafariView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */;
+			productName = BetterSafariView;
+		};
 		E19376852941E7CA001C8866 /* SnabblePay */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SnabblePay;

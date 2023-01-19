@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add Example APPS-581
 * Network Layer APPS-588
 * Phrase Integration APPS-583
-* pointfreeco/swift-tagged 0.9.0
 * Bearer Token Flow APPS-591
+* Verification with Tink APPS-585
 
 ### Updated
 * realm/SwiftLint 0.50.3 (was 0.50.0)
+* pointfreeco/swift-tagged 0.9.0
+* stleamist/BetterSafariView 2.4.1
