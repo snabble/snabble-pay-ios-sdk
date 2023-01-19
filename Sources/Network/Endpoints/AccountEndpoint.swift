@@ -21,8 +21,6 @@ public struct Account: Decodable {
     public let validationURL: URL?
     public let message: String?
 
-    public typealias ID = Tagged<Account, String>
-
     public enum State: String, Decodable {
         case pending = "PENDING"
         case successful = "SUCCESSFUL"
