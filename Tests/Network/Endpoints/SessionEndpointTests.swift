@@ -11,33 +11,45 @@ import XCTest
 final class SessionEndpointTests: XCTestCase {
 
     func testPostEndpoint() throws {
-        let endpoint = Endpoints.session()
+        let endpoint = Endpoints.Session.post()
         XCTAssertEqual(endpoint.path, "/apps/session")
         XCTAssertEqual(endpoint.method, .post(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testDeleteEndpoint() throws {
-        let endpoint = Endpoints.deleteSession(id: "1")
+        let endpoint = Endpoints.Session.delete(id: "1")
         XCTAssertEqual(endpoint.path, "/apps/session/1")
         XCTAssertEqual(endpoint.method, .delete)
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testGetEndpoint() throws {
-        let endpoint = Endpoints.session(id: "1")
+        let endpoint = Endpoints.Session.get(id: "1")
         XCTAssertEqual(endpoint.path, "/apps/session/1")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironmentStaging() throws {
-        let endpoint = Endpoints.session(onEnvironment: .staging)
+        var endpoint = Endpoints.Session.post(onEnvironment: .staging)
+        XCTAssertEqual(endpoint.environment, .staging)
+
+        endpoint = Endpoints.Session.get(id: "1", onEnvironment: .staging)
+        XCTAssertEqual(endpoint.environment, .staging)
+
+        endpoint = Endpoints.Session.delete(id: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
     }
 
     func testEnvironmentDevelopment() throws {
-        let endpoint = Endpoints.session(onEnvironment: .development)
+        var endpoint = Endpoints.Session.post(onEnvironment: .development)
+        XCTAssertEqual(endpoint.environment, .development)
+
+        endpoint = Endpoints.Session.get(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint.environment, .development)
+
+        endpoint = Endpoints.Session.delete(id: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

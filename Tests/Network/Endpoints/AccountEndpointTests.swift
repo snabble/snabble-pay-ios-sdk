@@ -11,17 +11,17 @@ import XCTest
 final class PaymentValidationsEndpointTests: XCTestCase {
 
     func testGetEndpoint() throws {
-        let endpoint = Endpoints.account()
+        let endpoint = Endpoints.Account.get()
         XCTAssertEqual(endpoint.path, "/apps/account")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoints.account(onEnvironment: .staging)
+        var endpoint = Endpoints.Account.get(onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoints.account(onEnvironment: .development)
+        endpoint = Endpoints.Account.get(onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

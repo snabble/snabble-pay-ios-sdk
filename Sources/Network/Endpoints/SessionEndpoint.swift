@@ -9,16 +9,18 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    public static func session(onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/session", method: .post(nil), environment: environment)
-    }
+    enum Session {
+        public static func post(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
+            return .init(path: "/apps/session", method: .post(nil), environment: environment)
+        }
 
-    public static func session(id: Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/session/\(id.rawValue)", method: .get(nil), environment: environment)
-    }
+        public static func get(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
+            return .init(path: "/apps/session/\(id.rawValue)", method: .get(nil), environment: environment)
+        }
 
-    public static func deleteSession(id: Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/session/\(id.rawValue)", method: .delete, environment: environment)
+        public static func delete(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
+            return .init(path: "/apps/session/\(id.rawValue)", method: .delete, environment: environment)
+        }
     }
 }
 

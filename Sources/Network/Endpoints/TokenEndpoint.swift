@@ -9,20 +9,22 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    public static func token(
-        withAppIdentifier appIdentifier: App.Idenitifer,
-        appSecret: App.Secret,
-        scope: Token.Scope = .all,
-        onEnvironment environment: Environment = .production
-    ) -> Endpoint<Token> {
-        return .init(path: "/apps/token",
-                     method: .get([
-                        .init(name: "grant_type", value: "client_credentials"),
-                        .init(name: "client_id", value: appIdentifier.rawValue),
-                        .init(name: "client_secret", value: appSecret.rawValue),
-                        .init(name: "scope", value: scope.rawValue)
-                     ]),
-                     environment: environment)
+    enum Token {
+        public static func get(
+            withAppIdentifier appIdentifier: App.Idenitifer,
+            appSecret: App.Secret,
+            scope: SnabblePayNetwork.Token.Scope = .all,
+            onEnvironment environment: Environment = .production
+        ) -> Endpoint<SnabblePayNetwork.Token> {
+            return .init(path: "/apps/token",
+                         method: .get([
+                            .init(name: "grant_type", value: "client_credentials"),
+                            .init(name: "client_id", value: appIdentifier.rawValue),
+                            .init(name: "client_secret", value: appSecret.rawValue),
+                            .init(name: "scope", value: scope.rawValue)
+                         ]),
+                         environment: environment)
+        }
     }
 }
 
