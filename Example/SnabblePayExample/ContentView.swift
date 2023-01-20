@@ -25,7 +25,7 @@ class ViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     func loadAccount() {
-        let endpoint = Endpoints.account(onEnvironment: .development)
+        let endpoint = Endpoints.Account.get(onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .receive(on: DispatchQueue.main)
             .sink { completion in

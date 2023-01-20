@@ -10,7 +10,7 @@ import XCTest
 
 final class TokenEndpointTests: XCTestCase {
     func testEndpoint() throws {
-        let endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret")
+        let endpoint = Endpoints.Token.get(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret")
         XCTAssertEqual(endpoint.path, "/apps/token")
         XCTAssertEqual(endpoint.method, .get(
             [
@@ -25,10 +25,10 @@ final class TokenEndpointTests: XCTestCase {
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .staging)
+        var endpoint = Endpoints.Token.get(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoints.token(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .development)
+        endpoint = Endpoints.Token.get(withAppIdentifier: "random_app_identifier", appSecret: "random_app_secret", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 

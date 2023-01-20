@@ -12,7 +12,7 @@ import Combine
 final class URLSessionEndpointTests: XCTestCase {
 
     let resourceData = try! loadResource(filename: "register", withExtension: "json")
-    let endpointRegister: Endpoint<App> = Endpoints.register(customUrlScheme: "snabble-pay", apiKeyValue: "123456")
+    let endpointRegister: Endpoint<App> = Endpoints.Register.post(customUrlScheme: "snabble-pay", apiKeyValue: "123456")
     let endpointData: Endpoint<Data> = .init(path: "/apps/register", method: .get(nil))
     var cancellables = Set<AnyCancellable>()
 

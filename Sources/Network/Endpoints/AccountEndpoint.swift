@@ -10,8 +10,10 @@ import Tagged
 import Combine
 
 extension Endpoints {
-    public static func account(onEnvironment environment: Environment = .production) -> Endpoint<Account> {
-        .init(path: "/apps/account", method: .get(nil), environment: environment)
+    public enum Account {
+        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account> {
+            .init(path: "/apps/account", method: .get(nil), environment: environment)
+        }
     }
 }
 
@@ -20,8 +22,6 @@ public struct Account: Decodable {
     public let credentials: Credential?
     public let validationURL: URL?
     public let message: String?
-
-    public typealias ID = Tagged<Account, String>
 
     public enum State: String, Decodable {
         case pending = "PENDING"

@@ -36,7 +36,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, Data())
         }
         
-        let endpoint = Endpoints.account(onEnvironment: .development)
+        let endpoint = Endpoints.Account.get(onEnvironment: .development)
 
         let expectation = expectation(description: "CredentialsValidations")
         networkManager.publisher(for: endpoint)
@@ -87,7 +87,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, try! loadResource(filename: "account-pending", withExtension: "json"))
         }
 
-        let endpoint = Endpoints.account(onEnvironment: .development)
+        let endpoint = Endpoints.Account.get(onEnvironment: .development)
 
         let expectation = expectation(description: "account-pending")
         var validation: Account?
