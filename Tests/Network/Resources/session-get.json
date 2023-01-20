@@ -5,7 +5,7 @@
   "refreshAt": "2022-12-22T09:34:38Z",
   "validUntil": "2022-12-22T09:44:38Z",
   "transaction": {
-    "id": 1,
+    "id": "1",
     "state": "ONGOING",
     "amount": "3.99",
     "currency": "EUR"

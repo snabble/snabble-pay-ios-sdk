@@ -10,11 +10,24 @@ import XCTest
 
 final class SessionEndpointTests: XCTestCase {
 
-    func testEndpoint() throws {
+    func testPostEndpoint() throws {
         let endpoint = Endpoints.session()
-        XCTAssertEqual(endpoint.path, "/apps/sessions")
+        XCTAssertEqual(endpoint.path, "/apps/session")
         XCTAssertEqual(endpoint.method, .post(nil))
-        XCTAssertNil(endpoint.headerFields)
+        XCTAssertEqual(endpoint.environment, .production)
+    }
+
+    func testDeleteEndpoint() throws {
+        let endpoint = Endpoints.deleteSession(id: "1")
+        XCTAssertEqual(endpoint.path, "/apps/session/1")
+        XCTAssertEqual(endpoint.method, .delete)
+        XCTAssertEqual(endpoint.environment, .production)
+    }
+
+    func testGetEndpoint() throws {
+        let endpoint = Endpoints.session(id: "1")
+        XCTAssertEqual(endpoint.path, "/apps/session/1")
+        XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
@@ -28,10 +41,44 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.environment, .development)
     }
 
-    func testDecodingAccount() throws {
+    func testDecodingAccountPost() throws {
         let jsonData = try loadResource(filename: "session-post", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
         XCTAssertEqual(instance.id.rawValue, "1")
         XCTAssertEqual(instance.token.rawValue, "3489f@asd2")
+        XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
+        XCTAssertEqual(instance.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
+        XCTAssertNil(instance.transaction)
+    }
+
+    func testDecodingAccountGet() throws {
+        let jsonData = try loadResource(filename: "session-get", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
+        XCTAssertEqual(instance.id.rawValue, "1")
+        XCTAssertEqual(instance.token.rawValue, "token")
+        XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
+        XCTAssertEqual(instance.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
+        XCTAssertNotNil(instance.transaction)
+        XCTAssertEqual(instance.transaction?.id, "1")
+        XCTAssertEqual(instance.transaction?.state, .ongoing)
+        XCTAssertEqual(instance.transaction?.amount, "3.99")
+        XCTAssertEqual(instance.transaction?.currency, "EUR")
+    }
+
+    func testTransactionState() throws {
+        var state: Transaction.State = .pending
+        XCTAssertEqual(state.rawValue, "PENDING")
+        state = .aborted
+        XCTAssertEqual(state.rawValue, "ABORTED")
+        state = .errored
+        XCTAssertEqual(state.rawValue, "ERRORED")
+        state = .failed
+        XCTAssertEqual(state.rawValue, "FAILED")
+        state = .ongoing
+        XCTAssertEqual(state.rawValue, "ONGOING")
+        state = .successful
+        XCTAssertEqual(state.rawValue, "SUCCESSFUL")
     }
 }

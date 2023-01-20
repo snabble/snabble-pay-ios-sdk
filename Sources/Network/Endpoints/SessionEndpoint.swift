@@ -10,15 +10,15 @@ import Tagged
 
 extension Endpoints {
     public static func session(onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/sessions", method: .post(nil), environment: environment)
+        return .init(path: "/apps/session", method: .post(nil), environment: environment)
     }
 
-    public static func getSession(id: Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/sessions/\(id.rawValue)", method: .get(nil), environment: environment)
+    public static func session(id: Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Session> {
+        return .init(path: "/apps/session/\(id.rawValue)", method: .get(nil), environment: environment)
     }
 
     public static func deleteSession(id: Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Session> {
-        return .init(path: "/apps/sessions/\(id.rawValue)", method: .delete, environment: environment)
+        return .init(path: "/apps/session/\(id.rawValue)", method: .delete, environment: environment)
     }
 }
 
@@ -49,7 +49,7 @@ public struct Transaction: Decodable {
     public let id: ID
     public let state: State
     public let amount: String
-    public let currenty: String
+    public let currency: String
 }
 
 
