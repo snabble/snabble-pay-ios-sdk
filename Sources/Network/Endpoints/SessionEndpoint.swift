@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    enum Session {
+    public enum Session {
         public static func post(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
             return .init(path: "/apps/session", method: .post(nil), environment: environment)
         }

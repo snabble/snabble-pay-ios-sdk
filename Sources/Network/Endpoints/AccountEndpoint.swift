@@ -10,7 +10,7 @@ import Tagged
 import Combine
 
 extension Endpoints {
-    enum Account {
+    public enum Account {
         public static func get(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account> {
             .init(path: "/apps/account", method: .get(nil), environment: environment)
         }

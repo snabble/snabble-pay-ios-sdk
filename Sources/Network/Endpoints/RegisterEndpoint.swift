@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    enum Register {
+    public enum Register {
         public static func post(customUrlScheme: String, apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<App> {
             let jsonObject = ["appUrlScheme": customUrlScheme]
             // swiftlint:disable:next force_try

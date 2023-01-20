@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    enum Token {
+    public enum Token {
         public static func get(
             withAppIdentifier appIdentifier: App.Idenitifer,
             appSecret: App.Secret,
