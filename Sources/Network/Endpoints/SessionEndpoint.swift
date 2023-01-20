@@ -51,5 +51,3 @@ public struct Transaction: Decodable {
     public let amount: String
     public let currency: String
 }
-
-
