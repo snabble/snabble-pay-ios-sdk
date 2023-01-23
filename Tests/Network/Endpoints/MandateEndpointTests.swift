@@ -66,9 +66,9 @@ final class MandateEndpointTests: XCTestCase {
     }
 
     func testEquatable() throws {
-        var mandate1 = Account.Mandate(state: .accepted, text: "foobar")
-        var mandate2 = Account.Mandate(state: .accepted, text: nil)
-        var mandate3 = Account.Mandate(state: .declined, text: "foobar")
+        let mandate1 = Account.Mandate(state: .accepted, text: "foobar")
+        let mandate2 = Account.Mandate(state: .accepted, text: nil)
+        let mandate3 = Account.Mandate(state: .declined, text: "foobar")
 
         XCTAssertEqual(mandate1, mandate2)
         XCTAssertFalse(mandate3 == mandate2)
