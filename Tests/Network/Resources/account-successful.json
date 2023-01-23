@@ -8,5 +8,8 @@
         "createdAt": "2022-12-22T09:24:38Z",
         "bank": "Bank Name",
         "iban": "DE123**********"
+    },
+    "mandate": {
+        "state": "ACCEPTED"
     }
 }

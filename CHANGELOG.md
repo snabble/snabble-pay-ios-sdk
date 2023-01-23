@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Bearer Token Flow APPS-591
 * Verification with Tink APPS-585
 * Session Endpoints APPS-654
+* Mandate Endpoints APPS-657
 
 ### Updated
 * realm/SwiftLint 0.50.3 (was 0.50.0)

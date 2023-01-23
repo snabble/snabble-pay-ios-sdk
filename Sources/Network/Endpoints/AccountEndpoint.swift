@@ -22,6 +22,7 @@ public struct Account: Decodable {
     public let credentials: Credential?
     public let validationURL: URL?
     public let message: String?
+    public let mandate: Mandate?
 
     public enum State: String, Decodable {
         case pending = "PENDING"
@@ -36,6 +37,7 @@ public struct Account: Decodable {
         case credentials
         case validationURL = "validationLink"
         case message
+        case mandate
     }
 
     public init(from decoder: Decoder) throws {
@@ -46,14 +48,18 @@ public struct Account: Decodable {
             self.validationURL = try container.decode(URL.self, forKey: .validationURL)
             self.credentials = nil
             self.message = nil
+            self.mandate = nil
         case .successful:
             self.validationURL = nil
             self.credentials = try container.decode(Credential.self, forKey: .credentials)
             self.message = nil
+#warning("Remove optional try if backend has added it")
+            self.mandate = try? container.decode(Mandate.self, forKey: .mandate)
         case .error, .failed:
             self.validationURL = nil
             self.credentials = nil
             self.message = try container.decode(String.self, forKey: .message)
+            self.mandate = nil
         }
     }
 
