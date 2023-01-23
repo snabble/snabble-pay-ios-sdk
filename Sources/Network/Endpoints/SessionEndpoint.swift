@@ -79,12 +79,14 @@ extension Session {
         public init(from decoder: Decoder) throws {
             let topLevelContainer = try decoder.container(keyedBy: RootKeys.self)
             let container = try topLevelContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .error)
-            do {
-                self.reason = try container.decode(Session.Error.Reason.self, forKey: Session.Error.CodingKeys.reason)
-            } catch {
-                self.reason = .unknown
-            }
+            self.reason = try container.decode(Session.Error.Reason.self, forKey: Session.Error.CodingKeys.reason)
             self.message = try container.decodeIfPresent(String.self, forKey: Session.Error.CodingKeys.message)
         }
+    }
+}
+
+extension Session.Error.Reason {
+    public init(from decoder: Decoder) throws {
+        self = try Self(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
     }
 }

@@ -1,6 +1,6 @@
 {
   "error": {
-    "type": "MANDATE_DECLINED",
+    "reason": "MANDATE_DECLINED",
     "message": "The user has to accept the mandate to start a session"
   }
 }

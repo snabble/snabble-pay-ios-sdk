@@ -1,5 +1,5 @@
 {
   "error": {
-    "type": "MANDATE_DECLINED_FOOBAR"
+    "reason": "MANDATE_DECLINED_FOOBAR"
   }
 }
