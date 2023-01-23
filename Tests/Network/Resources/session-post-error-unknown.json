@@ -1,0 +1,5 @@
+{
+  "error": {
+    "type": "MANDATE_DECLINED_FOOBAR"
+  }
+}

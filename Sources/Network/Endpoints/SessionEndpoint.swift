@@ -53,3 +53,38 @@ public struct Transaction: Decodable {
     public let amount: String
     public let currency: String
 }
+
+extension Session {
+    public struct Error: Decodable {
+        public let reason: Reason
+        public let message: String?
+
+        enum CodingKeys: String, CodingKey {
+            case reason
+            case message
+        }
+
+        enum RootKeys: String, CodingKey {
+            case error
+        }
+
+        public enum Reason: String, Decodable {
+            case mandateDeclined = "MANDATE_DECLINED"
+            case mandatePending = "MANDATE_PENDING"
+            case accountErrored = "ACCOUNT_ERRORED"
+            case accountFailed = "ACCOUNT_FAILED"
+            case unknown
+        }
+
+        public init(from decoder: Decoder) throws {
+            let topLevelContainer = try decoder.container(keyedBy: RootKeys.self)
+            let container = try topLevelContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .error)
+            do {
+                self.reason = try container.decode(Session.Error.Reason.self, forKey: Session.Error.CodingKeys.reason)
+            } catch {
+                self.reason = .unknown
+            }
+            self.message = try container.decodeIfPresent(String.self, forKey: Session.Error.CodingKeys.message)
+        }
+    }
+}

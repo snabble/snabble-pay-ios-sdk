@@ -64,6 +64,20 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertNil(instance.transaction)
     }
 
+    func testDecodingAccountPostErrorDeclined() throws {
+        let jsonData = try loadResource(filename: "session-post-error-declined", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
+        XCTAssertEqual(instance.reason, Session.Error.Reason.mandateDeclined)
+        XCTAssertEqual(instance.message, "The user has to accept the mandate to start a session")
+    }
+
+    func testDecodingAccountPostError() throws {
+        let jsonData = try loadResource(filename: "session-post-error-unknown", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
+        XCTAssertEqual(instance.reason, Session.Error.Reason.unknown)
+        XCTAssertNil(instance.message)
+    }
+
     func testDecodingAccountGet() throws {
         let jsonData = try loadResource(filename: "session-get", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
