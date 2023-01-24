@@ -59,17 +59,18 @@ struct AccountView: View {
     
     var body: some View {
         switch viewModel.account?.state {
-        case .successful:
-            AccountSuccessView(credentials: viewModel.account!.credentials!)
-        case .pending:
+        case .successful(let credentials, let mandate):
+            AccountSuccessView(credentials: credentials, mandate: mandate)
+        case .pending(let url):
             AccountPendingView(
-                url: viewModel.account!.validationURL!, onValidation:  {
+                url: url,
+                onValidation:  {
                     if viewModel.validateCallbackURL($0) {
                         viewModel.loadAccount()
                     }
                 })
-        case .error, .failed:
-            AccountErrorView()
+        case .error(let message), .failed(let message):
+            AccountErrorView(message: message)
         case .none:
             Text("Loading").onAppear {
                 viewModel.loadAccount()

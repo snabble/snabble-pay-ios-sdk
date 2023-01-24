@@ -19,19 +19,22 @@ extension Endpoints {
 
 public struct Account: Decodable {
     public let state: State
-    public let credentials: Credentials?
-    public let validationURL: URL?
-    public let message: String?
-    public let mandate: Mandate?
 
-    public enum State: String, Decodable {
+    public enum State {
+        case pending(URL)
+        case successful(Credentials, Mandate?)
+        case failed(String)
+        case error(String)
+    }
+
+    private enum StateCodingKeys: String, Decodable {
         case pending = "PENDING"
         case successful = "SUCCESSFUL"
         case failed = "FAILED"
         case error = "ERROR"
     }
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id
         case state
         case credentials
@@ -42,24 +45,22 @@ public struct Account: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.state = try container.decode(Account.State.self, forKey: .state)
-        switch state {
+        let stateKey = try container.decode(StateCodingKeys.self, forKey: .state)
+        switch stateKey {
         case .pending:
-            self.validationURL = try container.decode(URL.self, forKey: .validationURL)
-            self.credentials = nil
-            self.message = nil
-            self.mandate = nil
+            let validationURL = try container.decode(URL.self, forKey: .validationURL)
+            self.state = .pending(validationURL)
         case .successful:
-            self.validationURL = nil
-            self.credentials = try container.decode(Credentials.self, forKey: .credentials)
-            self.message = nil
+            let credentials = try container.decode(Credentials.self, forKey: .credentials)
 #warning("Remove optional try if backend has added it")
-            self.mandate = try? container.decode(Mandate.self, forKey: .mandate)
-        case .error, .failed:
-            self.validationURL = nil
-            self.credentials = nil
-            self.message = try container.decode(String.self, forKey: .message)
-            self.mandate = nil
+            let mandate = try? container.decode(Mandate.self, forKey: .mandate)
+            self.state = .successful(credentials, mandate)
+        case .error:
+            let message = try container.decode(String.self, forKey: .message)
+            self.state = .error(message)
+        case .failed:
+            let message = try container.decode(String.self, forKey: .message)
+            self.state = .failed(message)
         }
     }
 
@@ -75,10 +76,24 @@ public struct Account: Decodable {
 
 extension Account: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.state == rhs.state &&
-        lhs.credentials == rhs.credentials &&
-        lhs.validationURL == rhs.validationURL &&
-        lhs.message == rhs.message
+        lhs.state == rhs.state
+    }
+}
+
+extension Account.State: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.pending, .pending):
+            return true
+        case (.successful, .successful):
+            return true
+        case (.error, .error):
+            return true
+        case (.failed, .failed):
+            return true
+        default:
+            return false
+        }
     }
 }
 

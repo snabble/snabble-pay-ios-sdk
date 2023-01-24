@@ -54,53 +54,53 @@ class ViewModel: ObservableObject {
     }
 }
 
-struct ContentView: View {
-    @ObservedObject var viewModel: ViewModel
-
-    @State var validationURL: URL?
-    @State var iban: Account.Credentials.IBAN?
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            Button {
-                viewModel.loadAccount()
-            } label: {
-                Text("Fetch Account")
-            }
-            .sheet(item: $validationURL) { url in
-                SafariView(url: url)
-            }
-
-            if let iban = iban {
-                Text(iban.rawValue)
-            }
-
-            Button {
-                viewModel.removeAppId()
-            } label: {
-                Text("Remove AppId")
-            }
-        }
-        .onChange(of: viewModel.account, perform: { newValue in
-            validationURL = newValue?.validationURL
-            iban = newValue?.credentials?.iban
-        })
-        .alert(isPresented: $viewModel.errorOccured, content: {
-            Alert(title: Text("Error occured"))
-        })
-        .onOpenURL {
-            if viewModel.validateCallbackURL($0) {
-                validationURL = nil
-                viewModel.loadAccount()
-            }
-
-        }
-        .padding()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(viewModel: .init())
-    }
-}
+//struct ContentView: View {
+//    @ObservedObject var viewModel: ViewModel
+//
+//    @State var validationURL: URL?
+//    @State var iban: Account.Credentials.IBAN?
+//    
+//    var body: some View {
+//        VStack(spacing: 8) {
+//            Button {
+//                viewModel.loadAccount()
+//            } label: {
+//                Text("Fetch Account")
+//            }
+//            .sheet(item: $validationURL) { url in
+//                SafariView(url: url)
+//            }
+//
+//            if let iban = iban {
+//                Text(iban.rawValue)
+//            }
+//
+//            Button {
+//                viewModel.removeAppId()
+//            } label: {
+//                Text("Remove AppId")
+//            }
+//        }
+//        .onChange(of: viewModel.account, perform: { newValue in
+//            validationURL = newValue?.validationURL
+//            iban = newValue?.credentials?.iban
+//        })
+//        .alert(isPresented: $viewModel.errorOccured, content: {
+//            Alert(title: Text("Error occured"))
+//        })
+//        .onOpenURL {
+//            if viewModel.validateCallbackURL($0) {
+//                validationURL = nil
+//                viewModel.loadAccount()
+//            }
+//
+//        }
+//        .padding()
+//    }
+//}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView(viewModel: .init())
+//    }
+//}

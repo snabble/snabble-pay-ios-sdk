@@ -10,6 +10,7 @@ import SnabblePayNetwork
 
 struct AccountSuccessView: View {
     var credentials: Account.Credentials
+    var mandate: Account.Mandate?
 
     var body: some View {
         VStack(spacing: 8) {

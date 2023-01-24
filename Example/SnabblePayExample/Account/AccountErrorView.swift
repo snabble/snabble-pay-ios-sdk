@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct AccountErrorView: View {
+    var message: String
     var body: some View {
-        Text("Account Error View")
+        VStack(spacing: 8) {
+            Text("Account Error View")
+            Text(message)
+        }
     }
 }
 
 struct AccountErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountErrorView()
+        AccountErrorView(message: "Errormessage")
     }
 }
