@@ -1,17 +1,17 @@
 //
-//  ContentView.swift
+//  AccountView.swift
 //  SnabblePayExample
 //
-//  Created by Andreas Osberghaus on 2022-12-08.
+//  Created by Andreas Osberghaus on 2023-01-24.
 //
 
-import SwiftUI
-import Combine
+import Foundation
 import SnabblePayCore
 import SnabblePayNetwork
-import BetterSafariView
+import SwiftUI
+import Combine
 
-class ViewModel: ObservableObject {
+class AccountViewModel: ObservableObject {
     let networkManager: NetworkManager = .init(
         config: .init(
             customUrlScheme: "snabble-pay",
@@ -54,53 +54,27 @@ class ViewModel: ObservableObject {
     }
 }
 
-struct ContentView: View {
-    @ObservedObject var viewModel: ViewModel
-
-    @State var validationURL: URL?
-    @State var iban: Account.Credentials.IBAN?
+struct AccountView: View {
+    @ObservedObject var viewModel: AccountViewModel
     
     var body: some View {
-        VStack(spacing: 8) {
-            Button {
-                viewModel.loadAccount()
-            } label: {
-                Text("Fetch Account")
-            }
-            .sheet(item: $validationURL) { url in
-                SafariView(url: url)
-            }
-
-            if let iban = iban {
-                Text(iban.rawValue)
-            }
-
-            Button {
-                viewModel.removeAppId()
-            } label: {
-                Text("Remove AppId")
-            }
-        }
-        .onChange(of: viewModel.account, perform: { newValue in
-            validationURL = newValue?.validationURL
-            iban = newValue?.credentials?.iban
-        })
-        .alert(isPresented: $viewModel.errorOccured, content: {
-            Alert(title: Text("Error occured"))
-        })
-        .onOpenURL {
-            if viewModel.validateCallbackURL($0) {
-                validationURL = nil
+        switch viewModel.account?.state {
+        case .successful:
+            AccountSuccessView(credentials: viewModel.account!.credentials!)
+        case .pending:
+            AccountPendingView(
+                url: viewModel.account!.validationURL!, onValidation:  {
+                    if viewModel.validateCallbackURL($0) {
+                        viewModel.loadAccount()
+                    }
+                })
+        case .error, .failed:
+            AccountErrorView()
+        case .none:
+            Text("Loading").onAppear {
                 viewModel.loadAccount()
             }
-
         }
-        .padding()
-    }
-}
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(viewModel: .init())
     }
 }

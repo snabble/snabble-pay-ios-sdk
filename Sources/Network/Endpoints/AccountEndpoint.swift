@@ -19,7 +19,7 @@ extension Endpoints {
 
 public struct Account: Decodable {
     public let state: State
-    public let credentials: Credential?
+    public let credentials: Credentials?
     public let validationURL: URL?
     public let message: String?
     public let mandate: Mandate?
@@ -51,7 +51,7 @@ public struct Account: Decodable {
             self.mandate = nil
         case .successful:
             self.validationURL = nil
-            self.credentials = try container.decode(Credential.self, forKey: .credentials)
+            self.credentials = try container.decode(Credentials.self, forKey: .credentials)
             self.message = nil
 #warning("Remove optional try if backend has added it")
             self.mandate = try? container.decode(Mandate.self, forKey: .mandate)
@@ -82,21 +82,23 @@ extension Account: Equatable {
     }
 }
 
-public struct Credential: Decodable {
-    public let id: ID
-    public let name: String
-    public let holderName: String
-    public let currencyCode: CurrencyCode
-    public let bank: String
-    public let createdAt: Date
-    public let iban: IBAN
+extension Account {
+    public struct Credentials: Decodable {
+        public let id: ID
+        public let name: String
+        public let holderName: String
+        public let currencyCode: CurrencyCode
+        public let bank: String
+        public let createdAt: Date
+        public let iban: IBAN
 
-    public typealias ID = Tagged<Credential, String>
-    public typealias IBAN = Tagged<(Credential, iban: ()), String>
-    public typealias CurrencyCode = Tagged<(Credential, currencyCode: ()), String>
+        public typealias ID = Tagged<Credentials, String>
+        public typealias IBAN = Tagged<(Credentials, iban: ()), String>
+        public typealias CurrencyCode = Tagged<(Credentials, currencyCode: ()), String>
+    }
 }
 
-extension Credential: Equatable {
+extension Account.Credentials: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }
