@@ -10,8 +10,8 @@ import BetterSafariView
 
 struct AccountPendingView: View {
     var url: URL
-    var onDismiss: (() -> Void)? = nil
-    var onValidation: ((URL) -> Void)? = nil
+    var onDismiss: (() -> Void)?
+    var onValidation: ((URL) -> Void)?
 
     @State private var showSheet: Bool = false
 

@@ -61,7 +61,7 @@ struct AccountView: View {
         case .pending(let url):
             AccountPendingView(
                 url: url,
-                onValidation:  {
+                onValidation: {
                     if viewModel.validateCallbackURL($0) {
                         viewModel.loadAccount()
                     } else {
