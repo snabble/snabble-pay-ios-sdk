@@ -19,6 +19,6 @@ struct AccountErrorView: View {
 
 struct AccountErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountErrorView(message: "Errormessage")
+        AccountErrorView(message: "Error message")
     }
 }

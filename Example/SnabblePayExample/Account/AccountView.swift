@@ -42,6 +42,7 @@ class AccountViewModel: ObservableObject {
     }
 
     func removeAppId() {
+        account = nil
         networkManager.reset()
         objectWillChange.send()
     }
@@ -57,7 +58,9 @@ struct AccountView: View {
     var body: some View {
         switch viewModel.account?.state {
         case .successful(let credentials, let mandate):
-            AccountSuccessView(credentials: credentials, mandate: mandate)
+            AccountSuccessView(credentials: credentials, mandate: mandate) {
+                viewModel.removeAppId()
+            }
         case .pending(let url):
             AccountPendingView(
                 url: url,
