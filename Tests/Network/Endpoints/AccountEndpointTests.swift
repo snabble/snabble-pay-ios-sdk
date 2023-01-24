@@ -78,7 +78,7 @@ final class PaymentValidationsEndpointTests: XCTestCase {
             XCTAssertEqual(credentials.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
             XCTAssertEqual(credentials.bank, "Bank Name")
             XCTAssertEqual(credentials.iban, "DE123**********")
-            XCTAssertEqual(mandate?.state, .accepted)
+            XCTAssertEqual(mandate.state, .accepted)
         default:
             XCTFail("State should be pending")
         }
