@@ -20,6 +20,8 @@ extension Endpoints {
 public struct Account: Decodable {
     public let state: State
 
+    let urlScheme: String
+
     public enum State {
         case pending(URL)
         case successful(Credentials, Mandate?)
@@ -62,10 +64,14 @@ public struct Account: Decodable {
             let message = try container.decode(String.self, forKey: .message)
             self.state = .failed(message)
         }
+        guard let urlScheme = decoder.userInfo[.urlScheme] as? String else {
+            throw DecodingError.valueNotFound(String.self, .init(codingPath: [], debugDescription: "Missing URLScheme in decoders userInfo"))
+        }
+        self.urlScheme = urlScheme
     }
 
-    public static func validateCallbackURL(_ url: URL, forScheme scheme: String) -> Bool {
-        guard url.scheme == scheme,
+    public func validateCallbackURL(_ url: URL) -> Bool {
+        guard url.scheme == urlScheme,
               url.host == "account",
               url.lastPathComponent == "validation" else {
             return false

@@ -47,10 +47,7 @@ class AccountViewModel: ObservableObject {
     }
 
     func validateCallbackURL(_ url: URL) -> Bool {
-        guard Account.validateCallbackURL(url, forScheme: networkManager.config.customUrlScheme) else {
-            return false
-        }
-        return true
+        account?.validateCallbackURL(url) ?? false
     }
 }
 
@@ -67,6 +64,8 @@ struct AccountView: View {
                 onValidation:  {
                     if viewModel.validateCallbackURL($0) {
                         viewModel.loadAccount()
+                    } else {
+                        #warning("something todo")
                     }
                 })
         case .error(let message), .failed(let message):

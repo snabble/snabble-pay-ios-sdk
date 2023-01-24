@@ -46,12 +46,12 @@ class ViewModel: ObservableObject {
         objectWillChange.send()
     }
 
-    func validateCallbackURL(_ url: URL) -> Bool {
-        guard Account.validateCallbackURL(url, forScheme: networkManager.config.customUrlScheme) else {
-            return false
-        }
-        return true
-    }
+//    func validateCallbackURL(_ url: URL) -> Bool {
+//        guard Account.validateCallbackURL(url, forScheme: networkManager.config.customUrlScheme) else {
+//            return false
+//        }
+//        return true
+//    }
 }
 
 //struct ContentView: View {
