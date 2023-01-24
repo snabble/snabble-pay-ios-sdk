@@ -17,7 +17,7 @@ extension Endpoints.Account {
             )
         }
 
-        public static func accept(onEnvironment environment: Environment = .production) -> Endpoint<Data> {
+        public static func accept(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Mandate> {
             .init(
                 path: "/apps/account/mandate",
                 method: .patch(data(for: .accept)),
@@ -25,7 +25,7 @@ extension Endpoints.Account {
             )
         }
 
-        public static func decline(onEnvironment environment: Environment = .production) -> Endpoint<Data> {
+        public static func decline(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Mandate> {
             .init(
                 path: "/apps/account/mandate",
                 method: .patch(data(for: .decline)),

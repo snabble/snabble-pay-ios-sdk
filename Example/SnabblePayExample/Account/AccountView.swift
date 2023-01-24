@@ -37,48 +37,6 @@ class AccountViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func acceptMandate() {
-        performMandate(action: .accept)
-    }
-
-    func declineMandate() {
-        performMandate(action: .decline)
-    }
-
-    private func performMandate(action: MandateAction) {
-        networkManager.publisher(for: action.endpoint(onEnvironment: .development))
-            .flatMap { _ in
-                let endpoint = Endpoints.Account.get(onEnvironment: .development)
-                return self.networkManager.publisher(for: endpoint)
-            }
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure:
-                    self.account = nil
-                }
-            } receiveValue: { account in
-                self.account = account
-            }
-            .store(in: &cancellables)
-    }
-
-    private enum MandateAction {
-        case accept
-        case decline
-
-        func endpoint(onEnvironment environment: SnabblePayNetwork.Environment) -> Endpoint<Data> {
-            switch self {
-            case .accept:
-                return Endpoints.Account.Mandate.accept(onEnvironment: environment)
-            case .decline:
-                return Endpoints.Account.Mandate.decline(onEnvironment: environment)
-            }
-        }
-    }
-
     func removeAppId() {
         account = nil
         networkManager.reset()
@@ -101,12 +59,6 @@ struct AccountView: View {
                 mandate: mandate,
                 onDestructiveAction: {
                     viewModel.removeAppId()
-                },
-                onAcceptMandate: {
-                    viewModel.acceptMandate()
-                },
-                onDeclineMandate: {
-                    print("decline mandate")
                 }
             )
         case .pending(let url):

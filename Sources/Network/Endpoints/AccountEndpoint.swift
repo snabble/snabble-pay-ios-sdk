@@ -24,7 +24,7 @@ public struct Account: Decodable {
 
     public enum State {
         case pending(URL)
-        case successful(Credentials, Mandate?)
+        case successful(Credentials, Mandate)
         case failed(String)
         case error(String)
     }
@@ -55,7 +55,7 @@ public struct Account: Decodable {
         case .successful:
             let credentials = try container.decode(Credentials.self, forKey: .credentials)
 #warning("Remove optional try if backend has added it")
-            let mandate = try? container.decode(Mandate.self, forKey: .mandate)
+            let mandate = try container.decodeIfPresent(Mandate.self, forKey: .mandate) ?? Mandate(state: .pending, text: "Mandate Text")
             self.state = .successful(credentials, mandate)
         case .error:
             let message = try container.decode(String.self, forKey: .message)
