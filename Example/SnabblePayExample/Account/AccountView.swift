@@ -12,12 +12,7 @@ import SwiftUI
 import Combine
 
 class AccountViewModel: ObservableObject {
-    let networkManager: NetworkManager = .init(
-        config: .init(
-            customUrlScheme: "snabble-pay",
-            apiKey: "IO2wX69CsqZUQ3HshOnRkO4y5Gy/kRar6Fnvkp94piA2ivUun7TC7MjukrgUKlu7g8W8/enVsPDT7Kvq28ycw=="
-        )
-    )
+    @Injected(\.networkManager) var networkManager: NetworkManager
 
     @Published var account: Account?
     @Published var errorOccured: Bool = false
@@ -33,12 +28,55 @@ class AccountViewModel: ObservableObject {
                 case .finished:
                     break
                 case .failure:
+                    self.account = nil
                     self.errorOccured = true
                 }
             } receiveValue: {
                 self.account = $0
             }
             .store(in: &cancellables)
+    }
+
+    func acceptMandate() {
+        performMandate(action: .accept)
+    }
+
+    func declineMandate() {
+        performMandate(action: .decline)
+    }
+
+    private func performMandate(action: MandateAction) {
+        networkManager.publisher(for: action.endpoint(onEnvironment: .development))
+            .flatMap { _ in
+                let endpoint = Endpoints.Account.get(onEnvironment: .development)
+                return self.networkManager.publisher(for: endpoint)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure:
+                    self.account = nil
+                }
+            } receiveValue: { account in
+                self.account = account
+            }
+            .store(in: &cancellables)
+    }
+
+    private enum MandateAction {
+        case accept
+        case decline
+
+        func endpoint(onEnvironment environment: SnabblePayNetwork.Environment) -> Endpoint<Data> {
+            switch self {
+            case .accept:
+                return Endpoints.Account.Mandate.accept(onEnvironment: environment)
+            case .decline:
+                return Endpoints.Account.Mandate.decline(onEnvironment: environment)
+            }
+        }
     }
 
     func removeAppId() {
@@ -58,9 +96,19 @@ struct AccountView: View {
     var body: some View {
         switch viewModel.account?.state {
         case .successful(let credentials, let mandate):
-            AccountSuccessView(credentials: credentials, mandate: mandate) {
-                viewModel.removeAppId()
-            }
+            AccountSuccessView(
+                credentials: credentials,
+                mandate: mandate,
+                onDestructiveAction: {
+                    viewModel.removeAppId()
+                },
+                onAcceptMandate: {
+                    viewModel.acceptMandate()
+                },
+                onDeclineMandate: {
+                    print("decline mandate")
+                }
+            )
         case .pending(let url):
             AccountPendingView(
                 url: url,
