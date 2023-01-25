@@ -26,7 +26,7 @@ extension Endpoints.Account {
 }
 
 extension Account {
-    public struct Credentials: Decodable {
+    public struct Credentials: Decodable, Identifiable {
         public let id: ID
         public let name: String
         public let holderName: String

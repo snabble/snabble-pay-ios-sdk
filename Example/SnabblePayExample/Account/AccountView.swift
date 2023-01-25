@@ -55,13 +55,9 @@ struct AccountView: View {
         if let account = viewModel.account {
             switch account.state {
             case .ready:
-                EmptyView()
-//                AccountSuccessView(
-//                    credentials: account.credentials,
-//                    onDestructiveAction: {
-//                        viewModel.removeAppId()
-//                    }
-//                )
+                CredentialsView(credentials: account.credentials) {
+                    viewModel.removeAppId()
+                }
             case .pending:
                 AccountPendingView(
                     url: account.validationURL,
@@ -74,10 +70,14 @@ struct AccountView: View {
                     })
             }
         } else {
-            Text("Loading")
-                .onAppear {
-                    viewModel.loadAccount()
-                }
+            if viewModel.errorOccured {
+                Text("Error")
+            } else {
+                Text("Loading")
+                    .onAppear {
+                        viewModel.loadAccount()
+                    }
+            }
         }
     }
 }
