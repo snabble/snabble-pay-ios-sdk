@@ -8,7 +8,7 @@
 import XCTest
 @testable import SnabblePayNetwork
 
-final class CredentialsEndpointTests: XCTestCase {
+final class RegisterEndpointTests: XCTestCase {
     func testEndpoint() throws {
         let endpoint = Endpoints.Register.post(customUrlScheme: "snabble-pay", apiKeyValue: "123456")
         XCTAssertEqual(endpoint.path, "/apps/register")

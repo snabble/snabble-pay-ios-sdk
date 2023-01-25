@@ -52,32 +52,32 @@ struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
     
     var body: some View {
-        switch viewModel.account?.state {
-        case .successful(let credentials, let mandate):
-            AccountSuccessView(
-                credentials: credentials,
-                mandate: mandate,
-                onDestructiveAction: {
-                    viewModel.removeAppId()
-                }
-            )
-        case .pending(let url):
-            AccountPendingView(
-                url: url,
-                onValidation: {
-                    if viewModel.validateCallbackURL($0) {
-                        viewModel.loadAccount()
-                    } else {
-                        #warning("something todo")
-                    }
-                })
-        case .error(let message), .failed(let message):
-            AccountErrorView(message: message)
-        case .none:
-            Text("Loading").onAppear {
-                viewModel.loadAccount()
+        if let account = viewModel.account {
+            switch account.state {
+            case .ready:
+                EmptyView()
+//                AccountSuccessView(
+//                    credentials: account.credentials,
+//                    onDestructiveAction: {
+//                        viewModel.removeAppId()
+//                    }
+//                )
+            case .pending:
+                AccountPendingView(
+                    url: account.validationURL,
+                    onValidation: {
+                        if viewModel.validateCallbackURL($0) {
+                            viewModel.loadAccount()
+                        } else {
+                            #warning("something todo")
+                        }
+                    })
             }
+        } else {
+            Text("Loading")
+                .onAppear {
+                    viewModel.loadAccount()
+                }
         }
-
     }
 }

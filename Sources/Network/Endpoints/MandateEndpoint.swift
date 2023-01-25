@@ -7,27 +7,27 @@
 
 import Foundation
 
-extension Endpoints.Account {
+extension Endpoints.Account.Credentials {
     public enum Mandate {
-        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Mandate> {
+        public static func get(credentialsId: Account.Credentials.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Credentials.Mandate> {
             .init(
-                path: "/apps/account/mandate",
+                path: "/apps/account/credentials/\(credentialsId.rawValue)/mandate",
                 method: .get(nil),
                 environment: environment
             )
         }
 
-        public static func accept(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Mandate> {
+        public static func accept(credentialsId: Account.Credentials.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Credentials.Mandate> {
             .init(
-                path: "/apps/account/mandate",
+                path: "/apps/account/credentials/\(credentialsId.rawValue)/mandate",
                 method: .patch(data(for: .accept)),
                 environment: environment
             )
         }
 
-        public static func decline(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Mandate> {
+        public static func decline(credentialsId: Account.Credentials.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Credentials.Mandate> {
             .init(
-                path: "/apps/account/mandate",
+                path: "/apps/account/credentials/\(credentialsId.rawValue)/mandate",
                 method: .patch(data(for: .decline)),
                 environment: environment
             )
@@ -47,7 +47,7 @@ extension Endpoints.Account {
     }
 }
 
-extension Account {
+extension Account.Credentials {
     public struct Mandate: Decodable {
         public let state: State
         public let text: String?
@@ -60,7 +60,7 @@ extension Account {
     }
 }
 
-extension Account.Mandate: Equatable {
+extension Account.Credentials.Mandate: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.state == rhs.state
     }
