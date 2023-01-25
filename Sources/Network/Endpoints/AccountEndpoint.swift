@@ -54,5 +54,3 @@ extension Account: Equatable {
         lhs.credentials == rhs.credentials
     }
 }
-
-
