@@ -50,6 +50,8 @@ class AccountViewModel: ObservableObject {
 
 struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
+
+    @State var showQRCode: Bool = false
     
     var body: some View {
         if let account = viewModel.account {
@@ -78,6 +80,14 @@ struct AccountView: View {
                         viewModel.loadAccount()
                     }
             }
+        }
+        Button {
+            showQRCode.toggle()
+        } label: {
+            Text("Show QRCode")
+        }
+        .sheet(isPresented: $showQRCode) {
+            QRCodeView(code: "12345")
         }
     }
 }
