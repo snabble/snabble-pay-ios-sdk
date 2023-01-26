@@ -12,19 +12,14 @@ struct QRCodeView: View {
     private let context = CIContext()
     private let filter = CIFilter.qrCodeGenerator()
 
-    @State var code: String
-    @State var size: CGSize = .init(width: 200, height: 200)
-
-    init(code: String) {
-        self.code = code
-    }
+    let code: String
 
     var body: some View {
         Image(uiImage: generateQRCode(from: code))
             .interpolation(.none)
             .resizable()
             .scaledToFit()
-            .frame(width: size.width, height: size.height)
+            .frame(width: 200, height: 200)
     }
 
     private func generateQRCode(from string: String) -> UIImage {
