@@ -11,8 +11,8 @@ import XCTest
 final class MandateEndpointTests: XCTestCase {
 
     func testGetEndpoint() throws {
-        let endpoint = Endpoints.Account.Mandate.get()
-        XCTAssertEqual(endpoint.path, "/apps/account/mandate")
+        let endpoint = Endpoints.Account.Credentials.Mandate.get(credentialsId: "1")
+        XCTAssertEqual(endpoint.path, "/apps/account/credentials/1/mandate")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
@@ -21,8 +21,8 @@ final class MandateEndpointTests: XCTestCase {
         let jsonObject = ["state": "ACCEPTED"]
         let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
 
-        let endpoint = Endpoints.Account.Mandate.accept()
-        XCTAssertEqual(endpoint.path, "/apps/account/mandate")
+        let endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: "3")
+        XCTAssertEqual(endpoint.path, "/apps/account/credentials/3/mandate")
         XCTAssertEqual(endpoint.method, .patch(jsonData))
         XCTAssertEqual(endpoint.environment, .production)
     }
@@ -31,44 +31,42 @@ final class MandateEndpointTests: XCTestCase {
         let jsonObject = ["state": "DECLINED"]
         let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
 
-        let endpoint = Endpoints.Account.Mandate.decline()
-        XCTAssertEqual(endpoint.path, "/apps/account/mandate")
+        let endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "2")
+        XCTAssertEqual(endpoint.path, "/apps/account/credentials/2/mandate")
         XCTAssertEqual(endpoint.method, .patch(jsonData))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoints.Account.Mandate.get(onEnvironment: .staging)
+        var endpoint = Endpoints.Account.Credentials.Mandate.get(credentialsId: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoints.Account.Mandate.accept(onEnvironment: .development)
+        endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Account.Mandate.decline(onEnvironment: .development)
+        endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Account.Mandate.get(onEnvironment: .development)
+        endpoint = Endpoints.Account.Credentials.Mandate.get(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Account.Mandate.accept(onEnvironment: .development)
+        endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Account.Mandate.decline(onEnvironment: .development)
+        endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
-
-
     }
 
     func testState() throws {
-        XCTAssertEqual(Account.Mandate.State.pending.rawValue, "PENDING")
-        XCTAssertEqual(Account.Mandate.State.accepted.rawValue, "ACCEPTED")
-        XCTAssertEqual(Account.Mandate.State.declined.rawValue, "DECLINED")
+        XCTAssertEqual(Account.Credentials.Mandate.State.pending.rawValue, "PENDING")
+        XCTAssertEqual(Account.Credentials.Mandate.State.accepted.rawValue, "ACCEPTED")
+        XCTAssertEqual(Account.Credentials.Mandate.State.declined.rawValue, "DECLINED")
     }
 
     func testEquatable() throws {
-        let mandate1 = Account.Mandate(state: .accepted, text: "foobar")
-        let mandate2 = Account.Mandate(state: .accepted, text: nil)
-        let mandate3 = Account.Mandate(state: .declined, text: "foobar")
+        let mandate1 = Account.Credentials.Mandate(state: .accepted, text: "foobar")
+        let mandate2 = Account.Credentials.Mandate(state: .accepted, text: nil)
+        let mandate3 = Account.Credentials.Mandate(state: .declined, text: "foobar")
 
         XCTAssertEqual(mandate1, mandate2)
         XCTAssertFalse(mandate3 == mandate2)

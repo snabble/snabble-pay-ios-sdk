@@ -25,74 +25,73 @@ final class PaymentValidationsEndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.environment, .development)
     }
 
-    func testState() throws {
-        XCTAssertEqual(Account.State.pending.rawValue, "PENDING")
-        XCTAssertEqual(Account.State.successful.rawValue, "SUCCESSFUL")
-        XCTAssertEqual(Account.State.failed.rawValue, "FAILED")
-        XCTAssertEqual(Account.State.error.rawValue, "ERROR")
-    }
-
-    func testDecodingFailed() throws {
-        let data = try loadResource(filename: "account-failed", withExtension: "json")
-        let instance = try JSONDecoder().decode(Account.self, from: data)
-        XCTAssertEqual(instance.state, Account.State.failed)
-        XCTAssertNil(instance.credentials)
-        XCTAssertNil(instance.mandate)
-        XCTAssertNil(instance.validationURL)
-        XCTAssertNotNil(instance.message)
-        XCTAssertEqual(instance.message, "some error message")
-    }
-
-    func testDecodingError() throws {
-        let data = try loadResource(filename: "account-error", withExtension: "json")
-        let instance = try JSONDecoder().decode(Account.self, from: data)
-        XCTAssertEqual(instance.state, Account.State.error)
-        XCTAssertNil(instance.credentials)
-        XCTAssertNil(instance.mandate)
-        XCTAssertNil(instance.validationURL)
-        XCTAssertNotNil(instance.message)
-        XCTAssertEqual(instance.message, "some error message")
-    }
-
-    func testDecodingPending() throws {
-        let data = try loadResource(filename: "account-pending", withExtension: "json")
-        let instance = try JSONDecoder().decode(Account.self, from: data)
-        XCTAssertEqual(instance.state, Account.State.pending)
-        XCTAssertNil(instance.credentials)
-        XCTAssertNil(instance.mandate)
-        XCTAssertNotNil(instance.validationURL)
-        XCTAssertEqual(instance.validationURL?.absoluteString, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
-        XCTAssertNil(instance.credentials)
-    }
-
-    func testDecodingSuccessful() throws {
-        let data = try loadResource(filename: "account-successful", withExtension: "json")
+    func testDecodingEmpty() throws {
+        let data = try loadResource(filename: "account-empty", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Account.self, from: data)
-        XCTAssertEqual(instance.state, Account.State.successful)
-        XCTAssertNotNil(instance.credentials)
-        XCTAssertNotNil(instance.mandate)
+        XCTAssertTrue(instance.credentials.isEmpty)
+        XCTAssertNotNil(instance.validationURL)
+        XCTAssertEqual(instance.validationURL, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
+    }
 
-        XCTAssertEqual(instance.credentials?.id, "1")
-        XCTAssertEqual(instance.credentials?.name, "John Doe's Account")
-        XCTAssertEqual(instance.credentials?.holderName, "John Doe")
-        XCTAssertEqual(instance.credentials?.currencyCode.rawValue, "EUR")
-        XCTAssertEqual(instance.credentials?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
-        XCTAssertEqual(instance.credentials?.bank, "Bank Name")
-        XCTAssertEqual(instance.credentials?.iban, "DE123**********")
+    func testDecodingOne() throws {
+        let data = try loadResource(filename: "account-one", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.self, from: data)
+        XCTAssertFalse(instance.credentials.isEmpty)
+        XCTAssertEqual(instance.credentials.count, 1)
+        XCTAssertEqual(instance.credentials.first?.id, "1")
+        XCTAssertEqual(instance.credentials.first?.name, "John Doe's Account")
+        XCTAssertEqual(instance.credentials.first?.holderName, "John Doe")
+        XCTAssertEqual(instance.credentials.first?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.credentials.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.credentials.first?.bank, "Bank Name")
+        XCTAssertEqual(instance.credentials.first?.iban, "DE123**********")
+        XCTAssertEqual(instance.credentials.first?.mandate.state, .accepted)
+        XCTAssertNotNil(instance.validationURL)
+        XCTAssertEqual(instance.validationURL, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
+    }
+
+    func testDecodingMany() throws {
+        let data = try loadResource(filename: "account-many", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.self, from: data)
+        XCTAssertFalse(instance.credentials.isEmpty)
+        XCTAssertEqual(instance.credentials.count, 2)
+        XCTAssertEqual(instance.credentials.first?.id, "1")
+        XCTAssertEqual(instance.credentials.first?.name, "John Doe's Account")
+        XCTAssertEqual(instance.credentials.first?.holderName, "John Doe")
+        XCTAssertEqual(instance.credentials.first?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.credentials.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.credentials.first?.bank, "Bank Name")
+        XCTAssertEqual(instance.credentials.first?.iban, "DE123**********")
+        XCTAssertEqual(instance.credentials.first?.mandate.state, .accepted)
+        XCTAssertEqual(instance.credentials.last?.id, "2")
+        XCTAssertEqual(instance.credentials.last?.name, "Jana Doe's Account")
+        XCTAssertEqual(instance.credentials.last?.holderName, "Jana Doe")
+        XCTAssertEqual(instance.credentials.last?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.credentials.last?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T10:24:38Z"))
+        XCTAssertEqual(instance.credentials.last?.bank, "Bank Name")
+        XCTAssertEqual(instance.credentials.last?.iban, "DE123**********")
+        XCTAssertEqual(instance.credentials.last?.mandate.state, .declined)
+        XCTAssertNotNil(instance.validationURL)
+        XCTAssertEqual(instance.validationURL, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
     }
 
     func testValidationCallbackURL() throws {
-        let url: URL = .init(string: "snabble-pay://account/validation")!
-        XCTAssertTrue(Account.validateCallbackURL(url, forScheme: "snabble-pay"))
-        XCTAssertFalse(Account.validateCallbackURL(url, forScheme: "snabble"))
+        let data = try loadResource(filename: "account-one", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.self, from: data)
 
-        var falseURL: URL = .init(string: "snabble-pay://AccOunT/ValidAtion")!
-        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+        let url: URL = .init(string: "snabble-pay://account/validation")!
+        XCTAssertTrue(instance.validateCallbackURL(url))
+
+        var falseURL: URL = .init(string: "snabble://account/validation")!
+        XCTAssertFalse(instance.validateCallbackURL(falseURL))
+
+        falseURL = .init(string: "snabble-pay://AccOunT/ValidAtion")!
+        XCTAssertFalse(instance.validateCallbackURL(falseURL))
 
         falseURL = .init(string: "snabble-pay://account/ValidAtion")!
-        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+        XCTAssertFalse(instance.validateCallbackURL(falseURL))
 
         falseURL = .init(string: "snabble-pay://account2/validation")!
-        XCTAssertFalse(Account.validateCallbackURL(falseURL, forScheme: "snabble-pay"))
+        XCTAssertFalse(instance.validateCallbackURL(falseURL))
     }
 }

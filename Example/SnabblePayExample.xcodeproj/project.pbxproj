@@ -10,13 +10,17 @@
 		E17B754E2975474E00392861 /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = E17B754D2975474E00392861 /* BetterSafariView */; };
 		E17B7550297550B200392861 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17B754F297550B200392861 /* AppDelegate.swift */; };
 		E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */; };
-		E193765C2941E7AA001C8866 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193765B2941E7AA001C8866 /* ContentView.swift */; };
 		E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E193765D2941E7AB001C8866 /* Assets.xcassets */; };
 		E19376612941E7AB001C8866 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E19376602941E7AB001C8866 /* Preview Assets.xcassets */; };
 		E193766B2941E7AB001C8866 /* SnabblePayExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193766A2941E7AB001C8866 /* SnabblePayExampleTests.swift */; };
 		E19376752941E7AB001C8866 /* SnabblePayExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376742941E7AB001C8866 /* SnabblePayExampleUITests.swift */; };
 		E19376772941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19376762941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift */; };
 		E19376862941E7CA001C8866 /* SnabblePay in Frameworks */ = {isa = PBXBuildFile; productRef = E19376852941E7CA001C8866 /* SnabblePay */; };
+		E1C20593297FC50200D4F894 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20592297FC50200D4F894 /* AccountView.swift */; };
+		E1C20596297FC70E00D4F894 /* CredentialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20595297FC70E00D4F894 /* CredentialsView.swift */; };
+		E1C20598297FC71800D4F894 /* AccountPendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20597297FC71800D4F894 /* AccountPendingView.swift */; };
+		E1C2059A297FC72200D4F894 /* AccountErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20599297FC72200D4F894 /* AccountErrorView.swift */; };
+		E1C205A92982700E00D4F894 /* NetworkManager+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +45,6 @@
 		E17B75512975514D00392861 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E19376562941E7AA001C8866 /* SnabblePayExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnabblePayExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleApp.swift; sourceTree = "<group>"; };
-		E193765B2941E7AA001C8866 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E193765D2941E7AB001C8866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E19376602941E7AB001C8866 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E19376662941E7AB001C8866 /* SnabblePayExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnabblePayExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +53,11 @@
 		E19376742941E7AB001C8866 /* SnabblePayExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleUITests.swift; sourceTree = "<group>"; };
 		E19376762941E7AB001C8866 /* SnabblePayExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnabblePayExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E19376832941E7C0001C8866 /* snabble-pay-ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "snabble-pay-ios-sdk"; path = ..; sourceTree = "<group>"; };
+		E1C20592297FC50200D4F894 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		E1C20595297FC70E00D4F894 /* CredentialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsView.swift; sourceTree = "<group>"; };
+		E1C20597297FC71800D4F894 /* AccountPendingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPendingView.swift; sourceTree = "<group>"; };
+		E1C20599297FC72200D4F894 /* AccountErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountErrorView.swift; sourceTree = "<group>"; };
+		E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+Shared.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,9 +112,10 @@
 		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
 			isa = PBXGroup;
 			children = (
+				E1C205A72982700000D4F894 /* Helper */,
+				E1C20594297FC6F700D4F894 /* Account */,
 				E17B75512975514D00392861 /* Info.plist */,
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
-				E193765B2941E7AA001C8866 /* ContentView.swift */,
 				E193765D2941E7AB001C8866 /* Assets.xcassets */,
 				E193765F2941E7AB001C8866 /* Preview Content */,
 				E17B754F297550B200392861 /* AppDelegate.swift */,
@@ -144,6 +153,25 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E1C20594297FC6F700D4F894 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				E1C20592297FC50200D4F894 /* AccountView.swift */,
+				E1C20595297FC70E00D4F894 /* CredentialsView.swift */,
+				E1C20597297FC71800D4F894 /* AccountPendingView.swift */,
+				E1C20599297FC72200D4F894 /* AccountErrorView.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		E1C205A72982700000D4F894 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,8 +311,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1C205A92982700E00D4F894 /* NetworkManager+Shared.swift in Sources */,
+				E1C20593297FC50200D4F894 /* AccountView.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
-				E193765C2941E7AA001C8866 /* ContentView.swift in Sources */,
+				E1C2059A297FC72200D4F894 /* AccountErrorView.swift in Sources */,
+				E1C20598297FC71800D4F894 /* AccountPendingView.swift in Sources */,
+				E1C20596297FC70E00D4F894 /* CredentialsView.swift in Sources */,
 				E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

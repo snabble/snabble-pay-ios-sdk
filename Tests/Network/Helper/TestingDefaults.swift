@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import SnabblePayNetwork
 
 enum TestingDefaults {
     static var dateFormatter = {
@@ -15,6 +16,7 @@ enum TestingDefaults {
 
     static var jsonDecoder = {
         let decoder = JSONDecoder()
+        decoder.userInfo[.urlScheme] = "snabble-pay"
         decoder.dateDecodingStrategy = .iso8601
         return decoder
     }()

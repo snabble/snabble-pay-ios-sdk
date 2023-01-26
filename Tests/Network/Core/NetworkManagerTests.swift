@@ -84,12 +84,12 @@ final class NetworkManagerTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(filename: "account-pending", withExtension: "json"))
+            return (response, try! loadResource(filename: "account-empty", withExtension: "json"))
         }
 
         let endpoint = Endpoints.Account.get(onEnvironment: .development)
 
-        let expectation = expectation(description: "account-pending")
+        let expectation = expectation(description: "account-empty")
         var validation: Account?
         networkManager.publisher(for: endpoint)
             .sink { completion in
