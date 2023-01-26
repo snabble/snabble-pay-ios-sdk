@@ -14,23 +14,33 @@ struct QRCodeView: View {
 
     let code: String
 
+    private var qrCodeImage: UIImage {
+        guard let image = code.qrCodeImage else {
+            return UIImage(systemName: "xmark.circle") ?? UIImage()
+        }
+        return image
+    }
+
     var body: some View {
-        Image(uiImage: generateQRCode(from: code))
+        Image(uiImage: qrCodeImage)
             .interpolation(.none)
             .resizable()
             .scaledToFit()
-            .frame(width: 200, height: 200)
     }
+}
 
-    private func generateQRCode(from string: String) -> UIImage {
-        let data = Data(string.utf8)
-        filter.setValue(data, forKey: "inputMessage")
-        if let qrCodeImage = filter.outputImage {
-            if let qrCodeCGImage = context.createCGImage(qrCodeImage, from: qrCodeImage.extent) {
-                return UIImage(cgImage: qrCodeCGImage)
+private extension String {
+    var qrCodeImage: UIImage? {
+        let context = CIContext()
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(self.utf8)
+
+        if let outputImage = filter.outputImage {
+            if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
+                return UIImage(cgImage: cgimg)
             }
         }
-        return UIImage(systemName: "xmark.circle") ?? UIImage()
+        return nil
     }
 }
 
