@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Session Endpoints APPS-654
 * Mandate Endpoints APPS-657
 * Update Account, Credentials and Mandate Endpoints
+* QRCode View
 
 ### Updated
 * realm/SwiftLint 0.50.3 (was 0.50.0)
