@@ -12,7 +12,7 @@ import SwiftUI
 import Combine
 
 class AccountViewModel: ObservableObject {
-    @Injected(\.networkManager) var networkManager: NetworkManager
+    let networkManager: NetworkManager = .shared
 
     @Published var account: Account?
     @Published var errorOccured: Bool = false

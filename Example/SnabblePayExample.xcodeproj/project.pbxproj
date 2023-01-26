@@ -20,11 +20,7 @@
 		E1C20596297FC70E00D4F894 /* CredentialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20595297FC70E00D4F894 /* CredentialsView.swift */; };
 		E1C20598297FC71800D4F894 /* AccountPendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20597297FC71800D4F894 /* AccountPendingView.swift */; };
 		E1C2059A297FC72200D4F894 /* AccountErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20599297FC72200D4F894 /* AccountErrorView.swift */; };
-		E1C2059D29800F9E00D4F894 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C2059C29800F9E00D4F894 /* InjectionKey.swift */; };
-		E1C2059F29800FC500D4F894 /* NetworkManager+InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C2059E29800FC500D4F894 /* NetworkManager+InjectionKey.swift */; };
-		E1C205A12980102200D4F894 /* InjectionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A02980102200D4F894 /* InjectionValues.swift */; };
-		E1C205A32980105D00D4F894 /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A22980105D00D4F894 /* Injected.swift */; };
-		E1C205A62980140700D4F894 /* Publisher+WeakAssign.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A52980140700D4F894 /* Publisher+WeakAssign.swift */; };
+		E1C205A92982700E00D4F894 /* NetworkManager+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,11 +57,7 @@
 		E1C20595297FC70E00D4F894 /* CredentialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsView.swift; sourceTree = "<group>"; };
 		E1C20597297FC71800D4F894 /* AccountPendingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPendingView.swift; sourceTree = "<group>"; };
 		E1C20599297FC72200D4F894 /* AccountErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountErrorView.swift; sourceTree = "<group>"; };
-		E1C2059C29800F9E00D4F894 /* InjectionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
-		E1C2059E29800FC500D4F894 /* NetworkManager+InjectionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+InjectionKey.swift"; sourceTree = "<group>"; };
-		E1C205A02980102200D4F894 /* InjectionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionValues.swift; sourceTree = "<group>"; };
-		E1C205A22980105D00D4F894 /* Injected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
-		E1C205A52980140700D4F894 /* Publisher+WeakAssign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+WeakAssign.swift"; sourceTree = "<group>"; };
+		E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkManager+Shared.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +112,7 @@
 		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
 			isa = PBXGroup;
 			children = (
-				E1C205A4298013FF00D4F894 /* Helper */,
-				E1C2059B29800F8E00D4F894 /* Injection */,
+				E1C205A72982700000D4F894 /* Helper */,
 				E1C20594297FC6F700D4F894 /* Account */,
 				E17B75512975514D00392861 /* Info.plist */,
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
@@ -175,21 +166,10 @@
 			path = Account;
 			sourceTree = "<group>";
 		};
-		E1C2059B29800F8E00D4F894 /* Injection */ = {
+		E1C205A72982700000D4F894 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				E1C2059C29800F9E00D4F894 /* InjectionKey.swift */,
-				E1C205A02980102200D4F894 /* InjectionValues.swift */,
-				E1C205A22980105D00D4F894 /* Injected.swift */,
-				E1C2059E29800FC500D4F894 /* NetworkManager+InjectionKey.swift */,
-			);
-			path = Injection;
-			sourceTree = "<group>";
-		};
-		E1C205A4298013FF00D4F894 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				E1C205A52980140700D4F894 /* Publisher+WeakAssign.swift */,
+				E1C205A82982700E00D4F894 /* NetworkManager+Shared.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -331,16 +311,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C2059F29800FC500D4F894 /* NetworkManager+InjectionKey.swift in Sources */,
+				E1C205A92982700E00D4F894 /* NetworkManager+Shared.swift in Sources */,
 				E1C20593297FC50200D4F894 /* AccountView.swift in Sources */,
-				E1C205A12980102200D4F894 /* InjectionValues.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E1C2059A297FC72200D4F894 /* AccountErrorView.swift in Sources */,
-				E1C205A32980105D00D4F894 /* Injected.swift in Sources */,
 				E1C20598297FC71800D4F894 /* AccountPendingView.swift in Sources */,
-				E1C2059D29800F9E00D4F894 /* InjectionKey.swift in Sources */,
 				E1C20596297FC70E00D4F894 /* CredentialsView.swift in Sources */,
-				E1C205A62980140700D4F894 /* Publisher+WeakAssign.swift in Sources */,
 				E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
