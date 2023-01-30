@@ -13,6 +13,8 @@ class CredentialsViewModel: ObservableObject {
     private(set) var credentials: [Account.Credentials]
     let networkManager: NetworkManager = .shared
 
+    private(set) var session: SnabblePayNetwork.Session?
+
     var onDestructiveAction: (() -> Void)?
 
     private var cancellables = Set<AnyCancellable>()
@@ -40,6 +42,17 @@ class CredentialsViewModel: ObservableObject {
                 self?.update()
             } receiveValue: { mandate in
                 print(mandate)
+            }
+            .store(in: &cancellables)
+    }
+
+    func startSession(withCredentialsId credentialsId: Account.Credentials.ID) {
+        let endpoint = Endpoints.Session.post(withCredentialsId: credentialsId, onEnvironment: .development)
+        networkManager.publisher(for: endpoint)
+            .sink { [weak self] _ in
+                self?.update()
+            } receiveValue: { session in
+                self.session = session
             }
             .store(in: &cancellables)
     }
@@ -90,7 +103,11 @@ struct CredentialsView: View {
                             }
                         }
                     case .accepted:
-                        Text("Accepted")
+                        Button {
+                            viewModel.startSession(withCredentialsId: credential.id)
+                        } label: {
+                            Text("Session")
+                        }
                     case .declined:
                         Text("Declined")
                     }

@@ -10,10 +10,12 @@ import XCTest
 
 final class SessionEndpointTests: XCTestCase {
 
+    let jsonData = try! JSONSerialization.data(withJSONObject: ["credentialsId": "1"])
+
     func testPostEndpoint() throws {
-        let endpoint = Endpoints.Session.post()
+        let endpoint = Endpoints.Session.post(withCredentialsId: "1")
         XCTAssertEqual(endpoint.path, "/apps/session")
-        XCTAssertEqual(endpoint.method, .post(nil))
+        XCTAssertEqual(endpoint.method, .post(jsonData))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
@@ -32,7 +34,7 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testEnvironmentStaging() throws {
-        let endpoint1 = Endpoints.Session.post(onEnvironment: .staging)
+        let endpoint1 = Endpoints.Session.post(withCredentialsId: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint1.environment, .staging)
 
         let endpoint2 = Endpoints.Session.get(id: "1", onEnvironment: .staging)
@@ -43,7 +45,7 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testEnvironmentDevelopment() throws {
-        let endpoint1 = Endpoints.Session.post(onEnvironment: .development)
+        let endpoint1 = Endpoints.Session.post(withCredentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint1.environment, .development)
 
         let endpoint2 = Endpoints.Session.get(id: "1", onEnvironment: .development)

@@ -10,8 +10,14 @@ import Tagged
 
 extension Endpoints {
     public enum Session {
-        public static func post(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
-            return .init(path: "/apps/session", method: .post(nil), environment: environment)
+        public static func post(withCredentialsId credentialsId: SnabblePayNetwork.Account.Credentials.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
+            let jsonObject = ["credentialsId": credentialsId.rawValue]
+            return .init(
+                path: "/apps/session",
+                // swiftlint:disable:next force_try
+                method: .post(try! JSONSerialization.data(withJSONObject: jsonObject)),
+                environment: environment
+            )
         }
 
         public static func get(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
