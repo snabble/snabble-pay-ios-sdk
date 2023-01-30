@@ -11,7 +11,7 @@ import Combine
 
 extension Endpoints.Account {
     public enum Credentials {
-        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account.Credentials> {
+        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<[SnabblePayNetwork.Account.Credentials]> {
             .init(path: "/apps/account/credentials", method: .get(nil), environment: environment)
         }
 
