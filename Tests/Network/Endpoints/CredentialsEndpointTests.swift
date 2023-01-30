@@ -50,4 +50,10 @@ final class CredentialsEndpointTests: XCTestCase {
         endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
+
+    func testDecoder() throws {
+        let data = try loadResource(filename: "credentials", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode([Account.Credentials].self, from: data)
+        XCTAssertEqual(instance.count, 1)
+    }
 }

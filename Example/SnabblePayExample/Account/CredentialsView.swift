@@ -25,7 +25,7 @@ class CredentialsViewModel: ObservableObject {
     func acceptMandate(forCredentialsId credentialsId: Account.Credentials.ID) {
         let endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: credentialsId, onEnvironment: .development)
         networkManager.publisher(for: endpoint)
-            .sink { [weak self] completion in
+            .sink { [weak self] _ in
                 self?.update()
             } receiveValue: { mandate in
                 print(mandate)
@@ -36,7 +36,7 @@ class CredentialsViewModel: ObservableObject {
     func declineMandate(forCredentialsId credentialsId: Account.Credentials.ID) {
         let endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: credentialsId, onEnvironment: .development)
         networkManager.publisher(for: endpoint)
-            .sink { [weak self] completion in
+            .sink { [weak self] _ in
                 self?.update()
             } receiveValue: { mandate in
                 print(mandate)
@@ -106,4 +106,3 @@ struct CredentialsView: View {
         }
     }
 }
-

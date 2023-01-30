@@ -71,4 +71,11 @@ final class MandateEndpointTests: XCTestCase {
         XCTAssertEqual(mandate1, mandate2)
         XCTAssertFalse(mandate3 == mandate2)
     }
+
+    func testDecoder() throws {
+        let data = try loadResource(filename: "mandate", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.Credentials.Mandate.self, from: data)
+        XCTAssertEqual(instance.state, .accepted)
+        XCTAssertEqual(instance.text, "mandate text")
+    }
 }
