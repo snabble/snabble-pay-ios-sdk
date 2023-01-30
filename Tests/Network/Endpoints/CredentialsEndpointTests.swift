@@ -32,23 +32,23 @@ final class CredentialsEndpointTests: XCTestCase {
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoints.Account.Credentials.Mandate.get(credentialsId: "1", onEnvironment: .staging)
-        XCTAssertEqual(endpoint.environment, .staging)
+        var endpoint1 = Endpoints.Account.Credentials.get(id: "1", onEnvironment: .staging)
+        XCTAssertEqual(endpoint1.environment, .staging)
 
-        endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        var endpoint2 = Endpoints.Account.Credentials.get(onEnvironment: .development)
+        XCTAssertEqual(endpoint2.environment, .development)
 
-        endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        var endpoint3 = Endpoints.Account.Credentials.delete(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint3.environment, .development)
 
-        endpoint = Endpoints.Account.Credentials.Mandate.get(credentialsId: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        endpoint1 = Endpoints.Account.Credentials.get(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint1.environment, .development)
 
-        endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        endpoint2 = Endpoints.Account.Credentials.get(onEnvironment: .development)
+        XCTAssertEqual(endpoint2.environment, .development)
 
-        endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        endpoint3 = Endpoints.Account.Credentials.delete(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint3.environment, .development)
     }
 
     func testDecoder() throws {

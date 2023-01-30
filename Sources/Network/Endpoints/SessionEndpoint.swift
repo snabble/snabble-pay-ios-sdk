@@ -18,7 +18,7 @@ extension Endpoints {
             return .init(path: "/apps/session/\(id.rawValue)", method: .get(nil), environment: environment)
         }
 
-        public static func delete(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Session> {
+        public static func delete(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Data> {
             return .init(path: "/apps/session/\(id.rawValue)", method: .delete, environment: environment)
         }
     }

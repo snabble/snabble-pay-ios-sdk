@@ -32,25 +32,25 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testEnvironmentStaging() throws {
-        var endpoint = Endpoints.Session.post(onEnvironment: .staging)
-        XCTAssertEqual(endpoint.environment, .staging)
+        let endpoint1 = Endpoints.Session.post(onEnvironment: .staging)
+        XCTAssertEqual(endpoint1.environment, .staging)
 
-        endpoint = Endpoints.Session.get(id: "1", onEnvironment: .staging)
-        XCTAssertEqual(endpoint.environment, .staging)
+        let endpoint2 = Endpoints.Session.get(id: "1", onEnvironment: .staging)
+        XCTAssertEqual(endpoint2.environment, .staging)
 
-        endpoint = Endpoints.Session.delete(id: "1", onEnvironment: .staging)
-        XCTAssertEqual(endpoint.environment, .staging)
+        let endpoint3 = Endpoints.Session.delete(id: "1", onEnvironment: .staging)
+        XCTAssertEqual(endpoint3.environment, .staging)
     }
 
     func testEnvironmentDevelopment() throws {
-        var endpoint = Endpoints.Session.post(onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        let endpoint1 = Endpoints.Session.post(onEnvironment: .development)
+        XCTAssertEqual(endpoint1.environment, .development)
 
-        endpoint = Endpoints.Session.get(id: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        let endpoint2 = Endpoints.Session.get(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint2.environment, .development)
 
-        endpoint = Endpoints.Session.delete(id: "1", onEnvironment: .development)
-        XCTAssertEqual(endpoint.environment, .development)
+        let endpoint3 = Endpoints.Session.delete(id: "1", onEnvironment: .development)
+        XCTAssertEqual(endpoint3.environment, .development)
     }
 
     func testDecodingAccountPost() throws {
