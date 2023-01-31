@@ -15,7 +15,7 @@ struct SnabblePayExampleApp: SwiftUI.App {
 
     var body: some Scene {
         WindowGroup {
-            AccountView(viewModel: .init())
+            AccountsView()
         }
     }
 }
