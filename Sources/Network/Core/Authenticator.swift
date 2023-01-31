@@ -10,9 +10,9 @@ import Dispatch
 import Combine
 import KeychainAccess
 
-class Authenticator {
-    let session: URLSession
-    let apiKey: String
+public class Authenticator {
+    public let session: URLSession
+    public let apiKey: String
 
     enum Error: Swift.Error {
         case unknown

@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SnabblePayCore
 import SnabblePayNetwork
 import Combine
 import BetterSafariView
 
 class AccountsViewModel: ObservableObject {
-    let networkManager: NetworkManager = .shared
+    let snabblePay: SnabblePay = .shared
 
     @Published var accounts: [Account]?
     @Published var accountCheck: Account.Check?
@@ -22,81 +23,33 @@ class AccountsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     func loadAccountCheck() {
-        let endpoint = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure:
-                    self.accountCheck = nil
-                }
-            } receiveValue: {
-                self.accountCheck = $0
-            }
-            .store(in: &cancellables)
+        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check") { [weak self] in
+            self?.accountCheck = try? $0.get()
+        }
     }
 
     func loadAccounts() {
-        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure:
-                    self.accounts = nil
-                }
-            } receiveValue: {
-                self.accounts = $0
-            }
-            .store(in: &cancellables)
+        snabblePay.accounts { [weak self] in
+            self?.accounts = try? $0.get()
+        }
     }
 
-    func acceptMandate(forAccountId accountId: Account.ID) {
-        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: accountId, onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .sink { [weak self] _ in
-                self?.update()
-            } receiveValue: { mandate in
-                print(mandate)
-            }
-            .store(in: &cancellables)
+    func acceptMandate(forAccount account: Account) {
+        snabblePay.acceptMandate(forAccount: account) { [weak self] _ in
+            self?.loadAccounts()
+        }
     }
 
-    func declineMandate(forAccountId accountId: Account.ID) {
-        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: accountId, onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .sink { [weak self] _ in
-                self?.update()
-            } receiveValue: { mandate in
-                print(mandate)
-            }
-            .store(in: &cancellables)
+    func declineMandate(forAccount account: Account) {
+        snabblePay.declineMandate(forAccount: account) { [weak self] _ in
+            self?.loadAccounts()
+        }
     }
 
-    func startSession(withAccountId accountId: Account.ID) {
-        let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .sink { [weak self] _ in
-                self?.update()
-            } receiveValue: { session in
-                self.session = session
-            }
-            .store(in: &cancellables)
-    }
-
-    private func update() {
-        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
-        networkManager.publisher(for: endpoint)
-            .sink { completion in
-                print(completion)
-            } receiveValue: { accounts in
-                self.accounts = accounts
-            }
-            .store(in: &cancellables)
+    func startSession(withAccount account: Account) {
+        snabblePay.startSession(withAccount: account) { [weak self] in
+            self?.session = try? $0.get()
+        }
     }
 }
 
@@ -117,19 +70,19 @@ struct AccountsView: View {
                         case .pending:
                             VStack(alignment: .center, spacing: 8) {
                                 Button {
-                                    viewModel.acceptMandate(forAccountId: account.id)
+                                    viewModel.acceptMandate(forAccount: account)
                                 } label: {
                                     Text("Accept")
                                 }
                                 Button {
-                                    viewModel.declineMandate(forAccountId: account.id)
+                                    viewModel.declineMandate(forAccount: account)
                                 } label: {
                                     Text("Decline")
                                 }
                             }
                         case .accepted:
                             Button {
-                                viewModel.startSession(withAccountId: account.id)
+                                viewModel.startSession(withAccount: account)
                             } label: {
                                 Text("Session")
                             }

@@ -12,7 +12,7 @@ public struct NetworkManager {
     public let session: URLSession
     public let decoder: JSONDecoder
 
-    let authenticator: Authenticator
+    public let authenticator: Authenticator
 
     public init(apiKey: String, session: URLSession = .shared) {
         self.session = session

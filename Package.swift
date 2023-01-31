@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SnabblePay",
+    name: "SnabblePaySDK",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
@@ -12,7 +12,7 @@ let package = Package(
     products: [
         .library(
             name: "SnabblePay",
-            targets: ["SnabblePayCore", "SnabblePayUI"]),
+            targets: ["SnabblePayCore", "SnabblePayUI", "SnabblePayNetwork"]),
         .library(
             name: "SnabblePayCore",
             targets: ["SnabblePayCore"]
@@ -20,10 +20,6 @@ let package = Package(
         .library(
             name: "SnabblePayUI",
             targets: ["SnabblePayUI"]
-        ),
-        .library(
-            name: "SnabblePayNetwork",
-            targets: ["SnabblePayNetwork"]
         )
     ],
     dependencies: [
