@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Verification with Tink APPS-585
 * Session Endpoints APPS-654
 * Mandate Endpoints APPS-657
-* Update Account, Credentials and Mandate Endpoints
+* Update Accounts and Mandate Endpoints
 * QRCode View
 
 ### Updated
