@@ -38,9 +38,15 @@ extension Account {
             case appUri
         }
 
-        func validate(url: URL) -> Bool {
+        public func validate(url: URL) -> Bool {
             return appUri == url
         }
+    }
+}
+
+extension Account.Check: Identifiable {
+    public var id: URL {
+        validationURL
     }
 }
 
