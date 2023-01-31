@@ -9,7 +9,7 @@ import SwiftUI
 import BetterSafariView
 
 struct AccountPendingView: View {
-    var url: URL
+//    var url: URL
     var onDismiss: (() -> Void)?
     var onValidation: ((URL) -> Void)?
 
@@ -25,7 +25,8 @@ struct AccountPendingView: View {
             .sheet(
                 isPresented: $showSheet,
                 content: {
-                    SafariView(url: url)
+                    Text("Foobar")
+//                    SafariView(url: url)
                 }
             )
             .onOpenURL {
@@ -37,6 +38,6 @@ struct AccountPendingView: View {
 
 struct AccountPendingView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountPendingView(url: URL(string: "https://www.google.de")!)
+        AccountPendingView()
     }
 }

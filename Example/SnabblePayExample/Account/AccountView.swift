@@ -14,13 +14,13 @@ import Combine
 class AccountViewModel: ObservableObject {
     let networkManager: NetworkManager = .shared
 
-    @Published var account: Account?
+    @Published var accounts: [Account]?
     @Published var errorOccured: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
 
-    func loadAccount() {
-        let endpoint = Endpoints.Account.get(onEnvironment: .development)
+    func loadAccounts() {
+        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -28,24 +28,24 @@ class AccountViewModel: ObservableObject {
                 case .finished:
                     break
                 case .failure:
-                    self.account = nil
+                    self.accounts = nil
                     self.errorOccured = true
                 }
             } receiveValue: {
-                self.account = $0
+                self.accounts = $0
             }
             .store(in: &cancellables)
     }
 
     func removeAppId() {
-        account = nil
+        accounts = nil
         networkManager.reset()
         objectWillChange.send()
     }
 
-    func validateCallbackURL(_ url: URL) -> Bool {
-        account?.validateCallbackURL(url) ?? false
-    }
+//    func validateCallbackURL(_ url: URL) -> Bool {
+//        account?.validateCallbackURL(url) ?? false
+//    }
 }
 
 struct AccountView: View {
@@ -54,22 +54,13 @@ struct AccountView: View {
     @State var showQRCode: Bool = false
     
     var body: some View {
-        if let account = viewModel.account {
-            switch account.state {
-            case .ready:
-                CredentialsView(credentials: account.credentials) {
+        if let accounts = viewModel.accounts {
+            if accounts.isEmpty {
+                AccountPendingView()
+            } else {
+                CredentialsView(accounts: accounts) {
                     viewModel.removeAppId()
                 }
-            case .pending:
-                AccountPendingView(
-                    url: account.validationURL,
-                    onValidation: {
-                        if viewModel.validateCallbackURL($0) {
-                            viewModel.loadAccount()
-                        } else {
-                            #warning("something todo")
-                        }
-                    })
             }
         } else {
             if viewModel.errorOccured {
@@ -77,7 +68,7 @@ struct AccountView: View {
             } else {
                 Text("Loading")
                     .onAppear {
-                        viewModel.loadAccount()
+                        viewModel.loadAccounts()
                     }
             }
         }

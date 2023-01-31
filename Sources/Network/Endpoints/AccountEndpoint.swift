@@ -2,7 +2,7 @@
 //  AccountEndpoint.swift
 //  
 //
-//  Created by Andreas Osberghaus on 2022-12-19.
+//  Created by Andreas Osberghaus on 2023-01-25.
 //
 
 import Foundation
@@ -10,47 +10,57 @@ import Tagged
 import Combine
 
 extension Endpoints {
-    public enum Account {
-        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Account> {
-            .init(path: "/apps/account", method: .get(nil), environment: environment)
+    public enum Accounts {
+        public static func check(appUri: String, onEnvironment environment: Environment = .production) -> Endpoint<Account.Check> {
+            .init(path: "/apps/accounts/check", method: .get([.init(name: "appUri", value: appUri)]), environment: environment)
+        }
+        public static func get(onEnvironment environment: Environment = .production) -> Endpoint<[Account]> {
+            .init(path: "/apps/accounts", method: .get(nil), environment: environment)
+        }
+
+        public static func get(id: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account> {
+            .init(path: "/apps/accounts/\(id.rawValue)", method: .get(nil), environment: environment)
+        }
+
+        public static func delete(id: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Data> {
+            .init(path: "/apps/accounts/\(id.rawValue)", method: .delete, environment: environment)
         }
     }
 }
 
-public struct Account: Decodable {
-    public let credentials: [Credentials]
-    public let validationURL: URL
+extension Account {
+    public struct Check: Decodable {
+        public let validationURL: URL
+        public let appUri: String
 
-    let urlScheme: String
-
-    enum CodingKeys: String, CodingKey {
-        case credentials
-        case validationURL = "validationLink"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.credentials = try container.decode([Account.Credentials].self, forKey: .credentials)
-        self.validationURL = try container.decode(URL.self, forKey: .validationURL)
-
-        guard let urlScheme = decoder.userInfo[.urlScheme] as? String else {
-            throw DecodingError.valueNotFound(String.self, .init(codingPath: [], debugDescription: "Missing URLScheme in decoders userInfo"))
+        enum CodingKeys: String, CodingKey {
+            case validationURL = "validationLink"
+            case appUri
         }
-        self.urlScheme = urlScheme
-    }
 
-    public func validateCallbackURL(_ url: URL) -> Bool {
-        guard url.scheme == urlScheme,
-              url.host == "account",
-              url.lastPathComponent == "validation" else {
-            return false
+        func validate(appUri: String) -> Bool {
+            return true
         }
-        return true
     }
+}
+
+public struct Account: Decodable, Identifiable {
+    public let id: ID
+    public let name: String
+    public let holderName: String
+    public let currencyCode: CurrencyCode
+    public let bank: String
+    public let createdAt: Date
+    public let iban: IBAN
+    public let mandate: Mandate
+
+    public typealias ID = Tagged<Account, String>
+    public typealias IBAN = Tagged<(Account, iban: ()), String>
+    public typealias CurrencyCode = Tagged<(Account, currencyCode: ()), String>
 }
 
 extension Account: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.credentials == rhs.credentials
+        lhs.id == rhs.id && lhs.mandate == rhs.mandate
     }
 }

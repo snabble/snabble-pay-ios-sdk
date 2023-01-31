@@ -10,22 +10,22 @@ import SnabblePayNetwork
 import Combine
 
 class CredentialsViewModel: ObservableObject {
-    private(set) var credentials: [Account.Credentials]
+    @Published private(set) var accounts: [Account]
     let networkManager: NetworkManager = .shared
 
-    private(set) var session: SnabblePayNetwork.Session?
+    @Published private(set) var session: SnabblePayNetwork.Session?
 
     var onDestructiveAction: (() -> Void)?
 
     private var cancellables = Set<AnyCancellable>()
 
-    init(credentials: [Account.Credentials], onDestructiveAction: (() -> Void)? = nil) {
-        self.credentials = credentials
+    init(accounts: [Account], onDestructiveAction: (() -> Void)? = nil) {
+        self.accounts = accounts
         self.onDestructiveAction = onDestructiveAction
     }
 
-    func acceptMandate(forCredentialsId credentialsId: Account.Credentials.ID) {
-        let endpoint = Endpoints.Account.Credentials.Mandate.accept(credentialsId: credentialsId, onEnvironment: .development)
+    func acceptMandate(forAccountId accountId: Account.ID) {
+        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: accountId, onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .sink { [weak self] _ in
                 self?.update()
@@ -35,8 +35,8 @@ class CredentialsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func declineMandate(forCredentialsId credentialsId: Account.Credentials.ID) {
-        let endpoint = Endpoints.Account.Credentials.Mandate.decline(credentialsId: credentialsId, onEnvironment: .development)
+    func declineMandate(forAccountId accountId: Account.ID) {
+        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: accountId, onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .sink { [weak self] _ in
                 self?.update()
@@ -46,8 +46,8 @@ class CredentialsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func startSession(withCredentialsId credentialsId: Account.Credentials.ID) {
-        let endpoint = Endpoints.Session.post(withCredentialsId: credentialsId, onEnvironment: .development)
+    func startSession(withAccountId accountId: Account.ID) {
+        let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .sink { [weak self] _ in
                 self?.update()
@@ -58,12 +58,12 @@ class CredentialsViewModel: ObservableObject {
     }
 
     private func update() {
-        let endpoint = Endpoints.Account.Credentials.get(onEnvironment: .development)
+        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
         networkManager.publisher(for: endpoint)
             .sink { completion in
                 print(completion)
-            } receiveValue: { credentials in
-                self.credentials = credentials
+            } receiveValue: { accounts in
+                self.accounts = accounts
             }
             .store(in: &cancellables)
     }
@@ -72,39 +72,39 @@ class CredentialsViewModel: ObservableObject {
 struct CredentialsView: View {
     @ObservedObject var viewModel: CredentialsViewModel
 
-    init(credentials: [Account.Credentials], onDestructiveAction: (() -> Void)? = nil) {
+    init(accounts: [Account], onDestructiveAction: (() -> Void)? = nil) {
         self.viewModel = .init(
-            credentials: credentials,
+            accounts: accounts,
             onDestructiveAction: onDestructiveAction
         )
     }
 
     var body: some View {
         NavigationView {
-            ForEach(viewModel.credentials) { credential in
+            ForEach(viewModel.accounts) { account in
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(credential.holderName)
-                        Text(credential.iban.rawValue)
+                        Text(account.holderName)
+                        Text(account.iban.rawValue)
                     }
                     Spacer()
-                    switch credential.mandate.state {
+                    switch account.mandate.state {
                     case .pending:
                         VStack(alignment: .center, spacing: 8) {
                             Button {
-                                viewModel.acceptMandate(forCredentialsId: credential.id)
+                                viewModel.acceptMandate(forAccountId: account.id)
                             } label: {
                                 Text("Accept")
                             }
                             Button {
-                                viewModel.declineMandate(forCredentialsId: credential.id)
+                                viewModel.declineMandate(forAccountId: account.id)
                             } label: {
                                 Text("Decline")
                             }
                         }
                     case .accepted:
                         Button {
-                            viewModel.startSession(withCredentialsId: credential.id)
+                            viewModel.startSession(withAccountId: account.id)
                         } label: {
                             Text("Session")
                         }
