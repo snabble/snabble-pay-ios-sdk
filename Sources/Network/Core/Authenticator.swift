@@ -45,7 +45,6 @@ class Authenticator {
 
         // scenario 2: we have to register the app instance
         let endpoint = Endpoints.Register.post(
-            customUrlScheme: customUrlScheme,
             apiKeyValue: apiKey,
             onEnvironment: environment
         )
