@@ -7,6 +7,7 @@
 
 import Foundation
 import SnabblePayNetwork
+import SnabblePayModels
 import Combine
 
 public class SnabblePay {
@@ -141,7 +142,7 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func startSession(withAccount account: Account, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+    public func startSession(withAccount account: Account, completionHandler: @escaping (Result<SnabblePayModels.Session, Error>) -> Void) {
         let endpoint = Endpoints.Session.post(withAccountId: account.id, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {

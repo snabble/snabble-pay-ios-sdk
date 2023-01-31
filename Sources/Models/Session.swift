@@ -1,35 +1,12 @@
 //
-//  SessionEndpoint.swift
+//  Session.swift
 //  
 //
-//  Created by Andreas Osberghaus on 2023-01-19.
+//  Created by Andreas Osberghaus on 2023-01-31.
 //
 
 import Foundation
 import Tagged
-import SnabblePayModels
-
-extension Endpoints {
-    public enum Session {
-        public static func post(withAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayModels.Session> {
-            let jsonObject = ["accountId": accountId.rawValue]
-            return .init(
-                path: "/apps/session",
-                // swiftlint:disable:next force_try
-                method: .post(try! JSONSerialization.data(withJSONObject: jsonObject)),
-                environment: environment
-            )
-        }
-
-        public static func get(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayModels.Session> {
-            return .init(path: "/apps/session/\(id.rawValue)", method: .get(nil), environment: environment)
-        }
-
-        public static func delete(id: SnabblePayNetwork.Session.ID, onEnvironment environment: Environment = .production) -> Endpoint<Data> {
-            return .init(path: "/apps/session/\(id.rawValue)", method: .delete, environment: environment)
-        }
-    }
-}
 
 public struct Session: Decodable {
     public typealias ID = Tagged<Session, String>

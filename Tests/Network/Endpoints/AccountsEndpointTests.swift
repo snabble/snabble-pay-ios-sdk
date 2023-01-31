@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import SnabblePayNetwork
+import SnabblePayModels
 
 final class AccountsEndpointTests: XCTestCase {
 

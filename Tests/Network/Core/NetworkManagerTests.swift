@@ -8,6 +8,7 @@
 import XCTest
 import Combine
 @testable import SnabblePayNetwork
+@testable import SnabblePayModels
 
 final class NetworkManagerTests: XCTestCase {
 

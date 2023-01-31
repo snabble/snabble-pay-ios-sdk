@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SnabblePayCore
-import SnabblePayNetwork
+import SnabblePayModels
 import Combine
 import BetterSafariView
 
@@ -16,7 +16,7 @@ class AccountsViewModel: ObservableObject {
 
     @Published var accounts: [Account]?
     @Published var accountCheck: Account.Check?
-    @Published var session: SnabblePayNetwork.Session?
+    @Published var session: Session?
 
     var onDestructiveAction: (() -> Void)?
 
