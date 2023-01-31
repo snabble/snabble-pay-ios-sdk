@@ -12,7 +12,6 @@ import KeychainAccess
 
 class Authenticator {
     let session: URLSession
-    let customUrlScheme: String
     let apiKey: String
 
     enum Error: Swift.Error {
@@ -29,9 +28,8 @@ class Authenticator {
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
 
-    init(session: URLSession = .shared, customUrlScheme: String, apiKey: String) {
+    init( apiKey: String, session: URLSession = .shared) {
         self.session = session
-        self.customUrlScheme = customUrlScheme
         self.apiKey = apiKey
     }
 

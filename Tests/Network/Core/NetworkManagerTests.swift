@@ -16,7 +16,7 @@ final class NetworkManagerTests: XCTestCase {
 
     override func setUpWithError() throws {
         cancellables = Set<AnyCancellable>()
-        networkManager = NetworkManager(session: .mockSession, config: .init(customUrlScheme: "snabble-pay", apiKey: "123456"))
+        networkManager = NetworkManager(apiKey: "123456", session: .mockSession)
     }
 
     override func tearDownWithError() throws {

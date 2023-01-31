@@ -8,40 +8,22 @@
 import Combine
 import Foundation
 
-extension CodingUserInfoKey {
-    static let urlScheme = CodingUserInfoKey(rawValue: "urlScheme")!
-}
-
-public struct NetworkConfig {
-    public let customUrlScheme: String
-    public let apiKey: String
-
-    public init(customUrlScheme: String, apiKey: String) {
-        self.customUrlScheme = customUrlScheme
-        self.apiKey = apiKey
-    }
-}
-
 public struct NetworkManager {
     public let session: URLSession
-    public let config: NetworkConfig
     public let decoder: JSONDecoder
 
     let authenticator: Authenticator
 
-    public init(session: URLSession = .shared, config: NetworkConfig) {
+    public init(apiKey: String, session: URLSession = .shared) {
         self.session = session
-        self.config = config
 
         let decoder = JSONDecoder()
-        decoder.userInfo[.urlScheme] = config.customUrlScheme
         decoder.dateDecodingStrategy = .iso8601
         self.decoder = decoder
 
         self.authenticator = Authenticator(
-            session: session,
-            customUrlScheme: config.customUrlScheme,
-            apiKey: config.apiKey
+            apiKey: apiKey,
+            session: session
         )
     }
 
