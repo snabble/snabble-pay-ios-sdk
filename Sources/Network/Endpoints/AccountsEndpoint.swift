@@ -1,5 +1,5 @@
 //
-//  AccountEndpoint.swift
+//  AccountsEndpoint.swift
 //  
 //
 //  Created by Andreas Osberghaus on 2023-01-25.
@@ -11,8 +11,8 @@ import Combine
 
 extension Endpoints {
     public enum Accounts {
-        public static func check(appUri: String, onEnvironment environment: Environment = .production) -> Endpoint<Account.Check> {
-            .init(path: "/apps/accounts/check", method: .get([.init(name: "appUri", value: appUri)]), environment: environment)
+        public static func check(appUri: URL, onEnvironment environment: Environment = .production) -> Endpoint<Account.Check> {
+            .init(path: "/apps/accounts/check", method: .get([.init(name: "appUri", value: appUri.absoluteString)]), environment: environment)
         }
         public static func get(onEnvironment environment: Environment = .production) -> Endpoint<[Account]> {
             .init(path: "/apps/accounts", method: .get(nil), environment: environment)

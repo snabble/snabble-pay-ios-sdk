@@ -1,5 +1,5 @@
 //
-//  PaymentValidationsEndpointTests.swift
+//  AccountsEndpointTests.swift
 //  
 //
 //  Created by Andreas Osberghaus on 2022-12-20.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import SnabblePayNetwork
 
-final class PaymentValidationsEndpointTests: XCTestCase {
+final class AccountsEndpointTests: XCTestCase {
 
     func testCheckEndpoint() throws {
         let endpoint = Endpoints.Accounts.check(appUri: "snabble-pay://account/check")
