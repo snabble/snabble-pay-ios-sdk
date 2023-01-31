@@ -31,15 +31,15 @@ extension Endpoints {
 extension Account {
     public struct Check: Decodable {
         public let validationURL: URL
-        public let appUri: String
+        public let appUri: URL
 
         enum CodingKeys: String, CodingKey {
             case validationURL = "validationLink"
             case appUri
         }
 
-        func validate(appUri: String) -> Bool {
-            return true
+        func validate(url: URL) -> Bool {
+            return appUri == url
         }
     }
 }
