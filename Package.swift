@@ -12,7 +12,7 @@ let package = Package(
     products: [
         .library(
             name: "SnabblePay",
-            targets: ["SnabblePayCore", "SnabblePayNetwork", "SnabblePayModels"]),
+            targets: ["SnabblePayCore", "SnabblePayModels"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0"),
