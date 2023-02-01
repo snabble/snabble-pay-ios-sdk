@@ -33,10 +33,7 @@ let package = Package(
             dependencies: [
                 "SnabblePayNetwork",
             ],
-            path: "Sources/Core",
-            resources: [
-                .process("Resources")
-            ]
+            path: "Sources/Core"
         ),
         .target(
             name: "TestHelper",
