@@ -141,6 +141,22 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
+    public func sessions(completionHandler: @escaping (Result<[Session], Error>) -> Void) {
+        let endpoint = Endpoints.Session.get(onEnvironment: environment)
+        networkManager.publisher(for: endpoint)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
     public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
         let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)

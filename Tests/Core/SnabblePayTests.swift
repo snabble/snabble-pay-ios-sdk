@@ -12,7 +12,6 @@ import TestHelper
 final class SnabblePayTests: XCTestCase {
 
     let instance: SnabblePay = SnabblePay(apiKey: "1234", urlSession: .mockSession)
-    var account: Account! = nil
 
     private var injectedResponse: ((URLRequest) throws -> (HTTPURLResponse, Data))! = { request in
         let response = HTTPURLResponse(
@@ -25,9 +24,6 @@ final class SnabblePayTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        let jsonData = try loadResource(inBundle: .module, filename: "account-id", withExtension: "json")
-        account = try TestingDefaults.jsonDecoder.decode(Account.self, from: jsonData)
-        
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [self] request in
             if request.url?.path == "/apps/register" {
@@ -208,7 +204,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, try loadResource(inBundle: .module, filename: "account-id", withExtension: "json"))
         }
         let expectation = expectation(description: "testDeleteAccountSuccess")
-        instance.deleteAccount(withId: account.id) { result in
+        instance.deleteAccount(withId: "1") { result in
             switch result {
             case .success:
                 expectation.fulfill()
@@ -230,7 +226,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testDeleteAccountFailure")
-        instance.deleteAccount(withId: account.id) { result in
+        instance.deleteAccount(withId: "1") { result in
             switch result {
             case let .success(instance):
                 XCTAssertNil(instance)
@@ -253,7 +249,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, try loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
         }
         let expectation = expectation(description: "testMandateSuccess")
-        instance.mandate(forAccountId: account.id) { result in
+        instance.mandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -276,7 +272,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testMandateFailure")
-        instance.mandate(forAccountId: account.id) { result in
+        instance.mandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -299,7 +295,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, try loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
         }
         let expectation = expectation(description: "testAcceptMandateSuccess")
-        instance.acceptMandate(forAccountId: account.id) { result in
+        instance.acceptMandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -322,7 +318,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testAcceptAccountFailure")
-        instance.acceptMandate(forAccountId: account.id) { result in
+        instance.acceptMandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -346,7 +342,7 @@ final class SnabblePayTests: XCTestCase {
         }
         let expectation = expectation(description: "testDeclineMandateSuccess")
 
-        instance.declineMandate(forAccountId: account.id) { result in
+        instance.declineMandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -369,7 +365,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testDeclineMandateFailure")
-        instance.declineMandate(forAccountId: account.id) { result in
+        instance.declineMandate(forAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -381,7 +377,53 @@ final class SnabblePayTests: XCTestCase {
         wait(for: [expectation], timeout: 3.0)
     }
 
-    func testSessionSuccess() throws {
+    func testSessionsSuccess() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, try loadResource(inBundle: .module, filename: "sessions", withExtension: "json"))
+        }
+        let expectation = expectation(description: "testSessionsSuccess")
+        instance.sessions() { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNotNil(result)
+                expectation.fulfill()
+            case .failure:
+                XCTFail("shouldn't happen")
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testSessionsFailure() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 500,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data())
+        }
+        let expectation = expectation(description: "testSessionsFailure")
+        instance.startSession(withAccountId: "1") { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNil(result)
+            case let .failure(error):
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testStartSessionSuccess() throws {
         injectedResponse = { request in
             let response = HTTPURLResponse(
                 url: request.url!,
@@ -391,8 +433,8 @@ final class SnabblePayTests: XCTestCase {
             )!
             return (response, try loadResource(inBundle: .module, filename: "sessions-post", withExtension: "json"))
         }
-        let expectation = expectation(description: "testSessionSuccess")
-        instance.startSession(withAccountId: account.id) { result in
+        let expectation = expectation(description: "testStartSessionSuccess")
+        instance.startSession(withAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -404,7 +446,7 @@ final class SnabblePayTests: XCTestCase {
         wait(for: [expectation], timeout: 3.0)
     }
 
-    func testSessionFailure() throws {
+    func testStartSessionFailure() throws {
         injectedResponse = { request in
             let response = HTTPURLResponse(
                 url: request.url!,
@@ -414,11 +456,103 @@ final class SnabblePayTests: XCTestCase {
             )!
             return (response, Data())
         }
-        let expectation = expectation(description: "testSessionFailure")
-        instance.startSession(withAccountId: account.id) { result in
+        let expectation = expectation(description: "testStartSessionFailure")
+        instance.startSession(withAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
+            case let .failure(error):
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testSessionIdSuccess() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, try loadResource(inBundle: .module, filename: "sessions-get", withExtension: "json"))
+        }
+        let expectation = expectation(description: "testSessionIDSuccess")
+        instance.session(withId: "1") { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNotNil(result)
+                expectation.fulfill()
+            case .failure:
+                XCTFail("shouldn't happen")
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testSessionIdFailure() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 500,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data())
+        }
+        let expectation = expectation(description: "testSessionIdFailure")
+        instance.session(withId: "1") { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNil(result)
+            case let .failure(error):
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testSessionDeleteSuccess() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, try loadResource(inBundle: .module, filename: "sessions-get", withExtension: "json"))
+        }
+        let expectation = expectation(description: "testSessionDeleteSuccess")
+        instance.deleteSession(withId: "1") { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNotNil(result)
+                expectation.fulfill()
+            case .failure:
+                XCTFail("shouldn't happen")
+            }
+        }
+        wait(for: [expectation], timeout: 3.0)
+    }
+
+    func testSessionDeleteFailure() throws {
+        injectedResponse = { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 500,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data())
+        }
+        let expectation = expectation(description: "testSessionDeleteFailure")
+        instance.deleteSession(withId: "1") { result in
+            switch result {
+            case let .success(result):
+                XCTAssertNil(result)
             case let .failure(error):
                 XCTAssertNotNil(error)
                 expectation.fulfill()
