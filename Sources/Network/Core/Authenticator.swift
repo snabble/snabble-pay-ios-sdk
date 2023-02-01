@@ -42,11 +42,12 @@ public class Authenticator {
         }
 
         // scenario 2: we have to register the app instance
-        let endpoint = Endpoints.Register.post(
+        var endpoint = Endpoints.Register.post(
             apiKeyValue: apiKey,
             onEnvironment: environment
         )
-        let publisher = urlSession.publisher(for: endpoint, using: decoder)
+        endpoint.jsonDecoder = decoder
+        let publisher = urlSession.publisher(for: endpoint)
             .handleEvents(receiveOutput: { [weak self] app in
                 self?.app = app
             }, receiveCompletion: { _ in })
@@ -75,11 +76,13 @@ public class Authenticator {
             // scenario 3: we need a new token
             let publisher = validateApp(using: decoder, onEnvironment: environment)
                 .map { app -> Endpoint<Token> in
-                    Endpoints.Token.get(
+                    var endpoint = Endpoints.Token.get(
                         withAppIdentifier: app.identifier,
                         appSecret: app.secret,
                         onEnvironment: environment
                     )
+                    endpoint.jsonDecoder = decoder
+                    return endpoint
                 }
                 .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
                     guard let urlSession = self?.urlSession else {
@@ -88,7 +91,7 @@ public class Authenticator {
                     return (urlSession, endpoint)
                 }
                 .flatMap { urlSession, endpoint in
-                    return urlSession.publisher(for: endpoint, using: decoder)
+                    return urlSession.publisher(for: endpoint)
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in

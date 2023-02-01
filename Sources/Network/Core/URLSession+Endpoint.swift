@@ -47,41 +47,25 @@ private extension Publisher where Output == (data: Data, response: URLResponse),
 
 @available(iOS 13, *)
 extension URLSession {
-    func publisher(for endpoint: Endpoint<Data>) -> AnyPublisher<Data, Swift.Error> {
-        dataTaskPublisher(for: endpoint.urlRequest)
-            .mapError({ $0 as Swift.Error })
-            .tryVerifyResponse()
-            .map(\.data)
-            .eraseToAnyPublisher()
-    }
-
     func publisher<Response: Decodable>(
-        for endpoint: Endpoint<Response>,
-        using decoder: JSONDecoder = .init()
+        for endpoint: Endpoint<Response>
     ) -> AnyPublisher<Response, Swift.Error> {
         dataTaskPublisher(for: endpoint.urlRequest)
             .mapError({ $0 as Swift.Error })
             .tryVerifyResponse()
             .map(\.data)
-            .decode(type: Response.self, decoder: decoder)
+            .decode(type: Response.self, decoder: endpoint.jsonDecoder)
             .eraseToAnyPublisher()
     }
 }
 
 @available(iOS 15.0, *)
 extension URLSession {
-    func data(for endpoint: Endpoint<Data>) async throws -> Data {
-        let (data, response) = try await self.data(for: endpoint.urlRequest)
-        try response.verify()
-        return data
-    }
-
     func object<Response: Decodable>(
-        for endpoint: Endpoint<Response>,
-        using decoder: JSONDecoder = .init()
+        for endpoint: Endpoint<Response>
     ) async throws -> Response {
         let (data, response) = try await self.data(for: endpoint.urlRequest)
         try response.verify()
-        return try decoder.decode(Response.self, from: data)
+        return try endpoint.jsonDecoder.decode(Response.self, from: data)
     }
 }

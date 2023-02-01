@@ -34,19 +34,19 @@ class AccountsViewModel: ObservableObject {
     }
 
     func acceptMandate(forAccount account: Account) {
-        snabblePay.acceptMandate(forAccount: account) { [weak self] _ in
+        snabblePay.acceptMandate(forAccountId: account.id) { [weak self] _ in
             self?.loadAccounts()
         }
     }
 
     func declineMandate(forAccount account: Account) {
-        snabblePay.declineMandate(forAccount: account) { [weak self] _ in
+        snabblePay.declineMandate(forAccountId: account.id) { [weak self] _ in
             self?.loadAccounts()
         }
     }
 
     func startSession(withAccount account: Account) {
-        snabblePay.startSession(withAccount: account) { [weak self] in
+        snabblePay.startSession(withAccountId: account.id) { [weak self] in
             self?.session = try? $0.get()
         }
     }

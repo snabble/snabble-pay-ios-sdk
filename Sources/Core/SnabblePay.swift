@@ -78,8 +78,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func delete(account: Account, completionHandler: @escaping (Result<Void, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.delete(id: account.id, onEnvironment: environment)
+    public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Void, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.delete(id: id, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .receive(on: DispatchQueue.main)
             .sink {
@@ -93,8 +93,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func mandate(forAccount account: Account, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.get(accountId: account.id, onEnvironment: environment)
+    public func mandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.Mandate.get(accountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {
@@ -109,8 +109,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func acceptMandate(forAccount account: Account, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: account.id, onEnvironment: environment)
+    public func acceptMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {
@@ -125,8 +125,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func declineMandate(forAccount account: Account, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: account.id, onEnvironment: environment)
+    public func declineMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {
@@ -141,8 +141,40 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func startSession(withAccount account: Account, completionHandler: @escaping (Result<Session, Error>) -> Void) {
-        let endpoint = Endpoints.Session.post(withAccountId: account.id, onEnvironment: environment)
+    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+        let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: environment)
+        networkManager.publisher(for: endpoint)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
+    public func session(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+        let endpoint = Endpoints.Session.get(id: id, onEnvironment: environment)
+        networkManager.publisher(for: endpoint)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
+    public func deleteSession(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+        let endpoint = Endpoints.Session.delete(id: id, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {

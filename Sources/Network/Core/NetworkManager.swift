@@ -32,10 +32,11 @@ public struct NetworkManager {
             .map { token in
                 var endpoint = endpoint
                 endpoint.token = token
+                endpoint.jsonDecoder = jsonDecoder
                 return endpoint
             }
             .flatMap { endpoint in
-                urlSession.publisher(for: endpoint, using: jsonDecoder)
+                urlSession.publisher(for: endpoint)
             }
             .tryCatch { error in
                 if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
@@ -43,10 +44,11 @@ public struct NetworkManager {
                         .map { token in
                             var endpoint = endpoint
                             endpoint.token = token
+                            endpoint.jsonDecoder = jsonDecoder
                             return endpoint
                         }
                         .flatMap { endpoint in
-                            urlSession.publisher(for: endpoint, using: jsonDecoder)
+                            urlSession.publisher(for: endpoint)
                         }
                 }
                 throw error

@@ -14,7 +14,7 @@ final class SnabblePayTests: XCTestCase {
     let instance: SnabblePay = SnabblePay(apiKey: "1234", urlSession: .mockSession)
     var account: Account! = nil
 
-    private var injectedResponse: ((URLRequest) -> (HTTPURLResponse, Data))! = { request in
+    private var injectedResponse: ((URLRequest) throws -> (HTTPURLResponse, Data))! = { request in
         let response = HTTPURLResponse(
             url: request.url!,
             statusCode: 500,
@@ -25,8 +25,8 @@ final class SnabblePayTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        let jsonData = try! loadResource(inBundle: .module, filename: "account-id", withExtension: "json")
-        account = try! TestingDefaults.jsonDecoder.decode(Account.self, from: jsonData)
+        let jsonData = try loadResource(inBundle: .module, filename: "account-id", withExtension: "json")
+        account = try TestingDefaults.jsonDecoder.decode(Account.self, from: jsonData)
         
         MockURLProtocol.error = nil
         MockURLProtocol.requestHandler = { [self] request in
@@ -37,7 +37,7 @@ final class SnabblePayTests: XCTestCase {
                     httpVersion: nil,
                     headerFields: ["Content-Type": "application/json"]
                 )!
-                return (response, try! loadResource(inBundle: .module, filename: "register", withExtension: "json"))
+                return (response, try loadResource(inBundle: .module, filename: "register", withExtension: "json"))
             }
 
             if request.url?.path == "/apps/token" {
@@ -47,10 +47,10 @@ final class SnabblePayTests: XCTestCase {
                     httpVersion: nil,
                     headerFields: ["Content-Type": "application/json"]
                 )!
-                return (response, try! loadResource(inBundle: .module, filename: "token", withExtension: "json"))
+                return (response, try loadResource(inBundle: .module, filename: "token", withExtension: "json"))
             }
 
-            return self.injectedResponse(request)
+            return try self.injectedResponse(request)
         }
     }
 
@@ -67,7 +67,7 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "account-check", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "account-check", withExtension: "json"))
         }
         let expectation = expectation(description: "testAccountCheckSuccess")
         instance.accountCheck(withAppUri: "snabble-pay://account/check") { result in
@@ -113,7 +113,7 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "accounts-many", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "accounts-many", withExtension: "json"))
         }
         let expectation = expectation(description: "testAccountsSuccess")
         instance.accounts() { result in
@@ -159,7 +159,7 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "account-id", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "account-id", withExtension: "json"))
         }
         let expectation = expectation(description: "testAccountSuccess")
         instance.account(withId: "1") { result in
@@ -205,10 +205,10 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, Data())
+            return (response, try loadResource(inBundle: .module, filename: "account-id", withExtension: "json"))
         }
         let expectation = expectation(description: "testDeleteAccountSuccess")
-        instance.delete(account: account) { result in
+        instance.deleteAccount(withId: account.id) { result in
             switch result {
             case .success:
                 expectation.fulfill()
@@ -230,7 +230,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testDeleteAccountFailure")
-        instance.delete(account: account) { result in
+        instance.deleteAccount(withId: account.id) { result in
             switch result {
             case let .success(instance):
                 XCTAssertNil(instance)
@@ -250,10 +250,10 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
         }
         let expectation = expectation(description: "testMandateSuccess")
-        instance.mandate(forAccount: account) { result in
+        instance.mandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -276,7 +276,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testMandateFailure")
-        instance.mandate(forAccount: account) { result in
+        instance.mandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -296,10 +296,10 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
         }
         let expectation = expectation(description: "testAcceptMandateSuccess")
-        instance.acceptMandate(forAccount: account) { result in
+        instance.acceptMandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -322,7 +322,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testAcceptAccountFailure")
-        instance.acceptMandate(forAccount: account) { result in
+        instance.acceptMandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -342,10 +342,11 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "mandate", withExtension: "json"))
         }
         let expectation = expectation(description: "testDeclineMandateSuccess")
-        instance.declineMandate(forAccount: account) { result in
+
+        instance.declineMandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -368,7 +369,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testDeclineMandateFailure")
-        instance.declineMandate(forAccount: account) { result in
+        instance.declineMandate(forAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)
@@ -388,10 +389,10 @@ final class SnabblePayTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(inBundle: .module, filename: "session-post", withExtension: "json"))
+            return (response, try loadResource(inBundle: .module, filename: "sessions-post", withExtension: "json"))
         }
         let expectation = expectation(description: "testSessionSuccess")
-        instance.startSession(withAccount: account) { result in
+        instance.startSession(withAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -414,7 +415,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testSessionFailure")
-        instance.startSession(withAccount: account) { result in
+        instance.startSession(withAccountId: account.id) { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)

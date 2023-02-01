@@ -17,6 +17,8 @@ public struct Endpoint<Response> {
     public let path: String
     public let environment: Environment
 
+    var jsonDecoder: JSONDecoder
+
     var token: Token?
 
     var headerFields: [String: String] = [:]
@@ -25,6 +27,7 @@ public struct Endpoint<Response> {
         self.path = path
         self.method = method
         self.environment = environment
+        self.jsonDecoder = .init()
     }
 }
 
