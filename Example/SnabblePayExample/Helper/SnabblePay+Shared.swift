@@ -12,7 +12,7 @@ extension SnabblePay {
     static var shared: SnabblePay = {
         let snabblePay: SnabblePay = .init(
             apiKey: "IO2wX69CsqZUQ3HshOnRkO4y5Gy/kRar6Fnvkp94piA2ivUun7TC7MjukrgUKlu7g8W8/enVsPDT7Kvq28ycw==",
-            session: .shared
+            urlSession: .shared
         )
         snabblePay.environment = .development
         return snabblePay

@@ -11,7 +11,7 @@ import Combine
 import KeychainAccess
 
 public class Authenticator {
-    public let session: URLSession
+    public let urlSession: URLSession
     public let apiKey: String
 
     enum Error: Swift.Error {
@@ -28,8 +28,8 @@ public class Authenticator {
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
 
-    init( apiKey: String, session: URLSession = .shared) {
-        self.session = session
+    init( apiKey: String, urlSession: URLSession = .shared) {
+        self.urlSession = urlSession
         self.apiKey = apiKey
     }
 
@@ -46,7 +46,7 @@ public class Authenticator {
             apiKeyValue: apiKey,
             onEnvironment: environment
         )
-        let publisher = session.publisher(for: endpoint, using: decoder)
+        let publisher = urlSession.publisher(for: endpoint, using: decoder)
             .handleEvents(receiveOutput: { [weak self] app in
                 self?.app = app
             }, receiveCompletion: { _ in })
@@ -82,13 +82,13 @@ public class Authenticator {
                     )
                 }
                 .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
-                    guard let session = self?.session else {
+                    guard let urlSession = self?.urlSession else {
                         throw Error.unknown
                     }
-                    return (session, endpoint)
+                    return (urlSession, endpoint)
                 }
-                .flatMap { session, endpoint in
-                    return session.publisher(for: endpoint, using: decoder)
+                .flatMap { urlSession, endpoint in
+                    return urlSession.publisher(for: endpoint, using: decoder)
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in

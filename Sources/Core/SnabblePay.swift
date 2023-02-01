@@ -17,14 +17,14 @@ public class SnabblePay {
         networkManager.authenticator.apiKey
     }
 
-    public var session: URLSession {
-        networkManager.session
+    public var urlSession: URLSession {
+        networkManager.urlSession
     }
 
     private var cancellables = Set<AnyCancellable>()
 
-    public init(apiKey: String, session: URLSession = .shared) {
-        self.networkManager = NetworkManager(apiKey: apiKey, session: session)
+    public init(apiKey: String, urlSession: URLSession = .shared) {
+        self.networkManager = NetworkManager(apiKey: apiKey, urlSession: urlSession)
     }
 
     public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {

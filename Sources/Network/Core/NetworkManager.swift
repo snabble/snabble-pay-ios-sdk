@@ -9,44 +9,44 @@ import Combine
 import Foundation
 
 public struct NetworkManager {
-    public let session: URLSession
-    public let decoder: JSONDecoder
+    public let urlSession: URLSession
+    public let jsonDecoder: JSONDecoder
 
     public let authenticator: Authenticator
 
-    public init(apiKey: String, session: URLSession = .shared) {
-        self.session = session
+    public init(apiKey: String, urlSession: URLSession = .shared) {
+        self.urlSession = urlSession
 
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        self.decoder = decoder
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .iso8601
+        self.jsonDecoder = jsonDecoder
 
         self.authenticator = Authenticator(
             apiKey: apiKey,
-            session: session
+            urlSession: urlSession
         )
     }
 
     public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {
-        return authenticator.validToken(using: decoder, onEnvironment: endpoint.environment)
+        return authenticator.validToken(using: jsonDecoder, onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
                 endpoint.token = token
                 return endpoint
             }
             .flatMap { endpoint in
-                session.publisher(for: endpoint, using: decoder)
+                urlSession.publisher(for: endpoint, using: jsonDecoder)
             }
             .tryCatch { error in
                 if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
-                    return authenticator.validToken(using: decoder, forceRefresh: true, onEnvironment: endpoint.environment)
+                    return authenticator.validToken(using: jsonDecoder, forceRefresh: true, onEnvironment: endpoint.environment)
                         .map { token in
                             var endpoint = endpoint
                             endpoint.token = token
                             return endpoint
                         }
                         .flatMap { endpoint in
-                            session.publisher(for: endpoint, using: decoder)
+                            urlSession.publisher(for: endpoint, using: jsonDecoder)
                         }
                 }
                 throw error
