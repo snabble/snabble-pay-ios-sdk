@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SnabblePaySDK",
+    name: "SnabblePay",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
