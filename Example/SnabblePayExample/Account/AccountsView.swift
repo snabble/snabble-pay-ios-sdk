@@ -58,7 +58,7 @@ struct AccountsView: View {
 
     var body: some View {
         NavigationView {
-            if let accounts = viewModel.accounts {
+            if let accounts = viewModel.accounts, !accounts.isEmpty {
                 ForEach(accounts) { account in
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
@@ -93,6 +93,11 @@ struct AccountsView: View {
                 }
                 .padding()
                 .navigationTitle("Bank accounts")
+                .toolbar {
+                    Button("Add Account") {
+                        viewModel.loadAccountCheck()
+                    }
+                }
             } else {
                 Text("Empty State").onAppear {
                     viewModel.loadAccounts()
@@ -118,6 +123,12 @@ struct AccountsView: View {
                 return
             }
             viewModel.accountCheck = nil
+            viewModel.loadAccounts()
+        }
+        Button {
+            viewModel.snabblePay.reset()
+        } label: {
+            Text("Remove AppId")
         }
     }
 }
