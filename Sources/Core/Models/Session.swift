@@ -9,18 +9,23 @@ import Foundation
 import Tagged
 
 public struct Session: Decodable {
-    public typealias ID = Tagged<Session, String>
-    public typealias Token = Tagged<(Session, token: ()), String>
-
     public let id: ID
     public let token: Token
     public let createdAt: Date
     public let refreshAt: Date
     public let validUntil: Date
     public let transaction: Transaction?
+
+    public typealias ID = Tagged<Session, String>
+    public typealias Token = Tagged<(Session, token: ()), String>
 }
 
 public struct Transaction: Decodable {
+    public let id: ID
+    public let state: State
+    public let amount: String
+    public let currency: String
+
     public typealias ID = Tagged<Transaction, String>
 
     public enum State: String, Decodable {
@@ -31,11 +36,6 @@ public struct Transaction: Decodable {
         case errored = "ERRORED"
         case aborted = "ABORTED"
     }
-
-    public let id: ID
-    public let state: State
-    public let amount: String
-    public let currency: String
 }
 
 extension Session {
