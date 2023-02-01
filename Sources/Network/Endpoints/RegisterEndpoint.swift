@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    public enum Register {
+    enum Register {
         public static func post(apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<App> {
             var endpoint: Endpoint<App> = .init(path: "/apps/register", method: .post(nil), environment: environment)
             endpoint.headerFields = ["snabblePayKey": apiKeyValue]
@@ -18,12 +18,12 @@ extension Endpoints {
     }
 }
 
-public struct App: Codable {
-    public let identifier: Idenitifer
-    public let secret: Secret
+struct App: Codable {
+    let identifier: Idenitifer
+    let secret: Secret
 
-    public typealias Idenitifer = Tagged<(App, identifier: ()), String>
-    public typealias Secret = Tagged<(App, secret: ()), String>
+    typealias Idenitifer = Tagged<(App, identifier: ()), String>
+    typealias Secret = Tagged<(App, secret: ()), String>
 
     enum CodingKeys: String, CodingKey {
         case identifier = "appIdentifier"

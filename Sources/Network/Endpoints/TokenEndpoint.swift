@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    public enum Token {
+    enum Token {
         public static func get(
             withAppIdentifier appIdentifier: App.Idenitifer,
             appSecret: App.Secret,
@@ -28,19 +28,19 @@ extension Endpoints {
     }
 }
 
-public struct Token: Codable {
-    public enum Scope: String, Codable {
+struct Token: Codable {
+    enum Scope: String, Codable {
         case all
     }
 
-    public enum `Type`: String, Codable {
+    enum `Type`: String, Codable {
         case bearer = "Bearer"
     }
 
-    public let accessToken: AccessToken
-    public let expiresAt: Date
-    public let scope: Scope
-    public let type: `Type`
+    let accessToken: AccessToken
+    let expiresAt: Date
+    let scope: Scope
+    let type: `Type`
 
     enum CodingKeys: String, CodingKey {
         case accessToken
@@ -49,7 +49,7 @@ public struct Token: Codable {
         case type = "tokenType"
     }
 
-    public typealias AccessToken = Tagged<(Token, accessToken: ()), String>
+    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
 
     func isValid() -> Bool {
         return expiresAt.timeIntervalSinceNow.sign == .plus
