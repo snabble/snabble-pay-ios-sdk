@@ -14,7 +14,7 @@ public struct NetworkManager {
 
     public let authenticator: Authenticator
 
-    public init(apiKey: String, urlSession: URLSession = .shared) {
+    public init(apiKey: String, urlSession: URLSession) {
         self.urlSession = urlSession
 
         let jsonDecoder = JSONDecoder()

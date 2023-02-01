@@ -28,7 +28,7 @@ public class Authenticator {
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
 
-    init( apiKey: String, urlSession: URLSession = .shared) {
+    init(apiKey: String, urlSession: URLSession) {
         self.urlSession = urlSession
         self.apiKey = apiKey
     }
