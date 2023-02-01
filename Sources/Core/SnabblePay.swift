@@ -157,7 +157,7 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+    public func session(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
         let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
