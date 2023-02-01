@@ -8,7 +8,7 @@
 import Foundation
 
 extension URLSession {
-    static var mockSession: URLSession {
+    public static var mockSession: URLSession {
         let configuration: URLSessionConfiguration = .ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         return URLSession(configuration: configuration)

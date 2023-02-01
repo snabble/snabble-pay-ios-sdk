@@ -10,7 +10,7 @@ import Tagged
 
 extension Endpoints {
     enum Token {
-        public static func get(
+        static func get(
             withAppIdentifier appIdentifier: App.Idenitifer,
             appSecret: App.Secret,
             scope: SnabblePayNetwork.Token.Scope = .all,
@@ -25,33 +25,5 @@ extension Endpoints {
                          ]),
                          environment: environment)
         }
-    }
-}
-
-struct Token: Codable {
-    enum Scope: String, Codable {
-        case all
-    }
-
-    enum `Type`: String, Codable {
-        case bearer = "Bearer"
-    }
-
-    let accessToken: AccessToken
-    let expiresAt: Date
-    let scope: Scope
-    let type: `Type`
-
-    enum CodingKeys: String, CodingKey {
-        case accessToken
-        case expiresAt
-        case scope
-        case type = "tokenType"
-    }
-
-    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
-
-    func isValid() -> Bool {
-        return expiresAt.timeIntervalSinceNow.sign == .plus
     }
 }

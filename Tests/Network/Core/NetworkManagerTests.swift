@@ -8,7 +8,7 @@
 import XCTest
 import Combine
 @testable import SnabblePayNetwork
-@testable import SnabblePayModels
+import TestHelper
 
 final class NetworkManagerTests: XCTestCase {
 
@@ -37,9 +37,9 @@ final class NetworkManagerTests: XCTestCase {
             return (response, Data())
         }
         
-        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
+        let endpoint = Endpoints.Register.post(apiKeyValue: "1234")
 
-        let expectation = expectation(description: "CredentialsValidations")
+        let expectation = expectation(description: "register")
         networkManager.publisher(for: endpoint)
             .sink { completion in
                 switch completion {
@@ -66,7 +66,7 @@ final class NetworkManagerTests: XCTestCase {
                     httpVersion: nil,
                     headerFields: ["Content-Type": "application/json"]
                 )!
-                return (response, try! loadResource(filename: "register", withExtension: "json"))
+                return (response, try! loadResource(inBundle: .module, filename: "register", withExtension: "json"))
             }
 
             if request.url?.path == "/apps/token" {
@@ -76,22 +76,22 @@ final class NetworkManagerTests: XCTestCase {
                     httpVersion: nil,
                     headerFields: ["Content-Type": "application/json"]
                 )!
-                return (response, try! loadResource(filename: "token", withExtension: "json"))
+                return (response, try! loadResource(inBundle: .module, filename: "token", withExtension: "json"))
             }
 
             let response = HTTPURLResponse(
                 url: request.url!,
-                statusCode: 200,
+                statusCode: 500,
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
-            return (response, try! loadResource(filename: "account-empty", withExtension: "json"))
+            return (response, Data())
         }
 
-        let endpoint = Endpoints.Accounts.get(onEnvironment: .development)
+        let endpoint = Endpoints.Token.get(withAppIdentifier: "1234", appSecret: "5678")
 
-        let expectation = expectation(description: "account-empty")
-        var validation: [Account]?
+        let expectation = expectation(description: "token")
+        var validation: Token?
         networkManager.publisher(for: endpoint)
             .sink { completion in
                 switch completion {

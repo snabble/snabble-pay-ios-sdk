@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SnabblePayCore
+import SnabblePay
 
 extension SnabblePay {
     static var shared: SnabblePay = {

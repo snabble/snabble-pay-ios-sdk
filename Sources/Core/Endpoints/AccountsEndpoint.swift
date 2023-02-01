@@ -8,7 +8,7 @@
 import Foundation
 import Tagged
 import Combine
-import SnabblePayModels
+import SnabblePayNetwork
 
 extension Endpoints {
     public enum Accounts {

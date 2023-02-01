@@ -6,15 +6,14 @@
 //
 
 import Foundation
-@testable import SnabblePayNetwork
 
-enum TestingDefaults {
-    static var dateFormatter = {
+public enum TestingDefaults {
+    public static var dateFormatter = {
         let dateFormatter = ISO8601DateFormatter()
         return dateFormatter
     }()
 
-    static var jsonDecoder = {
+    public static var jsonDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         return decoder

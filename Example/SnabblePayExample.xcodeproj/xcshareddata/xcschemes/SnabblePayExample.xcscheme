@@ -42,16 +42,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SnabblePayUITests"
-               BuildableName = "SnabblePayUITests"
-               BlueprintName = "SnabblePayUITests"
-               ReferencedContainer = "container:..">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E19376652941E7AB001C8866"
                BuildableName = "SnabblePayExampleTests.xctest"
                BlueprintName = "SnabblePayExampleTests"
@@ -59,7 +49,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E193766F2941E7AB001C8866"

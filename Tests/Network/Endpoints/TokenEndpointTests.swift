@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import SnabblePayNetwork
+import TestHelper
 
 final class TokenEndpointTests: XCTestCase {
     func testEndpoint() throws {
@@ -33,7 +34,7 @@ final class TokenEndpointTests: XCTestCase {
     }
 
     func testDecodingCredentials() throws {
-        let data = try loadResource(filename: "token", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "token", withExtension: "json")
         let decodedObject = try TestingDefaults.jsonDecoder.decode(Token.self, from: data)
         XCTAssertEqual(decodedObject.accessToken, "ZMNBLHLDNJM6JI-LSW8X-Q")
         XCTAssertEqual(decodedObject.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T12:53:55+02:00"))

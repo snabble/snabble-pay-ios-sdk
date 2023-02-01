@@ -6,7 +6,9 @@
 //
 
 import XCTest
-@testable import SnabblePayNetwork
+@testable import SnabblePayCore
+import SnabblePayNetwork
+import TestHelper
 
 final class SessionEndpointTests: XCTestCase {
 
@@ -56,7 +58,7 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testDecodingAccountPost() throws {
-        let jsonData = try loadResource(filename: "session-post", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "session-post", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
         XCTAssertEqual(instance.id.rawValue, "1")
         XCTAssertEqual(instance.token.rawValue, "3489f@asd2")
@@ -67,21 +69,21 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testDecodingAccountPostErrorDeclined() throws {
-        let jsonData = try loadResource(filename: "session-post-error-declined", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "session-post-error-declined", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
         XCTAssertEqual(instance.reason, Session.Error.Reason.mandateDeclined)
         XCTAssertEqual(instance.message, "The user has to accept the mandate to start a session")
     }
 
     func testDecodingAccountPostError() throws {
-        let jsonData = try loadResource(filename: "session-post-error-unknown", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "session-post-error-unknown", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
         XCTAssertEqual(instance.reason, Session.Error.Reason.unknown)
         XCTAssertNil(instance.message)
     }
 
     func testDecodingAccountGet() throws {
-        let jsonData = try loadResource(filename: "session-get", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "session-get", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
         XCTAssertEqual(instance.id.rawValue, "1")
         XCTAssertEqual(instance.token.rawValue, "token")

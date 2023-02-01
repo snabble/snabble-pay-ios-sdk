@@ -7,19 +7,19 @@
 
 import Foundation
 
-class MockURLProtocol: URLProtocol {
-    static var error: Error?
-    static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+public class MockURLProtocol: URLProtocol {
+    public static var error: Error?
+    public static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 
-    override class func canInit(with request: URLRequest) -> Bool {
+    override public class func canInit(with request: URLRequest) -> Bool {
         return true
     }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 
-    override func startLoading() {
+    override public func startLoading() {
         if let error = MockURLProtocol.error {
             client?.urlProtocol(self, didFailWithError: error)
             return
@@ -40,7 +40,7 @@ class MockURLProtocol: URLProtocol {
         }
     }
 
-    override func stopLoading() {
+    override public func stopLoading() {
         // Not needed
     }
 }

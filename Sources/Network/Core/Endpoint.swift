@@ -21,7 +21,7 @@ public struct Endpoint<Response> {
 
     var headerFields: [String: String] = [:]
 
-    init(path: String, method: HTTPMethod, environment: Environment = .production) {
+    public init(path: String, method: HTTPMethod, environment: Environment = .production) {
         self.path = path
         self.method = method
         self.environment = environment

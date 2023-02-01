@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SnabblePayModels
+import SnabblePayNetwork
 
 extension Endpoints.Accounts {
     public enum Mandate {

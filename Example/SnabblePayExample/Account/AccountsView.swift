@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import SnabblePayCore
-import SnabblePayModels
+import SnabblePay
 import Combine
 import BetterSafariView
 

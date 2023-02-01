@@ -6,8 +6,9 @@
 //
 
 import XCTest
-@testable import SnabblePayNetwork
-@testable import SnabblePayModels
+@testable import SnabblePayCore
+import SnabblePayNetwork
+import TestHelper
 
 final class MandateEndpointTests: XCTestCase {
 
@@ -74,7 +75,7 @@ final class MandateEndpointTests: XCTestCase {
     }
 
     func testDecoder() throws {
-        let data = try loadResource(filename: "mandate", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "mandate", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: data)
         XCTAssertEqual(instance.state, .accepted)
         XCTAssertEqual(instance.text, "mandate text")
