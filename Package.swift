@@ -12,19 +12,7 @@ let package = Package(
     products: [
         .library(
             name: "SnabblePay",
-            targets: ["SnabblePayCore", "SnabblePayUI"]),
-        .library(
-            name: "SnabblePayCore",
-            targets: ["SnabblePayCore"]
-        ),
-        .library(
-            name: "SnabblePayUI",
-            targets: ["SnabblePayUI"]
-        ),
-        .library(
-            name: "SnabblePayNetwork",
-            targets: ["SnabblePayNetwork"]
-        )
+            targets: ["SnabblePay"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0"),
@@ -39,47 +27,40 @@ let package = Package(
             ],
             path: "Sources/Network"
         ),
+
+        .target(
+            name: "SnabblePay",
+            dependencies: [
+                "SnabblePayNetwork",
+            ],
+            path: "Sources/Core"
+        ),
+        .target(
+            name: "TestHelper",
+            dependencies: [],
+            path: "Tests/Helper"
+        ),
+        .testTarget(
+            name: "SnabblePayCoreTests",
+            dependencies: [
+                "SnabblePay",
+                "TestHelper"
+            ],
+            path: "Tests/Core",
+            resources: [
+                .process("Resources")
+            ]
+        ),
         .testTarget(
             name: "SnabblePayNetworkTests",
             dependencies: [
                 "SnabblePayNetwork",
+                "TestHelper",
             ],
             path: "Tests/Network",
             resources: [
                 .process("Resources")
             ]
-        ),
-        .target(
-            name: "SnabblePayCore",
-            dependencies: [
-                "SnabblePayNetwork",
-            ],
-            path: "Sources/Core",
-            resources: [
-                .process("Resources")
-            ]
-        ),
-        .testTarget(
-            name: "SnabblePayCoreTests",
-            dependencies: [
-                "SnabblePayCore",
-            ],
-            path: "Tests/Core"
-        ),
-        .target(
-            name: "SnabblePayUI",
-            dependencies: [
-                "SnabblePayCore"
-            ],
-            path: "Sources/UI",
-            resources: [
-                .process("Resources")
-            ]
-        ),
-        .testTarget(
-            name: "SnabblePayUITests",
-            dependencies: ["SnabblePayCore", "SnabblePayUI"],
-            path: "Tests/UI"
-        ),
+        )
     ]
 )

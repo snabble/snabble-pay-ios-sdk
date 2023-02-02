@@ -17,14 +17,17 @@ public struct Endpoint<Response> {
     public let path: String
     public let environment: Environment
 
+    var jsonDecoder: JSONDecoder
+
     var token: Token?
 
     var headerFields: [String: String] = [:]
 
-    init(path: String, method: HTTPMethod, environment: Environment = .production) {
+    public init(path: String, method: HTTPMethod, environment: Environment = .production) {
         self.path = path
         self.method = method
         self.environment = environment
+        self.jsonDecoder = .init()
     }
 }
 

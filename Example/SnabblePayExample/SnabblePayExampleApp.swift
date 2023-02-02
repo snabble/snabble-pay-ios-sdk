@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import SnabblePayCore
-import SnabblePayNetwork
+import SnabblePay
 
 @main
 struct SnabblePayExampleApp: SwiftUI.App {

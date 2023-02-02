@@ -6,7 +6,9 @@
 //
 
 import XCTest
-@testable import SnabblePayNetwork
+@testable import SnabblePay
+import SnabblePayNetwork
+import TestHelper
 
 final class AccountsEndpointTests: XCTestCase {
 
@@ -65,20 +67,20 @@ final class AccountsEndpointTests: XCTestCase {
     }
 
     func testAccountCheckDecoding() throws {
-        let data = try loadResource(filename: "account-check", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "account-check", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Account.Check.self, from: data)
         XCTAssertEqual(instance.validationURL, "https://link.tink.com/1.0/account-check/?client_id=fcba35b7bf174d30bb7ce83c1870483a&redirect_uri=https%3A%2F%2Fpayments.snabble.io%2Fcallback&market=DE&locale=en_US&state=c6a1f37a-aefd-47e4-afbb-4baf0dcf7d30")
         XCTAssertEqual(instance.appUri, "snabble-pay://account/check")
     }
 
     func testDecodingEmpty() throws {
-        let data = try loadResource(filename: "account-empty", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "accounts-empty", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode([Account].self, from: data)
         XCTAssertTrue(instance.isEmpty)
     }
 
     func testDecodingOne() throws {
-        let data = try loadResource(filename: "account-one", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "accounts-one", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode([Account].self, from: data)
         XCTAssertFalse(instance.isEmpty)
         XCTAssertEqual(instance.count, 1)
@@ -93,7 +95,7 @@ final class AccountsEndpointTests: XCTestCase {
     }
 
     func testDecodingMany() throws {
-        let data = try loadResource(filename: "account-many", withExtension: "json")
+        let data = try loadResource(inBundle: .module, filename: "accounts-many", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode([Account].self, from: data)
         XCTAssertFalse(instance.isEmpty)
         XCTAssertEqual(instance.count, 2)
@@ -113,5 +115,18 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.last?.bank, "Bank Name")
         XCTAssertEqual(instance.last?.iban, "DE123**********")
         XCTAssertEqual(instance.last?.mandate.state, .declined)
+    }
+
+    func testDecodingID() throws {
+        let data = try loadResource(inBundle: .module, filename: "account-id", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.self, from: data)
+        XCTAssertEqual(instance.id, "1")
+        XCTAssertEqual(instance.name, "John Doe's Account")
+        XCTAssertEqual(instance.holderName, "John Doe")
+        XCTAssertEqual(instance.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.bank, "Bank Name")
+        XCTAssertEqual(instance.iban, "DE123**********")
+        XCTAssertEqual(instance.mandate.state, .accepted)
     }
 }

@@ -9,8 +9,8 @@ import Foundation
 import Tagged
 
 extension Endpoints {
-    public enum Token {
-        public static func get(
+    enum Token {
+        static func get(
             withAppIdentifier appIdentifier: App.Idenitifer,
             appSecret: App.Secret,
             scope: SnabblePayNetwork.Token.Scope = .all,
@@ -25,33 +25,5 @@ extension Endpoints {
                          ]),
                          environment: environment)
         }
-    }
-}
-
-public struct Token: Codable {
-    public enum Scope: String, Codable {
-        case all
-    }
-
-    public enum `Type`: String, Codable {
-        case bearer = "Bearer"
-    }
-
-    public let accessToken: AccessToken
-    public let expiresAt: Date
-    public let scope: Scope
-    public let type: `Type`
-
-    enum CodingKeys: String, CodingKey {
-        case accessToken
-        case expiresAt
-        case scope
-        case type = "tokenType"
-    }
-
-    public typealias AccessToken = Tagged<(Token, accessToken: ()), String>
-
-    func isValid() -> Bool {
-        return expiresAt.timeIntervalSinceNow.sign == .plus
     }
 }

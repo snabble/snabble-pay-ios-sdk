@@ -6,7 +6,9 @@
 //
 
 import XCTest
-@testable import SnabblePayNetwork
+@testable import SnabblePay
+import SnabblePayNetwork
+import TestHelper
 
 final class SessionEndpointTests: XCTestCase {
 
@@ -14,21 +16,28 @@ final class SessionEndpointTests: XCTestCase {
 
     func testPostEndpoint() throws {
         let endpoint = Endpoints.Session.post(withAccountId: "1")
-        XCTAssertEqual(endpoint.path, "/apps/session")
+        XCTAssertEqual(endpoint.path, "/apps/sessions")
         XCTAssertEqual(endpoint.method, .post(jsonData))
+        XCTAssertEqual(endpoint.environment, .production)
+    }
+
+    func testGetEndpoint() throws {
+        let endpoint = Endpoints.Session.get()
+        XCTAssertEqual(endpoint.path, "/apps/sessions")
+        XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testDeleteEndpoint() throws {
         let endpoint = Endpoints.Session.delete(id: "1")
-        XCTAssertEqual(endpoint.path, "/apps/session/1")
+        XCTAssertEqual(endpoint.path, "/apps/sessions/1")
         XCTAssertEqual(endpoint.method, .delete)
         XCTAssertEqual(endpoint.environment, .production)
     }
 
-    func testGetEndpoint() throws {
+    func testGetIdEndpoint() throws {
         let endpoint = Endpoints.Session.get(id: "1")
-        XCTAssertEqual(endpoint.path, "/apps/session/1")
+        XCTAssertEqual(endpoint.path, "/apps/sessions/1")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
     }
@@ -42,6 +51,9 @@ final class SessionEndpointTests: XCTestCase {
 
         let endpoint3 = Endpoints.Session.delete(id: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint3.environment, .staging)
+
+        let endpoint4 = Endpoints.Session.get(onEnvironment: .staging)
+        XCTAssertEqual(endpoint4.environment, .staging)
     }
 
     func testEnvironmentDevelopment() throws {
@@ -53,10 +65,13 @@ final class SessionEndpointTests: XCTestCase {
 
         let endpoint3 = Endpoints.Session.delete(id: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint3.environment, .development)
+
+        let endpoint4 = Endpoints.Session.get(onEnvironment: .development)
+        XCTAssertEqual(endpoint4.environment, .development)
     }
 
     func testDecodingAccountPost() throws {
-        let jsonData = try loadResource(filename: "session-post", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "sessions-post", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
         XCTAssertEqual(instance.id.rawValue, "1")
         XCTAssertEqual(instance.token.rawValue, "3489f@asd2")
@@ -67,21 +82,21 @@ final class SessionEndpointTests: XCTestCase {
     }
 
     func testDecodingAccountPostErrorDeclined() throws {
-        let jsonData = try loadResource(filename: "session-post-error-declined", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "sessions-post-error-declined", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
         XCTAssertEqual(instance.reason, Session.Error.Reason.mandateDeclined)
         XCTAssertEqual(instance.message, "The user has to accept the mandate to start a session")
     }
 
     func testDecodingAccountPostError() throws {
-        let jsonData = try loadResource(filename: "session-post-error-unknown", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "sessions-post-error-unknown", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.Error.self, from: jsonData)
         XCTAssertEqual(instance.reason, Session.Error.Reason.unknown)
         XCTAssertNil(instance.message)
     }
 
     func testDecodingAccountGet() throws {
-        let jsonData = try loadResource(filename: "session-get", withExtension: "json")
+        let jsonData = try loadResource(inBundle: .module, filename: "sessions-get", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
         XCTAssertEqual(instance.id.rawValue, "1")
         XCTAssertEqual(instance.token.rawValue, "token")
