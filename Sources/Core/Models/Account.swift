@@ -48,6 +48,6 @@ public struct Account: Decodable, Identifiable {
 
 extension Account: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id && lhs.mandateState == rhs.mandateState
+        lhs.id == rhs.id
     }
 }
