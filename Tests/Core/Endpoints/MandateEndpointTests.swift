@@ -91,12 +91,13 @@ final class MandateEndpointTests: XCTestCase {
         let dataDeclined = try loadResource(inBundle: .module, filename: "mandate-declined", withExtension: "json")
         let mandateDeclined = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataDeclined)
 
-        XCTAssertFalse(mandateAccepted == mandatePending)
-        XCTAssertFalse(mandateAccepted == mandateDeclined)
-        XCTAssertFalse(mandatePending == mandateDeclined)
+        let dataAcceptedOtherId = try loadResource(inBundle: .module, filename: "mandate-accepted-otherId", withExtension: "json")
+        let mandateAcceptedOtherId = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAcceptedOtherId)
 
-        let mandateAccepted2 = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAccepted)
-        XCTAssertEqual(mandateAccepted, mandateAccepted2)
+        XCTAssertEqual(mandateAccepted, mandatePending)
+        XCTAssertEqual(mandateAccepted, mandateDeclined)
+        XCTAssertEqual(mandatePending, mandateDeclined)
+        XCTAssertFalse(mandateAccepted == mandateAcceptedOtherId)
     }
 
     func testDecoderAccepted() throws {

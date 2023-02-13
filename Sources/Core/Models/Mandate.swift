@@ -30,7 +30,7 @@ extension Account {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: Account.Mandate.CodingKeys.self)
-            self.id = try container.decodeIfPresent(Account.Mandate.ID.self, forKey: .id) ?? ID(UUID().uuidString)
+            self.id = try container.decode(Account.Mandate.ID.self, forKey: .id)
             self.state = try container.decode(Account.Mandate.State.self, forKey: .state)
             self.htmlText = try container.decodeIfPresent(String.self, forKey: .htmlText)
         }
@@ -39,6 +39,6 @@ extension Account {
 
 extension Account.Mandate: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id && lhs.state == rhs.state
+        lhs.id == rhs.id
     }
 }
