@@ -20,22 +20,38 @@ final class MandateEndpointTests: XCTestCase {
     }
 
     func testAcceptEndpoint() throws {
-        let jsonObject = ["state": "ACCEPTED"]
-        let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
+        let jsonObject: [String: String] = [
+            "id": "1",
+            "state": "ACCEPTED"
+        ]
 
-        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: "3")
+        let endpoint = Endpoints.Accounts.Mandate.accept(mandateId: "1", forAccountId: "3")
         XCTAssertEqual(endpoint.path, "/apps/accounts/3/mandate")
-        XCTAssertEqual(endpoint.method, .patch(jsonData))
+        switch endpoint.method {
+        case .patch(let data):
+            let object = try! JSONSerialization.jsonObject(with: data!) as? [String: String]
+            XCTAssertEqual(object, jsonObject)
+        default:
+            XCTFail("should be a patch method")
+        }
         XCTAssertEqual(endpoint.environment, .production)
     }
 
     func testDeclineEndpoint() throws {
-        let jsonObject = ["state": "DECLINED"]
-        let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
+        let jsonObject = [
+            "id": "1",
+            "state": "DECLINED"
+        ]
 
-        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: "2")
+        let endpoint = Endpoints.Accounts.Mandate.decline(mandateId: "1", forAccountId: "2")
         XCTAssertEqual(endpoint.path, "/apps/accounts/2/mandate")
-        XCTAssertEqual(endpoint.method, .patch(jsonData))
+        switch endpoint.method {
+        case .patch(let data):
+            let object = try! JSONSerialization.jsonObject(with: data!) as? [String: String]
+            XCTAssertEqual(object, jsonObject)
+        default:
+            XCTFail("should be a patch method")
+        }
         XCTAssertEqual(endpoint.environment, .production)
     }
 
@@ -43,19 +59,19 @@ final class MandateEndpointTests: XCTestCase {
         var endpoint = Endpoints.Accounts.Mandate.get(accountId: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
-        endpoint = Endpoints.Accounts.Mandate.accept(accountId: "1", onEnvironment: .development)
+        endpoint = Endpoints.Accounts.Mandate.accept(mandateId: "1", forAccountId: "2", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Accounts.Mandate.decline(accountId: "1", onEnvironment: .development)
+        endpoint = Endpoints.Accounts.Mandate.decline(mandateId: "1", forAccountId: "2", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
         endpoint = Endpoints.Accounts.Mandate.get(accountId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Accounts.Mandate.accept(accountId: "1", onEnvironment: .development)
+        endpoint = Endpoints.Accounts.Mandate.accept(mandateId: "1", forAccountId: "2", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Accounts.Mandate.decline(accountId: "1", onEnvironment: .development)
+        endpoint = Endpoints.Accounts.Mandate.decline(mandateId: "1", forAccountId: "2", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
     }
 
@@ -66,18 +82,34 @@ final class MandateEndpointTests: XCTestCase {
     }
 
     func testEquatable() throws {
-        let mandate1 = Account.Mandate(state: .accepted, text: "foobar")
-        let mandate2 = Account.Mandate(state: .accepted, text: nil)
-        let mandate3 = Account.Mandate(state: .declined, text: "foobar")
+        let dataAccepted = try loadResource(inBundle: .module, filename: "mandate-accepted", withExtension: "json")
+        let mandateAccepted = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAccepted)
 
-        XCTAssertEqual(mandate1, mandate2)
-        XCTAssertFalse(mandate3 == mandate2)
+        let dataPending = try loadResource(inBundle: .module, filename: "mandate-pending", withExtension: "json")
+        let mandatePending = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataPending)
+
+        let dataDeclined = try loadResource(inBundle: .module, filename: "mandate-declined", withExtension: "json")
+        let mandateDeclined = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataDeclined)
+
+        XCTAssertFalse(mandateAccepted == mandatePending)
+        XCTAssertFalse(mandateAccepted == mandateDeclined)
+        XCTAssertFalse(mandatePending == mandateDeclined)
+
+        let mandateAccepted2 = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAccepted)
+        XCTAssertEqual(mandateAccepted, mandateAccepted2)
     }
 
-    func testDecoder() throws {
-        let data = try loadResource(inBundle: .module, filename: "mandate", withExtension: "json")
+    func testDecoderAccepted() throws {
+        let data = try loadResource(inBundle: .module, filename: "mandate-accepted", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: data)
         XCTAssertEqual(instance.state, .accepted)
-        XCTAssertEqual(instance.text, "mandate text")
+        XCTAssertNil(instance.htmlText)
+    }
+
+    func testDecoderPending() throws {
+        let data = try loadResource(inBundle: .module, filename: "mandate-pending", withExtension: "json")
+        let instance = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: data)
+        XCTAssertEqual(instance.state, .pending)
+        XCTAssertNotNil(instance.htmlText)
     }
 }

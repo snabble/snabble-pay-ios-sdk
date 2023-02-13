@@ -109,8 +109,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func acceptMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.accept(accountId: accountId, onEnvironment: environment)
+    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.Mandate.accept(mandateId: mandateId, forAccountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {
@@ -125,8 +125,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func declineMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.decline(accountId: accountId, onEnvironment: environment)
+    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        let endpoint = Endpoints.Accounts.Mandate.decline(mandateId: mandateId, forAccountId: accountId, onEnvironment: environment)
         networkManager.publisher(for: endpoint)
             .sink {
                 switch $0 {

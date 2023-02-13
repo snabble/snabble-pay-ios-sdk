@@ -25,5 +25,4 @@ public enum HTTPMethod: Equatable {
         case .head: return "HEAD"
         }
     }
-
 }

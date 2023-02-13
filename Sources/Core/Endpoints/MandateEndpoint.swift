@@ -18,18 +18,18 @@ extension Endpoints.Accounts {
             )
         }
 
-        public static func accept(accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        public static func accept(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
-                method: .patch(data(for: .accept)),
+                method: .patch(data(for: .accept, withMandateId: mandateId)),
                 environment: environment
             )
         }
 
-        public static func decline(accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        public static func decline(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
-                method: .patch(data(for: .decline)),
+                method: .patch(data(for: .decline, withMandateId: mandateId)),
                 environment: environment
             )
         }
@@ -40,8 +40,11 @@ extension Endpoints.Accounts {
         }
 
         // swiftlint:disable force_try
-        private static func data(for action: Action) -> Data {
-            let jsonObject = ["state": action.rawValue]
+        private static func data(for action: Action, withMandateId mandateId: Account.Mandate.ID) -> Data {
+            let jsonObject = [
+                "id": mandateId.rawValue,
+                "state": action.rawValue
+            ]
             return try! JSONSerialization.data(withJSONObject: jsonObject)
         }
         // swiftlint:enable force_try

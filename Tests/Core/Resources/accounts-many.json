@@ -7,10 +7,7 @@
         "createdAt": "2022-12-22T09:24:38Z",
         "bank": "Bank Name",
         "iban": "DE123**********",
-        "mandate": {
-            "state": "ACCEPTED",
-            "text": "mandate text"
-        }
+        "mandateState": "ACCEPTED",
     },
     {
         "id": "2",
@@ -20,9 +17,6 @@
         "createdAt": "2022-12-22T10:24:38Z",
         "bank": "Bank Name",
         "iban": "DE123**********",
-        "mandate": {
-            "state": "DECLINED",
-            "text": "mandate text"
-        }
+        "mandateState": "DECLINED",
     },
 ]
