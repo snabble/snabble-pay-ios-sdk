@@ -56,10 +56,6 @@ public class NetworkManager {
             }
             .eraseToAnyPublisher()
     }
-
-    public func reset() {
-        authenticator.reset()
-    }
 }
 
 extension NetworkManager: AuthenticatorDelegate {

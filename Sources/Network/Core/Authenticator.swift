@@ -109,9 +109,4 @@ public class Authenticator {
             return publisher
         }
     }
-
-    func reset() {
-        token = nil
-        credentials = nil
-    }
 }
