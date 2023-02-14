@@ -91,7 +91,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.first?.bank, "Bank Name")
         XCTAssertEqual(instance.first?.iban, "DE123**********")
-        XCTAssertEqual(instance.first?.mandate.state, .accepted)
+        XCTAssertEqual(instance.first?.mandateState, .accepted)
     }
 
     func testDecodingMany() throws {
@@ -106,7 +106,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.first?.bank, "Bank Name")
         XCTAssertEqual(instance.first?.iban, "DE123**********")
-        XCTAssertEqual(instance.first?.mandate.state, .accepted)
+        XCTAssertEqual(instance.first?.mandateState, .accepted)
         XCTAssertEqual(instance.last?.id, "2")
         XCTAssertEqual(instance.last?.name, "Jana Doe's Account")
         XCTAssertEqual(instance.last?.holderName, "Jana Doe")
@@ -114,7 +114,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.last?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T10:24:38Z"))
         XCTAssertEqual(instance.last?.bank, "Bank Name")
         XCTAssertEqual(instance.last?.iban, "DE123**********")
-        XCTAssertEqual(instance.last?.mandate.state, .declined)
+        XCTAssertEqual(instance.last?.mandateState, .declined)
     }
 
     func testDecodingID() throws {
@@ -127,6 +127,6 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.bank, "Bank Name")
         XCTAssertEqual(instance.iban, "DE123**********")
-        XCTAssertEqual(instance.mandate.state, .accepted)
+        XCTAssertEqual(instance.mandateState, .accepted)
     }
 }

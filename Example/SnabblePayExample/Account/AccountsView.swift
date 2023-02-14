@@ -34,13 +34,13 @@ class AccountsViewModel: ObservableObject {
     }
 
     func acceptMandate(forAccount account: Account) {
-        snabblePay.acceptMandate(forAccountId: account.id) { [weak self] _ in
+        snabblePay.acceptMandate(withId: "1", forAccountId: account.id) { [weak self] _ in
             self?.loadAccounts()
         }
     }
 
     func declineMandate(forAccount account: Account) {
-        snabblePay.declineMandate(forAccountId: account.id) { [weak self] _ in
+        snabblePay.declineMandate(withId: "1", forAccountId: account.id) { [weak self] _ in
             self?.loadAccounts()
         }
     }
@@ -65,7 +65,7 @@ struct AccountsView: View {
                             Text(account.iban.rawValue)
                         }
                         Spacer()
-                        switch account.mandate.state {
+                        switch account.mandateState {
                         case .pending:
                             VStack(alignment: .center, spacing: 8) {
                                 Button {

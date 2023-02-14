@@ -56,7 +56,7 @@ extension Endpoint {
         case .post(let data), .put(let data), .patch(let data):
             request.httpBody = data
         default:
-            break
+            request.httpBody = nil
         }
 
         let headerFields = environment.headerFields.merging(headerFields, uniquingKeysWith: { _, new in new })
