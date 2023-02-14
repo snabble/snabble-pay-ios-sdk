@@ -11,16 +11,15 @@ import Tagged
 extension Endpoints {
     enum Token {
         static func get(
-            withAppIdentifier appIdentifier: App.Idenitifer,
-            appSecret: App.Secret,
+            withCredentials credentials: Credentials,
             scope: SnabblePayNetwork.Token.Scope = .all,
             onEnvironment environment: Environment = .production
         ) -> Endpoint<SnabblePayNetwork.Token> {
             return .init(path: "/apps/token",
                          method: .get([
                             .init(name: "grant_type", value: "client_credentials"),
-                            .init(name: "client_id", value: appIdentifier.rawValue),
-                            .init(name: "client_secret", value: appSecret.rawValue),
+                            .init(name: "client_id", value: credentials.identifier.rawValue),
+                            .init(name: "client_secret", value: credentials.secret.rawValue),
                             .init(name: "scope", value: scope.rawValue)
                          ]),
                          environment: environment)

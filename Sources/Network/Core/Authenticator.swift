@@ -8,55 +8,60 @@
 import Foundation
 import Dispatch
 import Combine
-import KeychainAccess
+
+protocol AuthenticatorDelegate: AnyObject {
+    func authenticator(_ authenticator: Authenticator, didUpdateCredentials credentials: Credentials?)
+}
 
 public class Authenticator {
     public let urlSession: URLSession
     public let apiKey: String
 
+    weak var delegate: AuthenticatorDelegate?
+
     enum Error: Swift.Error {
         case unknown
     }
 
-    @KeychainStorage("token", service: "io.snabble.pay.authenticator")
     private(set) var token: Token?
-
-    @KeychainStorage("app", service: "io.snabble.pay.authenticator")
-    private(set) var app: App?
+    private(set) var credentials: Credentials? {
+        didSet {
+            delegate?.authenticator(self, didUpdateCredentials: credentials)
+        }
+    }
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
 
     private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
 
-    init(apiKey: String, urlSession: URLSession) {
+    init(apiKey: String, credentials: Credentials?, urlSession: URLSession) {
         self.urlSession = urlSession
         self.apiKey = apiKey
+        self.credentials = credentials
     }
 
-    private func validateApp(using decoder: JSONDecoder, onEnvironment environment: Environment = .production) -> AnyPublisher<App, Swift.Error> {
+    private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, Swift.Error> {
         // scenario 1: app instance is registered
-        if let app = self.app {
-            return Just(app)
+        if let credentials = self.credentials {
+            return Just(credentials)
                 .setFailureType(to: Swift.Error.self)
                 .eraseToAnyPublisher()
         }
 
         // scenario 2: we have to register the app instance
-        var endpoint = Endpoints.Register.post(
+        let endpoint = Endpoints.Register.post(
             apiKeyValue: apiKey,
             onEnvironment: environment
         )
-        endpoint.jsonDecoder = decoder
         let publisher = urlSession.publisher(for: endpoint)
-            .handleEvents(receiveOutput: { [weak self] app in
-                self?.app = app
+            .handleEvents(receiveOutput: { [weak self] credentials in
+                self?.credentials = credentials
             }, receiveCompletion: { _ in })
             .eraseToAnyPublisher()
         return publisher
     }
 
     func validToken(
-        using decoder: JSONDecoder,
         forceRefresh: Bool = false,
         onEnvironment environment: Environment = .production
     ) -> AnyPublisher<Token, Swift.Error> {
@@ -74,15 +79,12 @@ public class Authenticator {
             }
 
             // scenario 3: we need a new token
-            let publisher = validateApp(using: decoder, onEnvironment: environment)
-                .map { app -> Endpoint<Token> in
-                    var endpoint = Endpoints.Token.get(
-                        withAppIdentifier: app.identifier,
-                        appSecret: app.secret,
+            let publisher = validateCredentials(onEnvironment: environment)
+                .map { credentials -> Endpoint<Token> in
+                    return Endpoints.Token.get(
+                        withCredentials: credentials,
                         onEnvironment: environment
                     )
-                    endpoint.jsonDecoder = decoder
-                    return endpoint
                 }
                 .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
                     guard let urlSession = self?.urlSession else {
@@ -110,6 +112,6 @@ public class Authenticator {
 
     func reset() {
         token = nil
-        app = nil
+        credentials = nil
     }
 }

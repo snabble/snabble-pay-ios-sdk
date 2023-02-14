@@ -9,9 +9,15 @@ import Foundation
 import SnabblePayNetwork
 import Combine
 
+public protocol SnabblePayDelegate: AnyObject {
+    func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?)
+}
+
 public class SnabblePay {
     public let networkManager: NetworkManager
     public var environment: Environment = .production
+
+    public weak var delegate: SnabblePayDelegate?
 
     public var apiKey: String {
         networkManager.authenticator.apiKey
@@ -23,8 +29,9 @@ public class SnabblePay {
 
     private var cancellables = Set<AnyCancellable>()
 
-    public init(apiKey: String, urlSession: URLSession = .shared) {
-        self.networkManager = NetworkManager(apiKey: apiKey, urlSession: urlSession)
+    public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
+        self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials, urlSession: urlSession)
+        self.networkManager.delegate = self
     }
 
     public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {

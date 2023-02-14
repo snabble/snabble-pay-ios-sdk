@@ -13,7 +13,7 @@ import TestHelper
 final class URLSessionEndpointTests: XCTestCase {
 
     let resourceData = try! loadResource(inBundle: .module, filename: "register", withExtension: "json")
-    let endpointRegister: Endpoint<App> = Endpoints.Register.post(apiKeyValue: "123456")
+    let endpointRegister: Endpoint<Credentials> = Endpoints.Register.post(apiKeyValue: "123456")
     let endpointData: Endpoint<Data> = .init(path: "/apps/register", method: .get(nil))
     var cancellables = Set<AnyCancellable>()
 

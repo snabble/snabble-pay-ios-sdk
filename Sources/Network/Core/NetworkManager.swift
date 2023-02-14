@@ -8,46 +8,47 @@
 import Combine
 import Foundation
 
-public struct NetworkManager {
+public protocol NetworkManagerDelegate: AnyObject {
+    func networkManager(_ networkManager: NetworkManager, didUpdateCredentials credentials: Credentials?)
+}
+
+public class NetworkManager {
     public let urlSession: URLSession
-    public let jsonDecoder: JSONDecoder
+
+    public weak var delegate: NetworkManagerDelegate?
 
     public let authenticator: Authenticator
 
-    public init(apiKey: String, urlSession: URLSession) {
+    public init(apiKey: String, credentials: Credentials?, urlSession: URLSession) {
         self.urlSession = urlSession
-
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.dateDecodingStrategy = .iso8601
-        self.jsonDecoder = jsonDecoder
 
         self.authenticator = Authenticator(
             apiKey: apiKey,
+            credentials: credentials,
             urlSession: urlSession
         )
+        self.authenticator.delegate = self
     }
 
     public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {
-        return authenticator.validToken(using: jsonDecoder, onEnvironment: endpoint.environment)
+        return authenticator.validToken(onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
                 endpoint.token = token
-                endpoint.jsonDecoder = jsonDecoder
                 return endpoint
             }
-            .flatMap { endpoint in
+            .flatMap { [self] endpoint in
                 urlSession.publisher(for: endpoint)
             }
-            .tryCatch { error in
+            .tryCatch { [self] error in
                 if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
-                    return authenticator.validToken(using: jsonDecoder, forceRefresh: true, onEnvironment: endpoint.environment)
+                    return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                         .map { token in
                             var endpoint = endpoint
                             endpoint.token = token
-                            endpoint.jsonDecoder = jsonDecoder
                             return endpoint
                         }
-                        .flatMap { endpoint in
+                        .flatMap { [self] endpoint in
                             urlSession.publisher(for: endpoint)
                         }
                 }
@@ -58,5 +59,11 @@ public struct NetworkManager {
 
     public func reset() {
         authenticator.reset()
+    }
+}
+
+extension NetworkManager: AuthenticatorDelegate {
+    func authenticator(_ authenticator: Authenticator, didUpdateCredentials credentials: Credentials?) {
+        delegate?.networkManager(self, didUpdateCredentials: credentials)
     }
 }

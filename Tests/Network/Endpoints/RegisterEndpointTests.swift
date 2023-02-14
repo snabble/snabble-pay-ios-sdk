@@ -30,7 +30,7 @@ final class RegisterEndpointTests: XCTestCase {
 
     func testDecodingApp() throws {
         let registerData = try loadResource(inBundle: .module, filename: "register", withExtension: "json")
-        let app = try JSONDecoder().decode(App.self, from: registerData)
+        let app = try JSONDecoder().decode(Credentials.self, from: registerData)
         XCTAssertEqual(app.identifier, "1l2z79uvnKU18hJ621hDti2Q1mckTs8633HFlUz7PCG1OalckFyKf/TzJlGcOUC4WPInc+RrKCAPLc0loJCtRw==")
         XCTAssertEqual(app.secret, "qPgwvqkVCFn+aFxljTClV7+kTe+18rOQ7Qrdp5YSethhi2X9Sp97UiDkAO3qzXgcdDi/+VazutfHxbA4SZKYWA==")
     }

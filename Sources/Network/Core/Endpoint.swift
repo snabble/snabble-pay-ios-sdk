@@ -17,7 +17,11 @@ public struct Endpoint<Response> {
     public let path: String
     public let environment: Environment
 
-    var jsonDecoder: JSONDecoder
+    var jsonDecoder: JSONDecoder = {
+        let jsonDecoder: JSONDecoder = .init()
+        jsonDecoder.dateDecodingStrategy = .iso8601
+        return jsonDecoder
+    }()
 
     var token: Token?
 
@@ -27,7 +31,6 @@ public struct Endpoint<Response> {
         self.path = path
         self.method = method
         self.environment = environment
-        self.jsonDecoder = .init()
     }
 }
 

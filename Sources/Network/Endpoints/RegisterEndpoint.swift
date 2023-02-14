@@ -10,8 +10,8 @@ import Tagged
 
 extension Endpoints {
     enum Register {
-        static func post(apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<App> {
-            var endpoint: Endpoint<App> = .init(path: "/apps/register", method: .post(nil), environment: environment)
+        static func post(apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<Credentials> {
+            var endpoint: Endpoint<Credentials> = .init(path: "/apps/register", method: .post(nil), environment: environment)
             endpoint.headerFields = ["snabblePayKey": apiKeyValue]
             return endpoint
         }

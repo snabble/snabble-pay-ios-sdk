@@ -11,7 +11,7 @@ import TestHelper
 
 final class SnabblePayTests: XCTestCase {
 
-    let instance: SnabblePay = SnabblePay(apiKey: "1234", urlSession: .mockSession)
+    let instance: SnabblePay = SnabblePay(apiKey: "1234", credentials: nil, urlSession: .mockSession)
 
     private var injectedResponse: ((URLRequest) throws -> (HTTPURLResponse, Data))! = { request in
         let response = HTTPURLResponse(

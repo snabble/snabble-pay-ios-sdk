@@ -17,7 +17,7 @@ final class NetworkManagerTests: XCTestCase {
 
     override func setUpWithError() throws {
         cancellables = Set<AnyCancellable>()
-        networkManager = NetworkManager(apiKey: "123456", urlSession: .mockSession)
+        networkManager = NetworkManager(apiKey: "123456", credentials: nil, urlSession: .mockSession)
     }
 
     override func tearDownWithError() throws {
@@ -88,7 +88,7 @@ final class NetworkManagerTests: XCTestCase {
             return (response, Data())
         }
 
-        let endpoint = Endpoints.Token.get(withAppIdentifier: "1234", appSecret: "5678")
+        let endpoint = Endpoints.Token.get(withCredentials: .init(identifier: "random_app_identifier", secret: "random_app_secret"))
 
         let expectation = expectation(description: "token")
         var validation: Token?
