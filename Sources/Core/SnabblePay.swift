@@ -77,9 +77,21 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
+    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String) -> AnyPublisher<Account.Mandate, Error> {
+        let endpoint = Endpoints.Accounts.Mandate.create(
+            forAccountId: accountId,
+            city: city,
+            country: country,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     public func mandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
         let endpoint = Endpoints.Accounts.Mandate.get(
-            accountId: accountId,
+            forAccountId: accountId,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -233,6 +245,25 @@ extension SnabblePay {
             var cancellable: AnyCancellable?
 
             cancellable = mandate(forAccountId: accountId)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String) async throws -> Account.Mandate {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = createMandate(forAccountId: accountId, city: city, country: country)
                 .sink {
                     switch $0 {
                     case .finished:
@@ -411,6 +442,21 @@ extension SnabblePay {
 
     public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Account, Error>) -> Void) {
         deleteAccount(withId: id)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
+    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        createMandate(forAccountId: accountId, city: city, country: country)
             .sink {
                 switch $0 {
                 case .finished:
