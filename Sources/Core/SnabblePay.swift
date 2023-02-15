@@ -77,11 +77,11 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String) -> AnyPublisher<Account.Mandate, Error> {
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) -> AnyPublisher<Account.Mandate, Error> {
         let endpoint = Endpoints.Accounts.Mandate.post(
             forAccountId: accountId,
             city: city,
-            country: country,
+            countryCode: countryCode,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -259,11 +259,11 @@ extension SnabblePay {
         })
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String) async throws -> Account.Mandate {
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) async throws -> Account.Mandate {
         try await withCheckedThrowingContinuation({ continuation in
             var cancellable: AnyCancellable?
 
-            cancellable = createMandate(forAccountId: accountId, city: city, country: country)
+            cancellable = createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
                 .sink {
                     switch $0 {
                     case .finished:
@@ -455,8 +455,8 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, country: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        createMandate(forAccountId: accountId, city: city, country: country)
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
             .sink {
                 switch $0 {
                 case .finished:
