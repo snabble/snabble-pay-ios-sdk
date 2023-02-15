@@ -13,7 +13,7 @@ import TestHelper
 final class MandateEndpointTests: XCTestCase {
 
     func testGetEndpoint() throws {
-        let endpoint = Endpoints.Accounts.Mandate.get(accountId: "1")
+        let endpoint = Endpoints.Accounts.Mandate.get(forAccountId: "1")
         XCTAssertEqual(endpoint.path, "/apps/accounts/1/mandate")
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.environment, .production)
@@ -56,7 +56,7 @@ final class MandateEndpointTests: XCTestCase {
     }
 
     func testEnvironment() throws {
-        var endpoint = Endpoints.Accounts.Mandate.get(accountId: "1", onEnvironment: .staging)
+        var endpoint = Endpoints.Accounts.Mandate.get(forAccountId: "1", onEnvironment: .staging)
         XCTAssertEqual(endpoint.environment, .staging)
 
         endpoint = Endpoints.Accounts.Mandate.accept(mandateId: "1", forAccountId: "2", onEnvironment: .development)
@@ -65,7 +65,7 @@ final class MandateEndpointTests: XCTestCase {
         endpoint = Endpoints.Accounts.Mandate.decline(mandateId: "1", forAccountId: "2", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
-        endpoint = Endpoints.Accounts.Mandate.get(accountId: "1", onEnvironment: .development)
+        endpoint = Endpoints.Accounts.Mandate.get(forAccountId: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint.environment, .development)
 
         endpoint = Endpoints.Accounts.Mandate.accept(mandateId: "1", forAccountId: "2", onEnvironment: .development)

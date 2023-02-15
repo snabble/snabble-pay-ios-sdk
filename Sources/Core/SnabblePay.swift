@@ -78,7 +78,7 @@ extension SnabblePay {
     }
 
     public func createMandate(forAccountId accountId: Account.ID, city: String, country: String) -> AnyPublisher<Account.Mandate, Error> {
-        let endpoint = Endpoints.Accounts.Mandate.create(
+        let endpoint = Endpoints.Accounts.Mandate.post(
             forAccountId: accountId,
             city: city,
             country: country,
@@ -130,7 +130,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func session(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Error> {
+    public func startSession(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Error> {
         let endpoint = Endpoints.Session.post(
             withAccountId: accountId,
             onEnvironment: environment
@@ -335,11 +335,11 @@ extension SnabblePay {
         })
     }
 
-    public func session(withAccountId accountId: Account.ID) async throws -> Session {
+    public func startSession(withAccountId accountId: Account.ID) async throws -> Session {
         try await withCheckedThrowingContinuation({ continuation in
             var cancellable: AnyCancellable?
 
-            cancellable = session(withAccountId: accountId)
+            cancellable = startSession(withAccountId: accountId)
                 .sink {
                     switch $0 {
                     case .finished:
@@ -530,8 +530,8 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func session(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
-        session(withAccountId: accountId)
+    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+        startSession(withAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:

@@ -46,7 +46,7 @@ class AccountsViewModel: ObservableObject {
     }
 
     func startSession(withAccount account: Account) {
-        snabblePay.session(withAccountId: account.id) { [weak self] in
+        snabblePay.startSession(withAccountId: account.id) { [weak self] in
             self?.session = try? $0.get()
         }
     }

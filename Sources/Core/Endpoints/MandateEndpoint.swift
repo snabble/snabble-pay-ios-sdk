@@ -10,7 +10,7 @@ import SnabblePayNetwork
 
 extension Endpoints.Accounts {
     public enum Mandate {
-        public static func create(forAccountId accountId: Account.ID, city: String, country: String, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        public static func post(forAccountId accountId: Account.ID, city: String, country: String, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             let jsonObject = [
                 "city": city,
                 "country": country
