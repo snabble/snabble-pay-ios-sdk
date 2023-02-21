@@ -46,7 +46,7 @@ class AccountsViewModel: ObservableObject {
     }
 
     func startSession(withAccount account: Account) {
-        snabblePay.session(withAccountId: account.id) { [weak self] in
+        snabblePay.startSession(withAccountId: account.id) { [weak self] in
             self?.session = try? $0.get()
         }
     }
@@ -125,9 +125,9 @@ struct AccountsView: View {
             viewModel.loadAccounts()
         }
         Button {
-            viewModel.snabblePay.reset()
+            print("init new snabblePay instance without credentials")
         } label: {
-            Text("Remove AppId")
+            Text("Remove Credentials")
         }
     }
 }

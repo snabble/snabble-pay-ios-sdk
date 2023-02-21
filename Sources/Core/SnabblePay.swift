@@ -9,9 +9,15 @@ import Foundation
 import SnabblePayNetwork
 import Combine
 
+public protocol SnabblePayDelegate: AnyObject {
+    func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?)
+}
+
 public class SnabblePay {
     public let networkManager: NetworkManager
     public var environment: Environment = .production
+
+    public weak var delegate: SnabblePayDelegate?
 
     public var apiKey: String {
         networkManager.authenticator.apiKey
@@ -23,14 +29,374 @@ public class SnabblePay {
 
     private var cancellables = Set<AnyCancellable>()
 
-    public init(apiKey: String, urlSession: URLSession = .shared) {
-        self.networkManager = NetworkManager(apiKey: apiKey, urlSession: urlSession)
+    public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
+        self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials, urlSession: urlSession)
+        self.networkManager.delegate = self
+    }
+}
+
+// MARK: Combine
+extension SnabblePay {
+
+    public func accountCheck(withAppUri appUri: URL) -> AnyPublisher<Account.Check, Error> {
+        let endpoint = Endpoints.Accounts.check(
+            appUri: appUri,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
-    public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.check(appUri: appUri, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+    public func accounts() -> AnyPublisher<[Account], Error> {
+        let endpoint = Endpoints.Accounts.get(
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
             .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func account(withId id: Account.ID) -> AnyPublisher<Account, Error> {
+        let endpoint = Endpoints.Accounts.get(
+            id: id,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func deleteAccount(withId id: Account.ID) -> AnyPublisher<Account, Error> {
+        let endpoint = Endpoints.Accounts.delete(
+            id: id,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) -> AnyPublisher<Account.Mandate, Error> {
+        let endpoint = Endpoints.Accounts.Mandate.post(
+            forAccountId: accountId,
+            city: city,
+            countryCode: countryCode,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func mandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+        let endpoint = Endpoints.Accounts.Mandate.get(
+            forAccountId: accountId,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+        let endpoint = Endpoints.Accounts.Mandate.accept(
+            mandateId: mandateId,
+            forAccountId: accountId,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+        let endpoint = Endpoints.Accounts.Mandate.decline(
+            mandateId: mandateId,
+            forAccountId: accountId,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func sessions() -> AnyPublisher<[Session], Error> {
+        let endpoint = Endpoints.Session.get(
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func startSession(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Error> {
+        let endpoint = Endpoints.Session.post(
+            withAccountId: accountId,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func session(withId id: Session.ID) -> AnyPublisher<Session, Error> {
+        let endpoint = Endpoints.Session.get(
+            id: id,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    public func deleteSession(withId id: Session.ID) -> AnyPublisher<Session, Error> {
+        let endpoint = Endpoints.Session.delete(
+            id: id,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+}
+
+// MARK: Async
+
+extension SnabblePay {
+    public func accountCheck(withAppUri appUri: URL) async throws -> Account.Check {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = accountCheck(withAppUri: appUri)
+                .sink { result in
+                    switch result {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func accounts() async throws -> [Account] {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = accounts()
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func account(withId id: Account.ID) async throws -> Account {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = account(withId: id)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func deleteAccount(withId id: Account.ID) async throws -> Account {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = deleteAccount(withId: id)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func mandate(forAccountId accountId: Account.ID) async throws -> Account.Mandate {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = mandate(forAccountId: accountId)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) async throws -> Account.Mandate {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) async throws -> Account.Mandate {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = acceptMandate(withId: mandateId, forAccountId: accountId)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) async throws -> Account.Mandate {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = declineMandate(withId: mandateId, forAccountId: accountId)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func sessions() async throws -> [Session] {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = sessions()
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func startSession(withAccountId accountId: Account.ID) async throws -> Session {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = startSession(withAccountId: accountId)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func session(withId id: Session.ID) async throws -> Session {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = session(withId: id)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+
+    public func deleteSession(withId id: Session.ID) async throws -> Session {
+        try await withCheckedThrowingContinuation({ continuation in
+            var cancellable: AnyCancellable?
+
+            cancellable = deleteSession(withId: id)
+                .sink {
+                    switch $0 {
+                    case .finished:
+                        break
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                    cancellable?.cancel()
+                } receiveValue: {
+                    continuation.resume(with: .success($0))
+                }
+        })
+    }
+}
+
+// MARK: Completion Handler
+extension SnabblePay {
+    public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
+        accountCheck(withAppUri: appUri)
             .sink {
                 switch $0 {
                 case .finished:
@@ -45,9 +411,7 @@ public class SnabblePay {
     }
 
     public func accounts(completionHandler: @escaping (Result<[Account], Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.get(onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
-            .receive(on: DispatchQueue.main)
+        accounts()
             .sink {
                 switch $0 {
                 case .finished:
@@ -62,9 +426,7 @@ public class SnabblePay {
     }
 
     public func account(withId id: Account.ID, completionHandler: @escaping (Result<Account, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.get(id: id, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
-            .receive(on: DispatchQueue.main)
+        account(withId: id)
             .sink {
                 switch $0 {
                 case .finished:
@@ -78,24 +440,38 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Void, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.delete(id: id, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
-            .receive(on: DispatchQueue.main)
+    public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Account, Error>) -> Void) {
+        deleteAccount(withId: id)
             .sink {
                 switch $0 {
                 case .finished:
-                    completionHandler(.success(()))
+                    break
                 case let .failure(error):
                     completionHandler(.failure(error))
                 }
-            } receiveValue: { _ in }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
+    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
             .store(in: &cancellables)
     }
 
     public func mandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.get(accountId: accountId, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        mandate(forAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
@@ -110,8 +486,7 @@ public class SnabblePay {
     }
 
     public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.accept(mandateId: mandateId, forAccountId: accountId, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        acceptMandate(withId: mandateId, forAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
@@ -126,8 +501,7 @@ public class SnabblePay {
     }
 
     public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        let endpoint = Endpoints.Accounts.Mandate.decline(mandateId: mandateId, forAccountId: accountId, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        declineMandate(withId: mandateId, forAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
@@ -142,8 +516,7 @@ public class SnabblePay {
     }
 
     public func sessions(completionHandler: @escaping (Result<[Session], Error>) -> Void) {
-        let endpoint = Endpoints.Session.get(onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        sessions()
             .sink {
                 switch $0 {
                 case .finished:
@@ -157,9 +530,8 @@ public class SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func session(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
-        let endpoint = Endpoints.Session.post(withAccountId: accountId, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+        startSession(withAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
@@ -174,8 +546,7 @@ public class SnabblePay {
     }
 
     public func session(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
-        let endpoint = Endpoints.Session.get(id: id, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        session(withId: id)
             .sink {
                 switch $0 {
                 case .finished:
@@ -190,8 +561,7 @@ public class SnabblePay {
     }
 
     public func deleteSession(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
-        let endpoint = Endpoints.Session.delete(id: id, onEnvironment: environment)
-        networkManager.publisher(for: endpoint)
+        deleteSession(withId: id)
             .sink {
                 switch $0 {
                 case .finished:
@@ -203,9 +573,5 @@ public class SnabblePay {
                 completionHandler(.success($0))
             }
             .store(in: &cancellables)
-    }
-
-    public func reset() {
-        networkManager.reset()
     }
 }

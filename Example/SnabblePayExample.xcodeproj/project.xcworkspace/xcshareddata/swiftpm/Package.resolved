@@ -10,21 +10,12 @@
       }
     },
     {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
-      "state" : {
-        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
-        "version" : "4.2.2"
-      }
-    },
-    {
       "identity" : "swift-tagged",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-tagged",
       "state" : {
-        "revision" : "af06825aaa6adffd636c10a2570b2010c7c07e6a",
-        "version" : "0.9.0"
+        "revision" : "3907a9438f5b57d317001dc99f3f11b46882272b",
+        "version" : "0.10.0"
       }
     }
   ],

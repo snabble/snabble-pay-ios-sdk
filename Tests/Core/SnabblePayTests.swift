@@ -11,7 +11,7 @@ import TestHelper
 
 final class SnabblePayTests: XCTestCase {
 
-    let instance: SnabblePay = SnabblePay(apiKey: "1234", urlSession: .mockSession)
+    let instance: SnabblePay = SnabblePay(apiKey: "1234", credentials: nil, urlSession: .mockSession)
 
     private var injectedResponse: ((URLRequest) throws -> (HTTPURLResponse, Data))! = { request in
         let response = HTTPURLResponse(
@@ -411,7 +411,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testSessionsFailure")
-        instance.session(withAccountId: "1") { result in
+        instance.startSession(withAccountId: "1") { result in
             switch result {
             case let .success(result):
                 XCTAssertNil(result)
@@ -434,7 +434,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, try loadResource(inBundle: .module, filename: "sessions-post", withExtension: "json"))
         }
         let expectation = expectation(description: "testStartSessionSuccess")
-        instance.session(withAccountId: "1") { result in
+        instance.startSession(withAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNotNil(mandate)
@@ -457,7 +457,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testStartSessionFailure")
-        instance.session(withAccountId: "1") { result in
+        instance.startSession(withAccountId: "1") { result in
             switch result {
             case let .success(mandate):
                 XCTAssertNil(mandate)

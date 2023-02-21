@@ -10,8 +10,22 @@ import SnabblePayNetwork
 
 extension Endpoints.Accounts {
     public enum Mandate {
-        public static func get(accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
-            .init(
+        public static func post(forAccountId accountId: Account.ID, city: String, countryCode: String, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+            let jsonObject = [
+                "city": city,
+                "countryCode": countryCode
+            ]
+            // swiftlint:disable:next force_try
+            let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject)
+            return .init(
+                path: "/apps/accounts/\(accountId.rawValue)/mandate",
+                method: .post(jsonData),
+                environment: environment
+            )
+        }
+
+        public static func get(forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+            return .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
                 method: .get(nil),
                 environment: environment

@@ -15,15 +15,13 @@ let package = Package(
             targets: ["SnabblePay"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.9.0"),
-        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2")
+        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0")
     ],
     targets: [
         .target(
             name: "SnabblePayNetwork",
             dependencies: [
                 .product(name: "Tagged", package: "swift-tagged"),
-                "KeychainAccess"
             ],
             path: "Sources/Network"
         ),
