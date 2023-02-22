@@ -103,7 +103,7 @@ struct AccountsView: View {
             viewModel.loadAccounts()
         }
         Button {
-            print("init new snabblePay instance without credentials")
+            SnabblePay.reset()
         } label: {
             Text("Remove Credentials")
         }

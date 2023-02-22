@@ -24,6 +24,10 @@ extension SnabblePay {
         snabblePay.delegate = snabblePay
         return snabblePay
     }()
+
+    static func reset() {
+        UserDefaults.standard.set(nil, forKey: "credentials")
+    }
 }
 
 extension SnabblePay: SnabblePayDelegate {
