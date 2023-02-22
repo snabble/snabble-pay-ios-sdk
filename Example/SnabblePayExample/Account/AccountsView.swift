@@ -22,7 +22,7 @@ class AccountsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     func loadAccountCheck() {
-        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check") { [weak self] in
+        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { [weak self] in
             self?.accountCheck = try? $0.get()
         }
     }

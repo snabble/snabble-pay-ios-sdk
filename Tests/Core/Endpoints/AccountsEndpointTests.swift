@@ -13,10 +13,15 @@ import TestHelper
 final class AccountsEndpointTests: XCTestCase {
 
     func testCheckEndpoint() throws {
-        let endpoint = Endpoints.Accounts.check(appUri: "snabble-pay://account/check")
+        let endpoint = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE")
         XCTAssertEqual(endpoint.path, "/apps/accounts/check")
-        XCTAssertEqual(endpoint.method, .get([.init(name: "appUri", value: "snabble-pay://account/check")]))
+        XCTAssertEqual(endpoint.method, .get([
+            .init(name: "appUri", value: "snabble-pay://account/check"),
+            .init(name: "countryCode", value: "DE"),
+            .init(name: "city", value: "Bonn")
+        ]))
         XCTAssertEqual(endpoint.environment, .production)
+        XCTAssertEqual(endpoint.urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/accounts/check?appUri=snabble-pay://account/check&city=Bonn&countryCode=DE")
     }
 
     func testGetEndpoint() throws {
@@ -50,7 +55,7 @@ final class AccountsEndpointTests: XCTestCase {
         var endpoint3 = Endpoints.Accounts.delete(id: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint3.environment, .development)
 
-        var endpoint4 = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", onEnvironment: .staging)
+        var endpoint4 = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE", onEnvironment: .staging)
         XCTAssertEqual(endpoint4.environment, .staging)
 
         endpoint1 = Endpoints.Accounts.get(id: "1", onEnvironment: .development)
@@ -62,7 +67,7 @@ final class AccountsEndpointTests: XCTestCase {
         endpoint3 = Endpoints.Accounts.delete(id: "1", onEnvironment: .development)
         XCTAssertEqual(endpoint3.environment, .development)
 
-        endpoint4 = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", onEnvironment: .development)
+        endpoint4 = Endpoints.Accounts.check(appUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE", onEnvironment: .development)
         XCTAssertEqual(endpoint4.environment, .development)
     }
 

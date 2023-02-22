@@ -22,7 +22,7 @@ class AccountViewModel: ObservableObject {
     @Published var session: Session? = nil
 
     func createMandate() {
-        snabblePay.createMandate(forAccountId: account.id, city: "Bonn", countryCode: "DE") { [weak self] result in
+        snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
             self?.mandate = try? result.get()
         }
     }
@@ -74,16 +74,12 @@ struct AccountView: View {
             if let mandate = viewModel.mandate {
                 Text(mandate.id.rawValue)
                 Text(mandate.state.rawValue)
-                Button {
-                    viewModel.accept(mandateId: mandate.id)
-                } label: {
-                    Text("Accept")
-                }
-
-                Button {
-                    viewModel.decline(mandateId: mandate.id)
-                } label: {
-                    Text("Decline")
+                if mandate.state == .pending {
+                    Button {
+                        viewModel.accept(mandateId: mandate.id)
+                    } label: {
+                        Text("Accept")
+                    }
                 }
             } else {
                 Text("No Mandate")

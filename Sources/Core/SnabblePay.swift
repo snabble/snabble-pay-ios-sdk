@@ -38,9 +38,17 @@ public class SnabblePay {
 // MARK: Combine
 extension SnabblePay {
 
-    public func accountCheck(withAppUri appUri: URL) -> AnyPublisher<Account.Check, Error> {
+    /// Asks for a new mandate
+    /// - Parameters:
+    ///   - appUri: Callback URLScheme to inform the app that the process is completed
+    ///   - city: The city in which the customer is registered.
+    ///   - countryCode: The countryCode (ISO 3166) in which the customer is registered.
+    /// - Returns: An account check publisher
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Error> {
         let endpoint = Endpoints.Accounts.check(
             appUri: appUri,
+            city: city,
+            countryCode: countryCode,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -77,17 +85,9 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    /// Asks for a new mandate
-    /// - Parameters:
-    ///   - accountId: Associated `Account` by `Account.ID`
-    ///   - city: The city in which the customer is registered.
-    ///   - countryCode: The countryCode (ISO 3166) in which the customer is registered.
-    /// - Returns: A new mandate publisher
-    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) -> AnyPublisher<Account.Mandate, Error> {
+    public func createMandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
         let endpoint = Endpoints.Accounts.Mandate.post(
             forAccountId: accountId,
-            city: city,
-            countryCode: countryCode,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -169,8 +169,8 @@ extension SnabblePay {
 
 // MARK: Completion Handler
 extension SnabblePay {
-    public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
-        accountCheck(withAppUri: appUri)
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
+        accountCheck(withAppUri: appUri, city: city, countryCode: countryCode)
             .sink {
                 switch $0 {
                 case .finished:
@@ -229,8 +229,8 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
+    public func createMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        createMandate(forAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
