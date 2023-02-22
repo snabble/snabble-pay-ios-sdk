@@ -259,6 +259,12 @@ extension SnabblePay {
         })
     }
 
+    /// Asks for a new mandate
+    /// - Parameters:
+    ///   - accountId: Associated `Account` by `Account.ID`
+    ///   - city: The city in which the customer is registered.
+    ///   - countryCode: The countryCode (ISO 3166) in which the customer is registered.
+    /// - Returns: A new mandate
     public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) async throws -> Account.Mandate {
         try await withCheckedThrowingContinuation({ continuation in
             var cancellable: AnyCancellable?
