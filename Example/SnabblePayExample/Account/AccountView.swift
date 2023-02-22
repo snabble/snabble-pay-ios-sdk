@@ -18,8 +18,8 @@ class AccountViewModel: ObservableObject {
         self.account = account
     }
 
-    @Published var mandate: Account.Mandate? = nil
-    @Published var session: Session? = nil
+    @Published var mandate: Account.Mandate?
+    @Published var session: Session?
 
     func createMandate() {
         snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
@@ -28,7 +28,7 @@ class AccountViewModel: ObservableObject {
     }
 
     func decline(mandateId: Account.Mandate.ID) {
-        snabblePay.declineMandate(withId: mandateId, forAccountId: account.id){ [weak self] result in
+        snabblePay.declineMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
             self?.mandate = try? result.get()
         }
     }
@@ -45,7 +45,6 @@ class AccountViewModel: ObservableObject {
         }
     }
 }
-
 
 struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
