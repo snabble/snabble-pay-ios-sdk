@@ -56,37 +56,15 @@ struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             if let accounts = viewModel.accounts, !accounts.isEmpty {
-                ForEach(accounts) { account in
-                    HStack {
+                List(accounts) { account in
+                    NavigationLink {
+                        AccountView(account: account)
+                    } label: {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(account.holderName)
                             Text(account.iban.rawValue)
-                        }
-                        Spacer()
-                        switch account.mandateState {
-                        case .pending:
-                            VStack(alignment: .center, spacing: 8) {
-                                Button {
-                                    viewModel.acceptMandate(forAccount: account)
-                                } label: {
-                                    Text("Accept")
-                                }
-                                Button {
-                                    viewModel.declineMandate(forAccount: account)
-                                } label: {
-                                    Text("Decline")
-                                }
-                            }
-                        case .accepted:
-                            Button {
-                                viewModel.startSession(withAccount: account)
-                            } label: {
-                                Text("Session")
-                            }
-                        case .declined:
-                            Text("Declined")
                         }
                     }
                 }
