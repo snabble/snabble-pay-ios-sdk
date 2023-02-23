@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum HTTPError: Equatable {
+public enum HTTPError: Equatable {
     case invalidResponse(HTTPStatusCode, Endpoints.Error?)
     case unknownResponse(URLResponse)
 }
@@ -59,4 +59,3 @@ extension URLSession {
             .eraseToAnyPublisher()
     }
 }
-
