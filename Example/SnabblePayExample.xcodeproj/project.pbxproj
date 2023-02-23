@@ -19,6 +19,7 @@
 		E1C20596297FC70E00D4F894 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C20595297FC70E00D4F894 /* AccountsView.swift */; };
 		E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205A82982700E00D4F894 /* SnabblePay+Shared.swift */; };
 		E1C205AB2982A6EC00D4F894 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C205AA2982A6EC00D4F894 /* QRCodeView.swift */; };
+		E1F9993A29A62F2B00904912 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F9993929A62F2B00904912 /* AccountView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		E1C20595297FC70E00D4F894 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		E1C205A82982700E00D4F894 /* SnabblePay+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnabblePay+Shared.swift"; sourceTree = "<group>"; };
 		E1C205AA2982A6EC00D4F894 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		E1F9993929A62F2B00904912 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				E1C20595297FC70E00D4F894 /* AccountsView.swift */,
+				E1F9993929A62F2B00904912 /* AccountView.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1F9993A29A62F2B00904912 /* AccountView.swift in Sources */,
 				E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E1C205AB2982A6EC00D4F894 /* QRCodeView.swift in Sources */,

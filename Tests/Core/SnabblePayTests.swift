@@ -66,7 +66,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, try loadResource(inBundle: .module, filename: "account-check", withExtension: "json"))
         }
         let expectation = expectation(description: "testAccountCheckSuccess")
-        instance.accountCheck(withAppUri: "snabble-pay://account/check") { result in
+        instance.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { result in
             switch result {
             case let .success(accountCheck):
                 XCTAssertNotNil(accountCheck)
@@ -89,7 +89,7 @@ final class SnabblePayTests: XCTestCase {
             return (response, Data())
         }
         let expectation = expectation(description: "testAccountCheckFailure")
-        instance.accountCheck(withAppUri: "snabble-pay://account/check") { result in
+        instance.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { result in
             switch result {
             case let .success(accountCheck):
                 XCTAssertNil(accountCheck)

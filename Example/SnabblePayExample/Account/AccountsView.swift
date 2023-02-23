@@ -22,7 +22,7 @@ class AccountsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     func loadAccountCheck() {
-        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check") { [weak self] in
+        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { [weak self] in
             self?.accountCheck = try? $0.get()
         }
     }
@@ -56,37 +56,15 @@ struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             if let accounts = viewModel.accounts, !accounts.isEmpty {
-                ForEach(accounts) { account in
-                    HStack {
+                List(accounts) { account in
+                    NavigationLink {
+                        AccountView(account: account)
+                    } label: {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(account.holderName)
                             Text(account.iban.rawValue)
-                        }
-                        Spacer()
-                        switch account.mandateState {
-                        case .pending:
-                            VStack(alignment: .center, spacing: 8) {
-                                Button {
-                                    viewModel.acceptMandate(forAccount: account)
-                                } label: {
-                                    Text("Accept")
-                                }
-                                Button {
-                                    viewModel.declineMandate(forAccount: account)
-                                } label: {
-                                    Text("Decline")
-                                }
-                            }
-                        case .accepted:
-                            Button {
-                                viewModel.startSession(withAccount: account)
-                            } label: {
-                                Text("Session")
-                            }
-                        case .declined:
-                            Text("Declined")
                         }
                     }
                 }
@@ -125,7 +103,7 @@ struct AccountsView: View {
             viewModel.loadAccounts()
         }
         Button {
-            print("init new snabblePay instance without credentials")
+            SnabblePay.reset()
         } label: {
             Text("Remove Credentials")
         }

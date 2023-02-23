@@ -38,9 +38,17 @@ public class SnabblePay {
 // MARK: Combine
 extension SnabblePay {
 
-    public func accountCheck(withAppUri appUri: URL) -> AnyPublisher<Account.Check, Error> {
+    /// Asks for a new mandate
+    /// - Parameters:
+    ///   - appUri: Callback URLScheme to inform the app that the process is completed
+    ///   - city: The city in which the customer is registered.
+    ///   - countryCode: The countryCode (ISO 3166) in which the customer is registered.
+    /// - Returns: An account check publisher
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Error> {
         let endpoint = Endpoints.Accounts.check(
             appUri: appUri,
+            city: city,
+            countryCode: countryCode,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -77,11 +85,9 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) -> AnyPublisher<Account.Mandate, Error> {
+    public func createMandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
         let endpoint = Endpoints.Accounts.Mandate.post(
             forAccountId: accountId,
-            city: city,
-            countryCode: countryCode,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
@@ -161,248 +167,10 @@ extension SnabblePay {
     }
 }
 
-// MARK: Async
-
-extension SnabblePay {
-    public func accountCheck(withAppUri appUri: URL) async throws -> Account.Check {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = accountCheck(withAppUri: appUri)
-                .sink { result in
-                    switch result {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func accounts() async throws -> [Account] {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = accounts()
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func account(withId id: Account.ID) async throws -> Account {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = account(withId: id)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func deleteAccount(withId id: Account.ID) async throws -> Account {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = deleteAccount(withId: id)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func mandate(forAccountId accountId: Account.ID) async throws -> Account.Mandate {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = mandate(forAccountId: accountId)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    /// Asks for a new mandate
-    /// - Parameters:
-    ///   - accountId: Associated `Account` by `Account.ID`
-    ///   - city: The city in which the customer is registered.
-    ///   - countryCode: The countryCode (ISO 3166) in which the customer is registered.
-    /// - Returns: A new mandate
-    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String) async throws -> Account.Mandate {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) async throws -> Account.Mandate {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = acceptMandate(withId: mandateId, forAccountId: accountId)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) async throws -> Account.Mandate {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = declineMandate(withId: mandateId, forAccountId: accountId)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func sessions() async throws -> [Session] {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = sessions()
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func startSession(withAccountId accountId: Account.ID) async throws -> Session {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = startSession(withAccountId: accountId)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func session(withId id: Session.ID) async throws -> Session {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = session(withId: id)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-
-    public func deleteSession(withId id: Session.ID) async throws -> Session {
-        try await withCheckedThrowingContinuation({ continuation in
-            var cancellable: AnyCancellable?
-
-            cancellable = deleteSession(withId: id)
-                .sink {
-                    switch $0 {
-                    case .finished:
-                        break
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                    cancellable?.cancel()
-                } receiveValue: {
-                    continuation.resume(with: .success($0))
-                }
-        })
-    }
-}
-
 // MARK: Completion Handler
 extension SnabblePay {
-    public func accountCheck(withAppUri appUri: URL, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
-        accountCheck(withAppUri: appUri)
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
+        accountCheck(withAppUri: appUri, city: city, countryCode: countryCode)
             .sink {
                 switch $0 {
                 case .finished:
@@ -461,8 +229,8 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
-        createMandate(forAccountId: accountId, city: city, countryCode: countryCode)
+    public func createMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+        createMandate(forAccountId: accountId)
             .sink {
                 switch $0 {
                 case .finished:
