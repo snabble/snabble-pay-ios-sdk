@@ -40,7 +40,7 @@ class AccountViewModel: ObservableObject {
     }
 
     func startSession() {
-        snabblePay.startSession(withAccountId: account.id) { [weak self] result in
+        snabblePay.startSession(withAccountId: "23") { [weak self] result in
             self?.session = try? result.get()
         }
     }
