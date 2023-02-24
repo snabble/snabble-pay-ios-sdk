@@ -9,8 +9,8 @@ import Foundation
 import SnabblePayNetwork
 
 extension Endpoints.Accounts {
-    public enum Mandate {
-        public static func post(forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+    enum Mandate {
+        static func post(forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             return .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
                 method: .post(nil),
@@ -18,7 +18,7 @@ extension Endpoints.Accounts {
             )
         }
 
-        public static func get(forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        static func get(forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             return .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
                 method: .get(nil),
@@ -26,7 +26,7 @@ extension Endpoints.Accounts {
             )
         }
 
-        public static func accept(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        static func accept(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
                 method: .patch(data(for: .accept, withMandateId: mandateId)),
@@ -34,7 +34,7 @@ extension Endpoints.Accounts {
             )
         }
 
-        public static func decline(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
+        static func decline(mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, onEnvironment environment: Environment = .production) -> Endpoint<Account.Mandate> {
             .init(
                 path: "/apps/accounts/\(accountId.rawValue)/mandate",
                 method: .patch(data(for: .decline, withMandateId: mandateId)),
