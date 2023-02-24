@@ -41,7 +41,7 @@ public class NetworkManager {
                 urlSession.publisher(for: endpoint)
             }
             .tryCatch { [self] error in
-                if case HTTPError.invalidResponse(let statusCode) = error, statusCode == .unauthorized {
+                if case HTTPError.invalidResponse(let statusCode, _) = error, statusCode == .unauthorized {
                     return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
                         .map { token in
                             var endpoint = endpoint
