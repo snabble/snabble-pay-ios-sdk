@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Tagged
 
 public typealias ModelSession = Session
 

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Tagged
 
 extension Endpoints {
     enum Token {
