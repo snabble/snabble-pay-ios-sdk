@@ -31,7 +31,7 @@ public class SnabblePay {
 
     public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
         self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials?.toDTO(), urlSession: urlSession)
-//        self.networkManager.delegate = self
+        self.networkManager.delegate = self
     }
 }
 
