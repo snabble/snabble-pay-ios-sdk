@@ -100,17 +100,9 @@ struct AccountsView: View {
         .sheet(
             item: $viewModel.accountCheck,
             content: { accountCheck in
+                // User: u98235448, Password: cdz248
+                // User: u86382190, Password: gmg612
                 SafariView(url: accountCheck.validationURL)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Button("u98235448") {
-                                print("u98235448")
-                            }
-                            Button("cdz248") {
-                                print("cdz248")
-                            }
-                       }
-                    }
             }
         )
         .onOpenURL {
