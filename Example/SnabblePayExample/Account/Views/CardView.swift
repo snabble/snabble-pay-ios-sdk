@@ -131,24 +131,3 @@ struct CardView: View {
         .padding([.leading, .trailing])
     }
 }
-
-struct CardView_Previews: PreviewProvider {
-    static func loadJSON<T: Decodable>(_ string: String) -> T {
-        do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(T.self, from: string.data(using: .utf8) ?? Data())
-        } catch {
-            fatalError("Couldn't parse \(string) as \(T.self):\n\(error)")
-        }
-    }
-    static let mockAccount: Account = {
-        let token: Account = loadJSON("""
-    { "id": "4711", "name": "John Doe's Account", "holderName": "John Doe", "currencyCode": "EUR", "bank": "Commerzbank", "createdAt": 0, "mandateState": "ACCEPTED", "iban": "DE83123400070123030300" }
-    """)
-        return token
-    }()
-
-    static var previews: some View {
-        CardView(account: Self.mockAccount)
-    }
-}
