@@ -4,17 +4,66 @@
 //
 //  Created by Uwe Tilemann on 23.02.23.
 //
-
+import Foundation
 import SnabblePay
 import Combine
+
+extension UserDefaults {
+    private enum Keys {
+        static let selectedAccount = "account"
+    }
+
+    class var selectedAccount: String? {
+        get {
+            return UserDefaults.standard.string(forKey: Keys.selectedAccount)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.selectedAccount)
+        }
+    }
+}
 
 class AccountsViewModel: ObservableObject {
     let snabblePay: SnabblePay = .shared
 
-    @Published var accounts: [Account]?
+    @Published var accounts: [Account]? {
+        didSet {
+            if let selectedID = UserDefaults.selectedAccount, let account = accounts?.first(where: { $0.name == selectedID} ) {
+                selectedAccount = account
+            } else if let first = accounts?.first {
+                selectedAccount = first
+            } else {
+                selectedAccount = nil
+            }
+        }
+    }
     @Published var accountCheck: Account.Check?
     @Published var session: Session?
-    @Published var selectedAccount: Account?
+    
+    @Published var selectedAccountModel: AccountViewModel? {
+        willSet {
+            if let model = selectedAccountModel {
+                model.autostart = false
+            }
+        }
+        didSet {
+            if let model = selectedAccountModel {
+                UserDefaults.selectedAccount = model.account.name
+                model.autostart = true
+                model.refresh()
+            }
+        }
+    }
+    
+    var selectedAccount: Account? {
+        didSet {
+            if let account = selectedAccount {
+                self.selectedAccountModel = AccountViewModel(account: account)
+            } else {
+                self.selectedAccountModel = nil
+            }
+        }
+    }
     
     var onDestructiveAction: (() -> Void)?
 
@@ -31,27 +80,21 @@ class AccountsViewModel: ObservableObject {
             self?.accounts = try? $0.get()
         }
     }
-
-    func acceptMandate(forAccount account: Account) {
-        snabblePay.acceptMandate(withId: "1", forAccountId: account.id) { [weak self] _ in
-            self?.loadAccounts()
-        }
-    }
-
-    func declineMandate(forAccount account: Account) {
-        snabblePay.declineMandate(withId: "1", forAccountId: account.id) { [weak self] _ in
-            self?.loadAccounts()
-        }
-    }
-
-    func startSession(withAccount account: Account) {
-        snabblePay.startSession(withAccountId: account.id) { [weak self] in
-            self?.session = try? $0.get()
-        }
-    }
 }
 
 extension AccountsViewModel {
+    var ordered: [Account]? {
+        guard let selected = selectedAccount else {
+            return accounts
+        }
+        var array = [Account]()
+        array.append(selected)
+        if let unselected = self.unselected {
+            array.append(contentsOf: unselected)
+        }
+        return array
+    }
+    
     var unselected: [Account]? {
         guard let selected = selectedAccount else {
             return accounts

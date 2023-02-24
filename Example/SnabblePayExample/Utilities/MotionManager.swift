@@ -18,6 +18,8 @@ struct ParallaxMotionModifier: ViewModifier {
 }
 
 class MotionManager: ObservableObject {
+    static let shared = MotionManager()
+    
     private let manager: CMMotionManager
     let formatter: NumberFormatter
     

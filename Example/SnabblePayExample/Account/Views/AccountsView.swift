@@ -10,87 +10,85 @@ import SnabblePay
 import Combine
 import BetterSafariView
 
-struct BackgroundView: View {
-    @ObservedObject var motionManager = MotionManager()
-    
-    var body: some View {
-        GeometryReader { geom in
-            Image("Background")
-                .resizable()
-                .scaledToFit()
-                .offset(x: -80, y: -120)
-                .frame(width: geom.size.width+160, height: geom.size.height+160)
-                .modifier(ParallaxMotionModifier(manager: motionManager, magnitude: 20))
-        }
-    }
-}
-
 struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
+    @State private var offset: CGFloat = 60
+    @State private var reset: Bool = false
+    
+    func card(account: Account, index: Int) -> some View {
+        if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
+            return AnyView(
+                NavigationLink {
+                    AccountView(viewModel: model)
+                } label: {
+                    CardView(model: model, index: index)
+                })
+        } else {
+            return AnyView(CardView(account: account, expand: false, index: index))
+        }
+    }
     
     var body: some View {
         NavigationStack {
-            if let accounts = viewModel.accounts, !accounts.isEmpty {
-                    if accounts.count == 1, let account = accounts.first {
-                        ZStack {
-                            BackgroundView()
-                            NavigationLink {
-                                AccountView(account: account)
-                            } label: {
-                                CardView(account: account)
-                            }
-                        }
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: {
-                                    viewModel.loadAccountCheck()
-                                }) {
-                                    Image(systemName: "plus")
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    SnabblePay.reset()
-                                }) {
-                                    Image(systemName: "trash")
-                                        .foregroundColor(.white)
-                                }
-                            }
-                       }
-                    } else {
-                        List(accounts) { account in
-                            NavigationLink {
-                                AccountView(account: account)
-                            } label: {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(account.holderName)
-                                    Text(account.iban.rawValue)
-                                }
-                            }
-                        }
-                        .padding()
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: {
-                                    viewModel.loadAccountCheck()
-                                }) {
-                                    Image(systemName: "plus")
-                                }
-                            }
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    SnabblePay.reset()
-                                }) {
-                                    Image(systemName: "trash")
-                                }
-                            }
-                       }
-                        .navigationTitle("Bank accounts")
+            if let ordered = viewModel.ordered, !ordered.isEmpty {
+                ZStack {
+                    BackgroundView()
+
+                    VStack {
+                        Image("Title")
+                        Text("The Future of Mobile Payment")
+                            .foregroundColor(.accentColor)
                     }
+                    .offset(y: -280)
+                    .shadow(radius: 3)
+                    .shadow(radius: 3)
+                    
+                    ForEach(Array(ordered.reversed().enumerated()), id: \.offset) { index, account in
+                        card(account: account, index: index)
+                            .modifier(SlideEffect(offset: index))
+                            .transition(.slide) // .move(edge: .bottom))
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.selectedAccount = account
+                                }
+                            }
+                    }
+
+                }
+                .confirmationDialog("Reset all accounts", isPresented: $reset, titleVisibility: .visible) {
+                    Button("Reset", role: .destructive) {
+                        SnabblePay.reset()
+                        viewModel.loadAccounts()
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            viewModel.loadAccountCheck()
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            reset.toggle()
+                        }) {
+                            Image(systemName: "trash")
+                        }
+                    }
+                }
             } else {
                 ZStack {
                     BackgroundView()
+                    
+                    VStack {
+                        Image("Title")
+                        Text("The Future of Mobile Payment")
+                    }
+                    .offset(y: -300)
+                    .shadow(radius: 3)
+                    .shadow(radius: 3)
+
                     AddFirstAccount(viewModel: viewModel)
                 }
                 .onAppear {
@@ -103,6 +101,16 @@ struct AccountsView: View {
             item: $viewModel.accountCheck,
             content: { accountCheck in
                 SafariView(url: accountCheck.validationURL)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Button("u98235448") {
+                                print("u98235448")
+                            }
+                            Button("cdz248") {
+                                print("cdz248")
+                            }
+                       }
+                    }
             }
         )
         .onOpenURL {

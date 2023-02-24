@@ -8,9 +8,26 @@
 import SwiftUI
 import SnabblePay
 
+struct SlideEffect: AnimatableModifier {
+    var offset: Int = 0
+
+    var animatableData: Int {
+        get {
+            offset
+        } set {
+            offset = newValue
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .offset(y: CGFloat(-60 * offset))
+    }
+}
+
 struct AddFirstAccount: View {
     @ObservedObject var viewModel: AccountsViewModel
-    @ObservedObject var motionManager = MotionManager()
+    @ObservedObject var motionManager = MotionManager.shared
 
     var body: some View {
         VStack(spacing: 10) {
@@ -32,15 +49,25 @@ struct AddFirstAccount: View {
 }
 
 struct CardView: View {
-    @ObservedObject private var model: AccountViewModel
-    @ObservedObject var motionManager = MotionManager()
+    @ObservedObject var model: AccountViewModel
+    @ObservedObject var motionManager = MotionManager.shared
+    
+    private let expand: Bool
+    private var index: Int = 0
+    
+    @State private var toggleSize = false
+    
     @Environment(\.scenePhase) var scenePhase
 
-    @State private var alternateSize = false
-
-    init(account: Account) {
-        self.model = AccountViewModel(account: account)
-        self.model.startSession()
+    init(model: AccountViewModel, expand: Bool = false, index: Int = 0) {
+        self.model = model
+        self.expand = expand
+        self.index = index
+    }
+    init(account: Account, expand: Bool = false, index: Int = 0) {
+        self.model = AccountViewModel(account: account, autostart: false)
+        self.expand = expand
+        self.index = index
     }
     
     @ViewBuilder
@@ -55,50 +82,52 @@ struct CardView: View {
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top) {
+            HStack(alignment: .center) {
+                Spacer()
                 qrImage
-                    .padding()
-                    .frame(width: alternateSize ? 160 : 80)
+                    .padding([.top])
+                    .frame(width: toggleSize ? 150 : 80)
                     .onTapGesture {
                         withAnimation {
-                            alternateSize.toggle()
+                            toggleSize.toggle()
                         }
                     }
                 Spacer()
-                Text(model.account.bank)
-                    .padding([.top, .trailing])
             }
             Spacer()
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
+            
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
                     Text(model.account.holderName)
-                    Text(model.account.iban.rawValue.replacingOccurrences(of: "*", with: "•"))
-                        .font(.custom("Menlo", size: 16))
-                        .fontWeight(.bold)
+                    Spacer()
+                    Text(model.account.bank)
                 }
-                .onChange(of: scenePhase) { newPhase in
-                    if newPhase == .active {
-                        model.refresh()
-                    }
-                }
-                .padding([.leading, .bottom], 20)
-                .foregroundColor(.white)
-                .shadow(radius: 2)
-
-                Spacer()
+                Text(model.account.iban.rawValue.replacingOccurrences(of: "*", with: "•"))
+                    .font(.custom("Menlo", size: 16))
+                    .fontWeight(.bold)
+            }
+            .padding([.leading, .trailing])
+            .padding([.bottom], model.autostart ? 20 : 10)
+            .foregroundColor(model.autostart ? .primary : .secondary)
+            
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                model.refresh()
             }
         }
         .onAppear {
-            print("Account did appear")
+            self.toggleSize = self.expand || self.model.session != nil
         }
         .onChange(of: model.sessionUpdated) { newUpdate in
             withAnimation {
-                alternateSize = true
+                toggleSize = true
             }
         }
-        .frame(width: 320, height: 220)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .frame(minWidth: 320, maxHeight: 220)
+        .background(model.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         .rotation3DEffect(.degrees(motionManager.x * 20), axis: (x: 0, y: 1, z: 0))
+        .padding([.leading, .trailing])
     }
 }
 

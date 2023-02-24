@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  SnabblePayExample
+
+  Created by Uwe Tilemann on 24.02.23.
+  
+*/
+
+"ACCEPTED" = "SEPA Mandat erteilt";
+"PENDING" = "SEPA Mandat ausstehend";
+"DECLINED" = "SEPA Mandat abgelehnt";
+
+"Reset all accounts" = "Alle Karten löschen";
+"Reset" = "Löschen";

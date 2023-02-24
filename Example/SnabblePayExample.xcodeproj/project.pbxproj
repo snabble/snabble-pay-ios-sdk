@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76344CFC29A86FAC00211A1B /* BackgroundView.swift */; };
+		76344D0029A8BE3000211A1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 76344D0229A8BE3000211A1B /* Localizable.strings */; };
 		76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */; };
 		76E4727E29A7804500BBCCC9 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727D29A7804500BBCCC9 /* CardView.swift */; };
 		76E4728229A780B000BBCCC9 /* AccountsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */; };
@@ -44,6 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		76344CFC29A86FAC00211A1B /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
+		76344D0129A8BE3000211A1B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		76344D0329A8BE4300211A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		76E4727D29A7804500BBCCC9 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsViewModel.swift; sourceTree = "<group>"; };
@@ -108,6 +113,7 @@
 				E1C20595297FC70E00D4F894 /* AccountsView.swift */,
 				E1F9993929A62F2B00904912 /* AccountView.swift */,
 				76E4727D29A7804500BBCCC9 /* CardView.swift */,
+				76344CFC29A86FAC00211A1B /* BackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -151,6 +157,7 @@
 				E1C20594297FC6F700D4F894 /* Account */,
 				E17B75512975514D00392861 /* Info.plist */,
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
+				76344D0229A8BE3000211A1B /* Localizable.strings */,
 				E193765D2941E7AB001C8866 /* Assets.xcassets */,
 				E193765F2941E7AB001C8866 /* Preview Content */,
 				E17B754F297550B200392861 /* AppDelegate.swift */,
@@ -306,6 +313,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = E193764D2941E7AA001C8866;
 			packageReferences = (
@@ -328,6 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E19376612941E7AB001C8866 /* Preview Assets.xcassets in Resources */,
+				76344D0029A8BE3000211A1B /* Localizable.strings in Resources */,
 				E193765E2941E7AB001C8866 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +364,7 @@
 			files = (
 				E1F9993A29A62F2B00904912 /* AccountView.swift in Sources */,
 				76E4728429A781F200BBCCC9 /* MotionManager.swift in Sources */,
+				76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */,
 				76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */,
 				E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
@@ -397,6 +407,19 @@
 			targetProxy = E19376712941E7AB001C8866 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		76344D0229A8BE3000211A1B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76344D0129A8BE3000211A1B /* de */,
+				76344D0329A8BE4300211A1B /* en */,
+			);
+			name = Localizable.strings;
+			path = SnabblePayExample;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E19376782941E7AB001C8866 /* Debug */ = {

@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  SnabblePayExample
+
+  Created by Uwe Tilemann on 24.02.23.
+  
+*/
+
+"ACCEPTED" = "Accepted";
+"PENDING" = "Pending";
+"DECLINED" = "Declined";
+

@@ -12,10 +12,22 @@ class AccountViewModel: ObservableObject {
     let snabblePay: SnabblePay = .shared
 
     let account: Account
+    var autostart: Bool {
+        didSet {
+            if autostart == false {
+                refreshTimer?.invalidate()
+                refreshTimer = nil
+            } else {
+                self.startSession()
+            }
+        }
+    }
+    
     private var refreshTimer: Timer?
-
-    init(account: Account) {
+    
+    init(account: Account, autostart: Bool = true) {
         self.account = account
+        self.autostart = autostart
     }
 
     @Published var mandate: Account.Mandate?
@@ -52,6 +64,9 @@ class AccountViewModel: ObservableObject {
     }
 
     func startSession() {
+        guard self.autostart else {
+            return
+        }
         snabblePay.startSession(withAccountId: account.id) { [weak self] result in
             if let session = try? result.get() {
                 self?.session = session
@@ -65,6 +80,9 @@ class AccountViewModel: ObservableObject {
 
 extension AccountViewModel {
     var needsRefresh: Bool {
+        guard self.autostart else {
+            return false
+        }
         guard let session = self.session else {
             return true
         }
