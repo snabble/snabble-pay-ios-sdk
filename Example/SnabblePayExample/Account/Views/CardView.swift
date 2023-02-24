@@ -31,7 +31,7 @@ struct AddFirstAccount: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text("Add yout first account now!")
+            Text("Add your first account now!")
                 .font(.title3)
                 .foregroundColor(.white)
                 .shadow(radius: 2)

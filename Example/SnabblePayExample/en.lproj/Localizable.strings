@@ -6,7 +6,7 @@
   
 */
 
-"ACCEPTED" = "Accepted";
-"PENDING" = "Pending";
-"DECLINED" = "Declined";
+"ACCEPTED" = "SEPA mandate accepted";
+"PENDING" = "SEPA mandate pending";
+"DECLINED" = "SEPA mandate declined";
 
