@@ -20,9 +20,7 @@ let package = Package(
     targets: [
         .target(
             name: "SnabblePayNetwork",
-            dependencies: [
-                .product(name: "Tagged", package: "swift-tagged"),
-            ],
+            dependencies: [],
             path: "Sources/Network"
         ),
 
@@ -30,6 +28,7 @@ let package = Package(
             name: "SnabblePay",
             dependencies: [
                 "SnabblePayNetwork",
+                .product(name: "Tagged", package: "swift-tagged"),
             ],
             path: "Sources/Core"
         ),

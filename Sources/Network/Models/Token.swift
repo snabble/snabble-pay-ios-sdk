@@ -6,15 +6,12 @@
 //
 
 import Foundation
-import Tagged
 
 struct Token: Codable {
-    let accessToken: AccessToken
+    let accessToken: String
     let expiresAt: Date
     let scope: Scope
     let type: `Type`
-
-    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
 
     enum Scope: String, Codable {
         case all

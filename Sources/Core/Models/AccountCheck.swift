@@ -6,16 +6,12 @@
 //
 
 import Foundation
+import SnabblePayNetwork
 
 extension Account {
-    public struct Check: Decodable {
+    public struct Check {
         public let validationURL: URL
         public let appUri: URL
-
-        enum CodingKeys: String, CodingKey {
-            case validationURL = "validationLink"
-            case appUri
-        }
 
         public func validate(url: URL) -> Bool {
             return appUri == url
@@ -26,5 +22,18 @@ extension Account {
 extension Account.Check: Identifiable {
     public var id: URL {
         validationURL
+    }
+}
+
+extension Account.Check: FromDTO {
+    init(fromDTO dto: SnabblePayNetwork.Account.Check) {
+        self.validationURL = dto.validationURL
+        self.appUri = dto.appUri
+    }
+}
+
+extension SnabblePayNetwork.Account.Check: ToModel {
+    func toModel() -> Account.Check {
+        .init(fromDTO: self)
     }
 }

@@ -6,21 +6,17 @@
 //
 
 import Foundation
-import Tagged
 
 public struct Credentials: Codable {
-    public let identifier: Idenitifer
-    public let secret: Secret
-
-    public typealias Idenitifer = Tagged<(Credentials, identifier: ()), String>
-    public typealias Secret = Tagged<(Credentials, secret: ()), String>
+    public let identifier: String
+    public let secret: String
 
     enum CodingKeys: String, CodingKey {
         case identifier = "appIdentifier"
         case secret = "appSecret"
     }
 
-    public init(identifier: Idenitifer, secret: Secret) {
+    public init(identifier: String, secret: String) {
         self.identifier = identifier
         self.secret = secret
     }

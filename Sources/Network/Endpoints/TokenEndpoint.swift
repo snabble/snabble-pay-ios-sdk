@@ -18,8 +18,8 @@ extension Endpoints {
             return .init(path: "/apps/token",
                          method: .get([
                             .init(name: "grant_type", value: "client_credentials"),
-                            .init(name: "client_id", value: credentials.identifier.rawValue),
-                            .init(name: "client_secret", value: credentials.secret.rawValue),
+                            .init(name: "client_id", value: credentials.identifier),
+                            .init(name: "client_secret", value: credentials.secret),
                             .init(name: "scope", value: scope.rawValue)
                          ]),
                          environment: environment)

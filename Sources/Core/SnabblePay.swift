@@ -30,8 +30,8 @@ public class SnabblePay {
     private var cancellables = Set<AnyCancellable>()
 
     public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
-        self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials, urlSession: urlSession)
-        self.networkManager.delegate = self
+        self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials?.toDTO(), urlSession: urlSession)
+//        self.networkManager.delegate = self
     }
 }
 
@@ -52,6 +52,7 @@ extension SnabblePay {
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -61,68 +62,75 @@ extension SnabblePay {
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func account(withId id: Account.ID) -> AnyPublisher<Account, Swift.Error> {
         let endpoint = Endpoints.Accounts.get(
-            id: id,
+            id: id.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func deleteAccount(withId id: Account.ID) -> AnyPublisher<Account, Swift.Error> {
         let endpoint = Endpoints.Accounts.delete(
-            id: id,
+            id: id.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func createMandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.post(
-            forAccountId: accountId,
+            forAccountId: accountId.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func mandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.get(
-            forAccountId: accountId,
+            forAccountId: accountId.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.accept(
-            mandateId: mandateId,
-            forAccountId: accountId,
+            mandateId: mandateId.rawValue,
+            forAccountId: accountId.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.decline(
-            mandateId: mandateId,
-            forAccountId: accountId,
+            mandateId: mandateId.rawValue,
+            forAccountId: accountId.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -132,36 +140,40 @@ extension SnabblePay {
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func startSession(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.post(
-            withAccountId: accountId,
+            withAccountId: accountId.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func session(withId id: Session.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.get(
-            id: id,
+            id: id.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
     public func deleteSession(withId id: Session.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.delete(
-            id: id,
+            id: id.rawValue,
             onEnvironment: environment
         )
         return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
