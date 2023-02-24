@@ -23,7 +23,6 @@ let package = Package(
             dependencies: [],
             path: "Sources/Network"
         ),
-
         .target(
             name: "SnabblePay",
             dependencies: [
