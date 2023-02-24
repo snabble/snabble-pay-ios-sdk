@@ -33,9 +33,26 @@ private extension String {
         filter.message = Data(self.utf8)
 
         if let outputImage = filter.outputImage {
-            if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
-                return UIImage(cgImage: cgimg)
-            }
+            let maskFilter = CIFilter.blendWithMask()
+            maskFilter.maskImage = outputImage.applyingFilter("CIColorInvert")
+
+            // create a version of the code with black foreground...
+            maskFilter.inputImage = CIImage(color: .black)
+            let blackCIImage = maskFilter.outputImage!
+            // ... and one with white foreground
+            maskFilter.inputImage = CIImage(color: .white)
+            let whiteCIImage = maskFilter.outputImage!
+
+            // render both images
+            let blackImage = context.createCGImage(blackCIImage, from: blackCIImage.extent).map(UIImage.init)!
+            let whiteImage = context.createCGImage(whiteCIImage, from: whiteCIImage.extent).map(UIImage.init)!
+
+            // use black version for light mode
+            // let qrImage = UIImage(cgImage: blackImage)
+            // assign the white version to be used in dark mode
+            blackImage.imageAsset?.register(whiteImage, with: UITraitCollection(userInterfaceStyle: .dark))
+
+            return blackImage
         }
         return nil
     }
