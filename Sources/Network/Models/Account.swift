@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Account: Decodable, Identifiable {
+public struct Account: Decodable {
     public let id: String
     public let name: String
     public let holderName: String

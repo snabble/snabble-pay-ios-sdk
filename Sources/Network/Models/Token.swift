@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct Token: Codable {
+struct Token: Decodable {
     let accessToken: String
     let expiresAt: Date
     let scope: Scope
     let type: `Type`
 
-    enum Scope: String, Codable {
+    enum Scope: String, Decodable {
         case all
     }
 
-    enum `Type`: String, Codable {
+    enum `Type`: String, Decodable {
         case bearer = "Bearer"
     }
 

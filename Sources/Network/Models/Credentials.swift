@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Credentials: Codable {
+public struct Credentials: Decodable {
     public let identifier: String
     public let secret: String
 
