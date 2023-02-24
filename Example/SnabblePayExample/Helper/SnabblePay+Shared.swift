@@ -7,7 +7,6 @@
 
 import Foundation
 import SnabblePay
-import SnabblePayNetwork
 
 extension SnabblePay {
     static var shared: SnabblePay = {
@@ -38,5 +37,25 @@ extension SnabblePay: SnabblePayDelegate {
             UserDefaults.standard.set(nil, forKey: "credentials")
         }
         UserDefaults.standard.synchronize()
+    }
+}
+
+extension Credentials: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let identifier = try container.decode(Credentials.Idenitifer.self, forKey: .identifier)
+        let secret = try container.decode(Credentials.Secret.self, forKey: .secret)
+        self.init(identifier: identifier, secret: secret)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.identifier, forKey: .identifier)
+        try container.encode(self.secret, forKey: .secret)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case identifier
+        case secret
     }
 }

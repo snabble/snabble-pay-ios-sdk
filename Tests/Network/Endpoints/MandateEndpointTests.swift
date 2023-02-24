@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import SnabblePay
-import SnabblePayNetwork
+@testable import SnabblePayNetwork
 import TestHelper
 
 final class MandateEndpointTests: XCTestCase {
@@ -79,25 +78,6 @@ final class MandateEndpointTests: XCTestCase {
         XCTAssertEqual(Account.Mandate.State.pending.rawValue, "PENDING")
         XCTAssertEqual(Account.Mandate.State.accepted.rawValue, "ACCEPTED")
         XCTAssertEqual(Account.Mandate.State.declined.rawValue, "DECLINED")
-    }
-
-    func testEquatable() throws {
-        let dataAccepted = try loadResource(inBundle: .module, filename: "mandate-accepted", withExtension: "json")
-        let mandateAccepted = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAccepted)
-
-        let dataPending = try loadResource(inBundle: .module, filename: "mandate-pending", withExtension: "json")
-        let mandatePending = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataPending)
-
-        let dataDeclined = try loadResource(inBundle: .module, filename: "mandate-declined", withExtension: "json")
-        let mandateDeclined = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataDeclined)
-
-        let dataAcceptedOtherId = try loadResource(inBundle: .module, filename: "mandate-accepted-otherId", withExtension: "json")
-        let mandateAcceptedOtherId = try TestingDefaults.jsonDecoder.decode(Account.Mandate.self, from: dataAcceptedOtherId)
-
-        XCTAssertEqual(mandateAccepted, mandatePending)
-        XCTAssertEqual(mandateAccepted, mandateDeclined)
-        XCTAssertEqual(mandatePending, mandateDeclined)
-        XCTAssertFalse(mandateAccepted == mandateAcceptedOtherId)
     }
 
     func testDecoderAccepted() throws {

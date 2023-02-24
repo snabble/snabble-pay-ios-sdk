@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import SnabblePay
-import SnabblePayNetwork
+@testable import SnabblePayNetwork
 import TestHelper
 
 final class AccountsEndpointTests: XCTestCase {
@@ -92,7 +91,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.first?.id, "1")
         XCTAssertEqual(instance.first?.name, "John Doe's Account")
         XCTAssertEqual(instance.first?.holderName, "John Doe")
-        XCTAssertEqual(instance.first?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.first?.currencyCode, "EUR")
         XCTAssertEqual(instance.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.first?.bank, "Bank Name")
         XCTAssertEqual(instance.first?.iban, "DE123**********")
@@ -107,7 +106,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.first?.id, "1")
         XCTAssertEqual(instance.first?.name, "John Doe's Account")
         XCTAssertEqual(instance.first?.holderName, "John Doe")
-        XCTAssertEqual(instance.first?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.first?.currencyCode, "EUR")
         XCTAssertEqual(instance.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.first?.bank, "Bank Name")
         XCTAssertEqual(instance.first?.iban, "DE123**********")
@@ -115,7 +114,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.last?.id, "2")
         XCTAssertEqual(instance.last?.name, "Jana Doe's Account")
         XCTAssertEqual(instance.last?.holderName, "Jana Doe")
-        XCTAssertEqual(instance.last?.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.last?.currencyCode, "EUR")
         XCTAssertEqual(instance.last?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T10:24:38Z"))
         XCTAssertEqual(instance.last?.bank, "Bank Name")
         XCTAssertEqual(instance.last?.iban, "DE123**********")
@@ -128,7 +127,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.id, "1")
         XCTAssertEqual(instance.name, "John Doe's Account")
         XCTAssertEqual(instance.holderName, "John Doe")
-        XCTAssertEqual(instance.currencyCode.rawValue, "EUR")
+        XCTAssertEqual(instance.currencyCode, "EUR")
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.bank, "Bank Name")
         XCTAssertEqual(instance.iban, "DE123**********")

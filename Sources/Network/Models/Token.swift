@@ -6,21 +6,18 @@
 //
 
 import Foundation
-import Tagged
 
-struct Token: Codable {
-    let accessToken: AccessToken
+struct Token: Decodable {
+    let accessToken: String
     let expiresAt: Date
     let scope: Scope
     let type: `Type`
 
-    typealias AccessToken = Tagged<(Token, accessToken: ()), String>
-
-    enum Scope: String, Codable {
+    enum Scope: String, Decodable {
         case all
     }
 
-    enum `Type`: String, Codable {
+    enum `Type`: String, Decodable {
         case bearer = "Bearer"
     }
 
