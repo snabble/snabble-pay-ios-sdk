@@ -39,7 +39,20 @@ class AccountsViewModel: ObservableObject {
     }
     @Published var accountCheck: Account.Check?
     @Published var session: Session?
+    @Published var ordered: [Account]?
     
+    func accountStack() -> [Account]? {
+        guard let selected = selectedAccount else {
+            return accounts
+        }
+        var array = [Account]()
+        array.append(selected)
+        if let unselected = self.unselected {
+            array.append(contentsOf: unselected)
+        }
+        return array.reversed()
+    }
+
     @Published var selectedAccountModel: AccountViewModel? {
         willSet {
             if let model = selectedAccountModel {
@@ -52,6 +65,7 @@ class AccountsViewModel: ObservableObject {
                 model.autostart = true
                 model.refresh()
             }
+            self.ordered = accountStack()
         }
     }
     
@@ -63,6 +77,12 @@ class AccountsViewModel: ObservableObject {
                 self.selectedAccountModel = nil
             }
         }
+    }
+    func isSelected(index: Int) -> Bool {
+        guard let account = selectedAccount, let first = ordered?.firstIndex(where: { $0 == account }) else {
+            return false
+        }
+        return index == first
     }
     
     var onDestructiveAction: (() -> Void)?
@@ -82,19 +102,7 @@ class AccountsViewModel: ObservableObject {
     }
 }
 
-extension AccountsViewModel {
-    var ordered: [Account]? {
-        guard let selected = selectedAccount else {
-            return accounts
-        }
-        var array = [Account]()
-        array.append(selected)
-        if let unselected = self.unselected {
-            array.append(contentsOf: unselected)
-        }
-        return array
-    }
-    
+extension AccountsViewModel {    
     var unselected: [Account]? {
         guard let selected = selectedAccount else {
             return accounts

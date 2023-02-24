@@ -13,6 +13,8 @@ import BetterSafariView
 struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
     @State private var offset: CGFloat = 60
+    @State private var animationOffset: CGFloat = 0
+    @State private var opacity: CGFloat = 1.0
     @State private var reset: Bool = false
     
     func card(account: Account, index: Int) -> some View {
@@ -26,6 +28,36 @@ struct AccountsView: View {
         } else {
             return AnyView(CardView(account: account, expand: false, index: index))
         }
+    }
+    
+    func slideOffset(index: Int) -> CGFloat {
+        let selectedOffset: CGFloat = viewModel.isSelected(index: index) ? animationOffset : 0
+        return (offset * CGFloat(index) * -1) + selectedOffset
+    }
+    func zIndex(index: Int) -> Double {
+        return viewModel.isSelected(index: index) ? 200 : 100
+    }
+    func opacity(index: Int) -> Double {
+        return viewModel.isSelected(index: index) ? 1 : opacity
+    }
+    
+    func tapGesture(account: Account) -> some Gesture {
+        LongPressGesture(minimumDuration: 0.05)
+                .onChanged { _ in
+                        withAnimation {
+                            animationOffset = 60
+                            opacity = 0
+                            viewModel.selectedAccount = account
+                        }
+                }
+                .onEnded { finished in
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            withAnimation {
+                                animationOffset = 0
+                                opacity = 1
+                            }
+                        }
+                }
     }
     
     var body: some View {
@@ -43,17 +75,33 @@ struct AccountsView: View {
                     .shadow(radius: 3)
                     .shadow(radius: 3)
                     
-                    ForEach(Array(ordered.reversed().enumerated()), id: \.offset) { index, account in
+                    ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
                         card(account: account, index: index)
-                            .modifier(SlideEffect(offset: index))
-                            .transition(.slide) // .move(edge: .bottom))
-                            .onTapGesture {
-                                withAnimation {
-                                    viewModel.selectedAccount = account
-                                }
-                            }
+                            .modifier(SlideEffect(offset: slideOffset(index: index)))
+                            .gesture( tapGesture(account: account)
+//                                LongPressGesture(minimumDuration: 0.05)
+//                                    .onChanged { _ in
+//                                        if viewModel.session != nil {
+//                                            withAnimation {
+//                                                animationOffset = 60
+//                                                opacity = 0
+//                                                viewModel.selectedAccount = account
+//                                            }
+//                                        }
+//                                    }
+//                                    .onEnded { finished in
+//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                                            withAnimation {
+//                                                animationOffset = 0
+//                                                opacity = 1
+//                                            }
+//                                        }
+//                                    }
+//
+                            )
+                            .opacity(opacity(index: index))
+                            .zIndex(zIndex(index: index))
                     }
-
                 }
                 .confirmationDialog("Reset all accounts", isPresented: $reset, titleVisibility: .visible) {
                     Button("Reset", role: .destructive) {

@@ -9,9 +9,9 @@ import SwiftUI
 import SnabblePay
 
 struct SlideEffect: AnimatableModifier {
-    var offset: Int = 0
+    var offset: CGFloat = 0
 
-    var animatableData: Int {
+    var animatableData: CGFloat {
         get {
             offset
         } set {
@@ -21,7 +21,7 @@ struct SlideEffect: AnimatableModifier {
 
     func body(content: Content) -> some View {
         content
-            .offset(y: CGFloat(-60 * offset))
+            .offset(y: offset)
     }
 }
 
@@ -49,6 +49,7 @@ struct AddFirstAccount: View {
 }
 
 struct CardView: View {
+
     @ObservedObject var model: AccountViewModel
     @ObservedObject var motionManager = MotionManager.shared
     

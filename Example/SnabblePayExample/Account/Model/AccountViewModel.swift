@@ -44,6 +44,7 @@ class AccountViewModel: ObservableObject {
         }
     }
     @Published var sessionUpdated = false
+    @Published var isLoading = false
     
     func createMandate() {
         snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
@@ -67,18 +68,25 @@ class AccountViewModel: ObservableObject {
         guard self.autostart else {
             return
         }
+        isLoading = true
         snabblePay.startSession(withAccountId: account.id) { [weak self] result in
             if let session = try? result.get() {
                 self?.session = session
-                self?.sessionUpdated.toggle()
             } else {
                 self?.session = nil
             }
+            self?.sessionUpdated.toggle()
+            self?.isLoading = false
         }
     }
 }
 
 extension AccountViewModel {
+    
+    var canSelect: Bool {
+        return isLoading == false
+    }
+    
     var needsRefresh: Bool {
         guard self.autostart else {
             return false
