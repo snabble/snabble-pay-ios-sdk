@@ -42,9 +42,10 @@ struct AddFirstAccount: View {
                     .font(.system(size: 64))
             }
         }
-        .frame(width: 320, height: 220)
+        .frame(minWidth: 320, maxHeight: 220)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
         .rotation3DEffect(.degrees(motionManager.xCoordinate * 20), axis: (x: 0, y: 1, z: 0))
+        .padding([.leading, .trailing])
     }
 }
 
