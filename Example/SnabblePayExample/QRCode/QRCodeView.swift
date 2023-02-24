@@ -48,15 +48,11 @@ private extension String {
             let whiteImage = context.createCGImage(whiteCIImage, from: whiteCIImage.extent).map(UIImage.init)!
 
             // use black version for light mode
-            //let qrImage = UIImage(cgImage: blackImage)
+            // let qrImage = UIImage(cgImage: blackImage)
             // assign the white version to be used in dark mode
             blackImage.imageAsset?.register(whiteImage, with: UITraitCollection(userInterfaceStyle: .dark))
 
             return blackImage
-
-//            if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
-//                return UIImage(cgImage: cgimg)
-//            }
         }
         return nil
     }

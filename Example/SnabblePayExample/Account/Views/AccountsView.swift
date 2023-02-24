@@ -50,7 +50,7 @@ struct AccountsView: View {
                             viewModel.selectedAccount = account
                         }
                 }
-                .onEnded { finished in
+                .onEnded { _ in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             withAnimation {
                                 animationOffset = 0

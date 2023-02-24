@@ -120,7 +120,7 @@ struct CardView: View {
         .onAppear {
             self.toggleSize = self.expand || self.model.session != nil
         }
-        .onChange(of: model.sessionUpdated) { newUpdate in
+        .onChange(of: model.sessionUpdated) { _ in
             withAnimation {
                 toggleSize = true
             }

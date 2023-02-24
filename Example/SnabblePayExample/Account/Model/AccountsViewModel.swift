@@ -28,7 +28,7 @@ class AccountsViewModel: ObservableObject {
 
     @Published var accounts: [Account]? {
         didSet {
-            if let selectedID = UserDefaults.selectedAccount, let account = accounts?.first(where: { $0.name == selectedID} ) {
+            if let selectedID = UserDefaults.selectedAccount, let account = accounts?.first(where: { $0.name == selectedID }) {
                 selectedAccount = account
             } else if let first = accounts?.first {
                 selectedAccount = first

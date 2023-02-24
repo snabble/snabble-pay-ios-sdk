@@ -54,8 +54,6 @@ struct AccountView: View {
                 HStack {
                     viewModel.mandateStateImage
                         .foregroundStyle(.white, viewModel.mandateStateColor, viewModel.mandateStateColor)
-
-                    
                     Text(viewModel.mandateStateString)
                 }
                 .font(.title3)

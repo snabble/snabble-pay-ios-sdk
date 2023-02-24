@@ -13,7 +13,7 @@ struct ParallaxMotionModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .offset(x: CGFloat(manager.x * magnitude), y: CGFloat(manager.y * magnitude))
+            .offset(x: CGFloat(manager.xCoordinate * magnitude), y: CGFloat(manager.yCoordinate * magnitude))
     }
 }
 
@@ -23,8 +23,8 @@ class MotionManager: ObservableObject {
     private let manager: CMMotionManager
     let formatter: NumberFormatter
     
-    @Published var x = 0.0
-    @Published var y = 0.0
+    @Published var xCoordinate = 0.0
+    @Published var yCoordinate = 0.0
 
     init() {
         self.formatter = NumberFormatter()
@@ -32,11 +32,11 @@ class MotionManager: ObservableObject {
         
         self.manager = CMMotionManager()
         self.manager.deviceMotionUpdateInterval = 1 / 30
-        self.manager.startDeviceMotionUpdates(to: .main) { [weak self] (data, error) in
+        self.manager.startDeviceMotionUpdates(to: .main) { [weak self] (data, _) in
             guard let motion = data?.attitude else { return }
             
-            self?.x = motion.roll
-            self?.y = motion.pitch
+            self?.xCoordinate = motion.roll
+            self?.yCoordinate = motion.pitch
         }
     }
 }
