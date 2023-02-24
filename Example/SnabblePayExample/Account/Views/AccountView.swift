@@ -7,44 +7,6 @@
 
 import SwiftUI
 import SnabblePay
-import Combine
-
-class AccountViewModel: ObservableObject {
-    let snabblePay: SnabblePay = .shared
-
-    let account: Account
-
-    init(account: Account) {
-        self.account = account
-    }
-
-    @Published var mandate: Account.Mandate?
-    @Published var session: Session?
-
-    func createMandate() {
-        snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
-        }
-    }
-
-    func decline(mandateId: Account.Mandate.ID) {
-        snabblePay.declineMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
-        }
-    }
-
-    func accept(mandateId: Account.Mandate.ID) {
-        snabblePay.acceptMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
-        }
-    }
-
-    func startSession() {
-        snabblePay.startSession(withAccountId: account.id) { [weak self] result in
-            self?.session = try? result.get()
-        }
-    }
-}
 
 struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
