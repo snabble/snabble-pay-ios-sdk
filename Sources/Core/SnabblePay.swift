@@ -44,6 +44,7 @@ extension SnabblePay {
     ///   - city: The city of residence
     ///   - countryCode: The countryCode [PayOne - ISO 3166](https://docs.payone.com/pages/releaseview.action?pageId=1213959) of residence.
     /// - Returns: An account check publisher
+    /// - Important: A list of supported two letter country codes from ISO 3166 can be found here: https://docs.payone.com/pages/releaseview.action?pageId=1213959
     public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Swift.Error> {
         let endpoint = Endpoints.Accounts.check(
             appUri: appUri,
