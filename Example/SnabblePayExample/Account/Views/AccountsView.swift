@@ -78,27 +78,7 @@ struct AccountsView: View {
                     ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
                         card(account: account, index: index)
                             .modifier(SlideEffect(offset: slideOffset(index: index)))
-                            .gesture( tapGesture(account: account)
-//                                LongPressGesture(minimumDuration: 0.05)
-//                                    .onChanged { _ in
-//                                        if viewModel.session != nil {
-//                                            withAnimation {
-//                                                animationOffset = 60
-//                                                opacity = 0
-//                                                viewModel.selectedAccount = account
-//                                            }
-//                                        }
-//                                    }
-//                                    .onEnded { finished in
-//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                                            withAnimation {
-//                                                animationOffset = 0
-//                                                opacity = 1
-//                                            }
-//                                        }
-//                                    }
-//
-                            )
+                            .gesture( tapGesture(account: account))
                             .opacity(opacity(index: index))
                             .zIndex(zIndex(index: index))
                     }
