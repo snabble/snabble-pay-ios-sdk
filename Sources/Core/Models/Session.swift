@@ -82,7 +82,6 @@ extension Session: FromDTO {
     }
 }
 
-
 extension SnabblePayNetwork.Session: ToModel {
     func toModel() -> Session {
         .init(fromDTO: self)
