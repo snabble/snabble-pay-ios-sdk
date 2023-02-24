@@ -9,7 +9,7 @@ import Foundation
 import SnabblePayNetwork
 
 extension SnabblePay: NetworkManagerDelegate {
-    public func networkManager(_ networkManager: NetworkManager, didUpdateCredentials credentials: Credentials?) {
-        delegate?.snabblePay(self, didUpdateCredentials: credentials)
+    public func networkManager(_ networkManager: NetworkManager, didUpdateCredentials credentials: SnabblePayNetwork.Credentials?) {
+        delegate?.snabblePay(self, didUpdateCredentials: credentials?.toModel())
     }
 }

@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import SnabblePay
-import SnabblePayNetwork
+@testable import SnabblePayNetwork
 import TestHelper
 
 final class SessionEndpointTests: XCTestCase {
@@ -73,8 +72,8 @@ final class SessionEndpointTests: XCTestCase {
     func testDecodingAccountPost() throws {
         let jsonData = try loadResource(inBundle: .module, filename: "sessions-post", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
-        XCTAssertEqual(instance.id.rawValue, "1")
-        XCTAssertEqual(instance.token.rawValue, "3489f@asd2")
+        XCTAssertEqual(instance.id, "1")
+        XCTAssertEqual(instance.token, "3489f@asd2")
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
         XCTAssertEqual(instance.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
@@ -98,8 +97,8 @@ final class SessionEndpointTests: XCTestCase {
     func testDecodingAccountGet() throws {
         let jsonData = try loadResource(inBundle: .module, filename: "sessions-get", withExtension: "json")
         let instance = try TestingDefaults.jsonDecoder.decode(Session.self, from: jsonData)
-        XCTAssertEqual(instance.id.rawValue, "1")
-        XCTAssertEqual(instance.token.rawValue, "token")
+        XCTAssertEqual(instance.id, "1")
+        XCTAssertEqual(instance.token, "token")
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
         XCTAssertEqual(instance.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
