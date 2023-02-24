@@ -41,8 +41,8 @@ extension SnabblePay {
     /// Asks for a new mandate
     /// - Parameters:
     ///   - appUri: Callback URLScheme to inform the app that the process is completed
-    ///   - city: The city in which the customer is registered.
-    ///   - countryCode: The countryCode [ISO 3166](https://docs.payone.com/pages/releaseview.action?pageId=1213959) in which the customer is registered.
+    ///   - city: The city of residence
+    ///   - countryCode: The countryCode [ISO 3166](https://docs.payone.com/pages/releaseview.action?pageId=1213959) of residence.
     /// - Returns: An account check publisher
     public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Swift.Error> {
         let endpoint = Endpoints.Accounts.check(
