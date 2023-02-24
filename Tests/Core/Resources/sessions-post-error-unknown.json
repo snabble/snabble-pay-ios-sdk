@@ -1,5 +1,5 @@
 {
   "error": {
-    "reason": "MANDATE_DECLINED_FOOBAR"
+    "reason": "account_not_found_foooobar"
   }
 }

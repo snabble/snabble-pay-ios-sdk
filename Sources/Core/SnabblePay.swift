@@ -44,7 +44,7 @@ extension SnabblePay {
     ///   - city: The city in which the customer is registered.
     ///   - countryCode: The countryCode [ISO 3166](https://docs.payone.com/pages/releaseview.action?pageId=1213959) in which the customer is registered.
     /// - Returns: An account check publisher
-    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Error> {
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String) -> AnyPublisher<Account.Check, Swift.Error> {
         let endpoint = Endpoints.Accounts.check(
             appUri: appUri,
             city: city,
@@ -56,7 +56,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func accounts() -> AnyPublisher<[Account], Error> {
+    public func accounts() -> AnyPublisher<[Account], Swift.Error> {
         let endpoint = Endpoints.Accounts.get(
             onEnvironment: environment
         )
@@ -65,7 +65,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func account(withId id: Account.ID) -> AnyPublisher<Account, Error> {
+    public func account(withId id: Account.ID) -> AnyPublisher<Account, Swift.Error> {
         let endpoint = Endpoints.Accounts.get(
             id: id,
             onEnvironment: environment
@@ -75,7 +75,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func deleteAccount(withId id: Account.ID) -> AnyPublisher<Account, Error> {
+    public func deleteAccount(withId id: Account.ID) -> AnyPublisher<Account, Swift.Error> {
         let endpoint = Endpoints.Accounts.delete(
             id: id,
             onEnvironment: environment
@@ -85,7 +85,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func createMandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+    public func createMandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.post(
             forAccountId: accountId,
             onEnvironment: environment
@@ -95,7 +95,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func mandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+    public func mandate(forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.get(
             forAccountId: accountId,
             onEnvironment: environment
@@ -105,7 +105,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.accept(
             mandateId: mandateId,
             forAccountId: accountId,
@@ -116,7 +116,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Error> {
+    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID) -> AnyPublisher<Account.Mandate, Swift.Error> {
         let endpoint = Endpoints.Accounts.Mandate.decline(
             mandateId: mandateId,
             forAccountId: accountId,
@@ -127,7 +127,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func sessions() -> AnyPublisher<[Session], Error> {
+    public func sessions() -> AnyPublisher<[Session], Swift.Error> {
         let endpoint = Endpoints.Session.get(
             onEnvironment: environment
         )
@@ -136,7 +136,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func startSession(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Error> {
+    public func startSession(withAccountId accountId: Account.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.post(
             withAccountId: accountId,
             onEnvironment: environment
@@ -146,7 +146,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func session(withId id: Session.ID) -> AnyPublisher<Session, Error> {
+    public func session(withId id: Session.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.get(
             id: id,
             onEnvironment: environment
@@ -156,7 +156,7 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    public func deleteSession(withId id: Session.ID) -> AnyPublisher<Session, Error> {
+    public func deleteSession(withId id: Session.ID) -> AnyPublisher<Session, Swift.Error> {
         let endpoint = Endpoints.Session.delete(
             id: id,
             onEnvironment: environment
@@ -169,7 +169,7 @@ extension SnabblePay {
 
 // MARK: Completion Handler
 extension SnabblePay {
-    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Check, Error>) -> Void) {
+    public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Check, Swift.Error>) -> Void) {
         accountCheck(withAppUri: appUri, city: city, countryCode: countryCode)
             .sink {
                 switch $0 {
@@ -184,7 +184,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func accounts(completionHandler: @escaping (Result<[Account], Error>) -> Void) {
+    public func accounts(completionHandler: @escaping (Result<[Account], Swift.Error>) -> Void) {
         accounts()
             .sink {
                 switch $0 {
@@ -199,7 +199,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func account(withId id: Account.ID, completionHandler: @escaping (Result<Account, Error>) -> Void) {
+    public func account(withId id: Account.ID, completionHandler: @escaping (Result<Account, Swift.Error>) -> Void) {
         account(withId: id)
             .sink {
                 switch $0 {
@@ -214,7 +214,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Account, Error>) -> Void) {
+    public func deleteAccount(withId id: Account.ID, completionHandler: @escaping (Result<Account, Swift.Error>) -> Void) {
         deleteAccount(withId: id)
             .sink {
                 switch $0 {
@@ -229,7 +229,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func createMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+    public func createMandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Swift.Error>) -> Void) {
         createMandate(forAccountId: accountId)
             .sink {
                 switch $0 {
@@ -244,7 +244,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func mandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+    public func mandate(forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Swift.Error>) -> Void) {
         mandate(forAccountId: accountId)
             .sink {
                 switch $0 {
@@ -259,7 +259,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+    public func acceptMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Swift.Error>) -> Void) {
         acceptMandate(withId: mandateId, forAccountId: accountId)
             .sink {
                 switch $0 {
@@ -274,7 +274,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Error>) -> Void) {
+    public func declineMandate(withId mandateId: Account.Mandate.ID, forAccountId accountId: Account.ID, completionHandler: @escaping (Result<Account.Mandate, Swift.Error>) -> Void) {
         declineMandate(withId: mandateId, forAccountId: accountId)
             .sink {
                 switch $0 {
@@ -289,7 +289,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func sessions(completionHandler: @escaping (Result<[Session], Error>) -> Void) {
+    public func sessions(completionHandler: @escaping (Result<[Session], Swift.Error>) -> Void) {
         sessions()
             .sink {
                 switch $0 {
@@ -304,7 +304,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+    public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, Swift.Error>) -> Void) {
         startSession(withAccountId: accountId)
             .sink {
                 switch $0 {
@@ -319,7 +319,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func session(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+    public func session(withId id: Session.ID, completionHandler: @escaping (Result<Session, Swift.Error>) -> Void) {
         session(withId: id)
             .sink {
                 switch $0 {
@@ -334,7 +334,7 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
-    public func deleteSession(withId id: Session.ID, completionHandler: @escaping (Result<Session, Error>) -> Void) {
+    public func deleteSession(withId id: Session.ID, completionHandler: @escaping (Result<Session, Swift.Error>) -> Void) {
         deleteSession(withId: id)
             .sink {
                 switch $0 {

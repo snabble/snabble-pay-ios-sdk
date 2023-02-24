@@ -12,6 +12,7 @@ import TestHelper
 
 final class URLSessionEndpointTests: XCTestCase {
 
+    let errorData = try! loadResource(inBundle: .module, filename: "error-unknown", withExtension: "json")
     let resourceData = try! loadResource(inBundle: .module, filename: "register", withExtension: "json")
     let endpointRegister: Endpoint<Credentials> = Endpoints.Register.post(apiKeyValue: "123456")
     let endpointData: Endpoint<Data> = .init(path: "/apps/register", method: .get(nil))
@@ -79,6 +80,44 @@ final class URLSessionEndpointTests: XCTestCase {
         MockURLProtocol.requestHandler = { [unowned self] request in
             let response = HTTPURLResponse(
                 url: URL(string: "https://payment.snabble.io/apps/register")!,
+                statusCode: 404,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, errorData)
+        }
+
+        let expectation = expectation(description: "register")
+        let session = URLSession.mockSession
+        session.publisher(for: endpointRegister)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    XCTAssertTrue(true)
+                case .failure(let error):
+                    XCTAssertNotNil(error)
+                    XCTAssertTrue(error is HTTPError)
+                    if case HTTPError.invalidResponse(let statusCode, let endpointError) = error {
+                        XCTAssertEqual(statusCode, .notFound)
+                        XCTAssertEqual(endpointError?.reason, .unknown)
+                    } else {
+                        XCTFail("should ne httpError invalidResponse")
+                    }
+                }
+                expectation.fulfill()
+            } receiveValue: { credentials in
+                XCTAssertNil(credentials)
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 5.0)
+    }
+
+    func testDecodableCombineInvalidResponseWithErrorObject() async throws {
+        MockURLProtocol.error = nil
+        MockURLProtocol.requestHandler = { [unowned self] request in
+            let response = HTTPURLResponse(
+                url: URL(string: "https://payment.snabble.io/apps/register")!,
                 statusCode: 400,
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
@@ -104,59 +143,5 @@ final class URLSessionEndpointTests: XCTestCase {
             .store(in: &cancellables)
 
         wait(for: [expectation], timeout: 5.0)
-    }
-
-    func testDecodableAsync() async throws {
-        MockURLProtocol.error = nil
-        MockURLProtocol.requestHandler = { [unowned self] request in
-            let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/register")!,
-                statusCode: 200,
-                httpVersion: nil,
-                headerFields: ["Content-Type": "application/json"]
-            )!
-            return (response, resourceData)
-        }
-
-        let session = URLSession.mockSession
-        let decodableObject = try await session.object(for: endpointRegister)
-
-        XCTAssertNotNil(decodableObject)
-    }
-
-    func testDecodableAsyncError() async throws {
-        MockURLProtocol.error = URLError(.unknown)
-        MockURLProtocol.requestHandler = nil
-
-        do {
-            let session = URLSession.mockSession
-            let decodableObject = try await session.object(for: endpointRegister)
-            XCTAssertNil(decodableObject)
-        } catch {
-            XCTAssertNotNil(error)
-            XCTAssertNotNil(error is URLError)
-        }
-    }
-
-    func testDecodableAsyncInvalidResponse() async throws {
-        MockURLProtocol.error = nil
-        MockURLProtocol.requestHandler = { [unowned self] request in
-            let response = HTTPURLResponse(
-                url: URL(string: "https://payment.snabble.io/apps/register")!,
-                statusCode: 400,
-                httpVersion: nil,
-                headerFields: ["Content-Type": "application/json"]
-            )!
-            return (response, resourceData)
-        }
-
-        do {
-            let session = URLSession.mockSession
-            let decodableObject = try await session.object(for: endpointRegister)
-            XCTAssertNil(decodableObject)
-        } catch {
-            XCTAssertNotNil(error)
-            XCTAssertNotNil(error is HTTPError)
-        }
     }
 }

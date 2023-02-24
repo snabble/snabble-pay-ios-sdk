@@ -8,29 +8,30 @@
 import Foundation
 import Combine
 
-enum HTTPError: Equatable {
-    case invalidResponse(statusCode: HTTPStatusCode)
+public enum HTTPError: Equatable {
+    case invalidResponse(HTTPStatusCode, Endpoints.Error?)
     case unknownResponse(URLResponse)
 }
 
 extension HTTPError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .invalidResponse(let statusCode):
-            return "Error: \(statusCode)"
-        case .unknownResponse(let response):
+        case let .invalidResponse(statusCode, error):
+            return "Error: \(statusCode) \(String(describing: error))"
+        case let .unknownResponse(response):
             return "Error: unknown \(response)"
         }
     }
 }
 
 private extension URLResponse {
-    func verify() throws {
+    func verify(with data: Data) throws {
         guard let httpResponse = self as? HTTPURLResponse else {
             throw HTTPError.unknownResponse(self)
         }
         guard httpResponse.httpStatusCode.responseType == .success else {
-            throw HTTPError.invalidResponse(statusCode: httpResponse.httpStatusCode)
+            let endpointError = try? JSONDecoder().decode(Endpoints.Error.self, from: data)
+            throw HTTPError.invalidResponse(httpResponse.httpStatusCode, endpointError)
         }
     }
 }
@@ -38,7 +39,7 @@ private extension URLResponse {
 private extension Publisher where Output == (data: Data, response: URLResponse), Failure == any Error {
     func tryVerifyResponse() -> AnyPublisher<Output, Failure> {
         tryMap { (data, response) throws -> Output in
-            try response.verify()
+            try response.verify(with: data)
             return (data, response)
         }
         .eraseToAnyPublisher()
@@ -56,16 +57,5 @@ extension URLSession {
             .map(\.data)
             .decode(type: Response.self, decoder: endpoint.jsonDecoder)
             .eraseToAnyPublisher()
-    }
-}
-
-@available(iOS 15.0, *)
-extension URLSession {
-    func object<Response: Decodable>(
-        for endpoint: Endpoint<Response>
-    ) async throws -> Response {
-        let (data, response) = try await self.data(for: endpoint.urlRequest)
-        try response.verify()
-        return try endpoint.jsonDecoder.decode(Response.self, from: data)
     }
 }
