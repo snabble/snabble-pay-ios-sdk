@@ -11,7 +11,7 @@ import SnabblePay
 extension SnabblePay {
     static var shared: SnabblePay = {
         var credentials: Credentials?
-        if let savedPerson = UserDefaults.standard.object(forKey: "credentials") as? Data {
+        if let savedPerson = UserDefaults.credentials {
             credentials = try? JSONDecoder().decode(Credentials.self, from: savedPerson)
         }
         let snabblePay: SnabblePay = .init(
@@ -25,18 +25,17 @@ extension SnabblePay {
     }()
 
     static func reset() {
-        UserDefaults.standard.set(nil, forKey: "credentials")
+        UserDefaults.credentials = nil
     }
 }
 
 extension SnabblePay: SnabblePayDelegate {
     public func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?) {
         if let encoded = try? JSONEncoder().encode(credentials) {
-            UserDefaults.standard.set(encoded, forKey: "credentials")
-        } else {
-            UserDefaults.standard.set(nil, forKey: "credentials")
+            UserDefaults.credentials = encoded
+       } else {
+            UserDefaults.credentials = nil
         }
-        UserDefaults.standard.synchronize()
     }
 }
 
@@ -57,5 +56,32 @@ extension Credentials: Codable {
     enum CodingKeys: String, CodingKey {
         case identifier
         case secret
+    }
+}
+
+extension UserDefaults {
+    private enum Keys {
+        static let selectedAccount = "account"
+        static let credentials = "credentials"
+    }
+
+    class var credentials: Data? {
+        get {
+            return UserDefaults.standard.data(forKey: Keys.credentials)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.credentials)
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    class var selectedAccount: String? {
+        get {
+            return UserDefaults.standard.string(forKey: Keys.selectedAccount)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.selectedAccount)
+            UserDefaults.standard.synchronize()
+        }
     }
 }

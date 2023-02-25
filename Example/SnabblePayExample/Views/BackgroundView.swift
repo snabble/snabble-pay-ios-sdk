@@ -18,6 +18,7 @@ struct BackgroundView: View {
                 .offset(x: -90, y: -120)
                 .frame(width: geom.size.width + 180, height: geom.size.height + 180)
                 .modifier(ParallaxMotionModifier(manager: motionManager, magnitude: 20))
+                .zIndex(-1)
         }
     }
 }

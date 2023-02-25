@@ -1,6 +1,6 @@
 //
 //  CardView.swift
-//  
+//  SnabblePayExample
 //
 //  Created by Uwe Tilemann on 23.02.23.
 //
@@ -8,26 +8,8 @@
 import SwiftUI
 import SnabblePay
 
-struct SlideEffect: AnimatableModifier {
-    var offset: CGFloat = 0
-
-    var animatableData: CGFloat {
-        get {
-            offset
-        } set {
-            offset = newValue
-        }
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .offset(y: offset)
-    }
-}
-
 struct AddFirstAccount: View {
     @ObservedObject var viewModel: AccountsViewModel
-    @ObservedObject var motionManager = MotionManager.shared
 
     var body: some View {
         VStack(spacing: 10) {
@@ -37,42 +19,35 @@ struct AddFirstAccount: View {
                 .foregroundColor(.white)
                 .shadow(radius: 2)
             Button(action: {
-                viewModel.loadAccountCheck()
+                viewModel.startAccountCheck()
             }) {
                 Image(systemName: "plus")
                     .font(.system(size: 64))
             }
         }
-        .frame(minWidth: 320, maxHeight: 220)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-        .rotation3DEffect(.degrees(motionManager.xCoordinate * 20), axis: (x: 0, y: 1, z: 0))
-        .padding([.leading, .trailing])
+        .cardStyle()
     }
 }
 
 struct CardView: View {
-
     @ObservedObject var model: AccountViewModel
-    @ObservedObject var motionManager = MotionManager.shared
-    
+    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.colorScheme) var colorScheme
+
     private let expand: Bool
-    private var index: Int = 0
     
     @State private var toggleSize = false
-    
-    @Environment(\.scenePhase) var scenePhase
 
-    init(model: AccountViewModel, expand: Bool = false, index: Int = 0) {
+    init(model: AccountViewModel, expand: Bool = false) {
         self.model = model
         self.expand = expand
-        self.index = index
     }
-    init(account: Account, expand: Bool = false, index: Int = 0) {
+
+    init(account: Account, expand: Bool = false) {
         self.model = AccountViewModel(account: account, autostart: false)
         self.expand = expand
-        self.index = index
     }
-    
+ 
     @ViewBuilder
     var qrImage: some View {
         if let session = model.session {
@@ -81,6 +56,7 @@ struct CardView: View {
             Image(systemName: "qrcode")
                 .resizable()
                 .scaledToFit()
+                .foregroundColor(colorScheme == .dark ? .white : .black)
         }
     }
     var body: some View {
@@ -90,11 +66,6 @@ struct CardView: View {
                 qrImage
                     .padding([.top])
                     .frame(width: toggleSize ? 150 : 80)
-                    .onTapGesture {
-                        withAnimation {
-                            toggleSize.toggle()
-                        }
-                    }
                 Spacer()
             }
             Spacer()
@@ -120,17 +91,15 @@ struct CardView: View {
             }
         }
         .onAppear {
-            self.toggleSize = self.expand || self.model.session != nil
+            withAnimation {
+                self.toggleSize = self.expand || self.model.session != nil
+            }
         }
         .onChange(of: model.sessionUpdated) { _ in
             withAnimation {
                 toggleSize = true
             }
         }
-        .frame(minWidth: 320, maxHeight: 220)
-        .background(model.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-        .rotation3DEffect(.degrees(motionManager.xCoordinate * 20), axis: (x: 0, y: 1, z: 0))
-        .padding([.leading, .trailing])
-        .shadow(radius: 4, y: 2)
+        .cardStyle(top: model.autostart)
     }
 }

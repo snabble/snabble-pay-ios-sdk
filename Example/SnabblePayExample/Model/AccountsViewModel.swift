@@ -8,23 +8,8 @@ import Foundation
 import SnabblePay
 import Combine
 
-extension UserDefaults {
-    private enum Keys {
-        static let selectedAccount = "account"
-    }
-
-    class var selectedAccount: String? {
-        get {
-            return UserDefaults.standard.string(forKey: Keys.selectedAccount)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Keys.selectedAccount)
-        }
-    }
-}
-
 class AccountsViewModel: ObservableObject {
-    let snabblePay: SnabblePay = .shared
+    private let snabblePay: SnabblePay = .shared
 
     @Published var accounts: [Account]? {
         didSet {
@@ -41,7 +26,7 @@ class AccountsViewModel: ObservableObject {
     @Published var session: Session?
     @Published var ordered: [Account]?
     
-    func accountStack() -> [Account]? {
+    private func accountStack() -> [Account]? {
         guard let selected = selectedAccount else {
             return accounts
         }
@@ -89,7 +74,7 @@ class AccountsViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
 
-    func loadAccountCheck() {
+    func startAccountCheck() {
         snabblePay.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { [weak self] in
             self?.accountCheck = try? $0.get()
         }
@@ -108,5 +93,12 @@ extension AccountsViewModel {
             return accounts
         }
         return accounts?.filter({ $0 != selected })
+    }
+   
+    var canSelect: Bool {
+        guard let model = selectedAccountModel else {
+            return true
+        }
+        return model.canSelect
     }
 }

@@ -2,7 +2,7 @@
 //  AccountView.swift
 //  SnabblePayExample
 //
-//  Created by Andreas Osberghaus on 2023-02-22.
+//  Created by Uwe Tilemann on 23.02.23.
 //
 
 import SwiftUI
@@ -12,14 +12,11 @@ extension AccountViewModel {
     var mandateIDString: String {
         return mandate?.id.rawValue ?? ""
     }
-
     var mandateStateString: String {
         return NSLocalizedString(account.mandateState.rawValue, comment: "")
     }
-
     var mandateStateColor: Color {
         switch account.mandateState {
-            
         case .pending:
             return Color.yellow
         case .accepted:
@@ -27,12 +24,9 @@ extension AccountViewModel {
         case .declined:
             return Color.red
         }
-
     }
-
     var mandateStateImage: Image {
         switch account.mandateState {
-            
         case .pending:
             return Image(systemName: "questionmark.circle.fill")
         case .accepted:
@@ -75,17 +69,33 @@ struct AccountView: View {
     var mandateAction: some View {
         if let mandate = viewModel.mandate {
             if mandate.state == .pending {
-                HStack {
-                    Button {
-                        viewModel.accept(mandateId: mandate.id)
-                    } label: {
-                        Text("Accept")
-                            .frame(maxWidth: .infinity)
-                            .padding()
+                VStack {
+                    HStack {
+                        Button {
+                            viewModel.accept(mandateId: mandate.id)
+                        } label: {
+                            Text("Accept")
+                                .fontWeight(.bold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                        }
                     }
-                }
-                .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                .padding([.leading, .trailing])
+                    .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .padding([.leading, .trailing])
+                   
+                    HStack {
+                        Button {
+                            viewModel.decline(mandateId: mandate.id)
+                        } label: {
+                            Text("Decline")
+                                .fontWeight(.bold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                        }
+                    }
+                    .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .padding([.leading, .trailing])
+              }
             }
         } else {
             HStack {

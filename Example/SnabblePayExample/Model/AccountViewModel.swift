@@ -9,14 +9,13 @@ import SnabblePay
 import Combine
 
 class AccountViewModel: ObservableObject {
-    let snabblePay: SnabblePay = .shared
+    private let snabblePay: SnabblePay = .shared
 
     let account: Account
     var autostart: Bool {
         didSet {
             if autostart == false {
-                refreshTimer?.invalidate()
-                refreshTimer = nil
+                resetTimer()
             } else {
                 self.startSession()
             }
@@ -25,6 +24,16 @@ class AccountViewModel: ObservableObject {
     
     private var refreshTimer: Timer?
     
+    private func resetTimer() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+        
+        if autostart, let refreshAt = session?.refreshAt {
+            self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
+                self.startSession()
+            }
+        }
+    }
     init(account: Account, autostart: Bool = true) {
         self.account = account
         self.autostart = autostart
@@ -33,14 +42,7 @@ class AccountViewModel: ObservableObject {
     @Published var mandate: Account.Mandate?
     @Published var session: Session? {
         didSet {
-            refreshTimer?.invalidate()
-            refreshTimer = nil
-            if let refreshAt = session?.refreshAt {
-                self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
-                    self.startSession()
-                }
-            }
-
+            resetTimer()
         }
     }
     @Published var sessionUpdated = false

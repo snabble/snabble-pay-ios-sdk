@@ -2,7 +2,7 @@
 //  CredentialsView.swift
 //  SnabblePayExample
 //
-//  Created by Andreas Osberghaus on 2023-01-24.
+//  Created by Uwe Tilemann on 23.02.23.
 //
 
 import SwiftUI
@@ -15,84 +15,91 @@ struct AccountsView: View {
     @State private var offset: CGFloat = 60
     @State private var animationOffset: CGFloat = 0
     @State private var opacity: CGFloat = 1.0
+    @State private var zIndex: Double = 0
     @State private var reset: Bool = false
+    @State private var animationStarted = false
     
-    func card(account: Account, index: Int) -> some View {
-        if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
-            return AnyView(
-                NavigationLink {
-                    AccountView(viewModel: model)
-                } label: {
-                    CardView(model: model, index: index)
-                })
-        } else {
-            return AnyView(CardView(account: account, expand: false, index: index))
-        }
-    }
-    
-    func slideOffset(index: Int) -> CGFloat {
-        let selectedOffset: CGFloat = viewModel.isSelected(index: index) ? animationOffset : 0
-        return (offset * CGFloat(index) * -1) + selectedOffset
-    }
-    func zIndex(index: Int) -> Double {
-        return viewModel.isSelected(index: index) ? 200 : 100
-    }
-    func opacity(index: Int) -> Double {
-        return viewModel.isSelected(index: index) ? 1 : opacity
-    }
-    
-    func tapGesture(account: Account) -> some Gesture {
+    private func tapGesture(account: Account) -> some Gesture {
         LongPressGesture(minimumDuration: 0.05)
-                .onChanged { _ in
-                        withAnimation {
-                            animationOffset = 60
+                .onChanged { change in
+                    if viewModel.canSelect, !animationStarted {
+                        withAnimation(.easeIn(duration: 0.25)) {
+                            animationStarted = true
+                            animationOffset = -60
+                            zIndex = 300
                             opacity = 0
                             viewModel.selectedAccount = account
                         }
-                }
-                .onEnded { _ in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            withAnimation {
-                                animationOffset = 0
-                                opacity = 1
-                            }
-                        }
+                    }
                 }
     }
-    
+
+    @ViewBuilder
+    private func cardView(account: Account, index: Int) -> some View {
+        if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
+                NavigationLink {
+                    AccountView(viewModel: model)
+                } label: {
+                    CardView(model: model)
+                }
+        } else {
+            CardView(account: account, expand: false)
+        }
+    }
+
+    @ViewBuilder
+    var header: some View {
+        VStack {
+            Image("Title")
+            Text("The Future of Mobile Payment")
+                .foregroundColor(.accentColor)
+        }
+        .offset(y: -280)
+        .shadow(radius: 3)
+        .shadow(radius: 3)
+    }
+
     var body: some View {
         NavigationStack {
             if let ordered = viewModel.ordered, !ordered.isEmpty {
                 ZStack {
                     BackgroundView()
-
-                    VStack {
-                        Image("Title")
-                        Text("The Future of Mobile Payment")
-                            .foregroundColor(.accentColor)
-                    }
-                    .offset(y: -280)
-                    .shadow(radius: 3)
-                    .shadow(radius: 3)
+                    
+                    header
                     
                     ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
-                        card(account: account, index: index)
-                            .modifier(SlideEffect(offset: slideOffset(index: index)))
-                            .gesture( tapGesture(account: account))
-                            .opacity(opacity(index: index))
-                            .zIndex(zIndex(index: index))
+                        cardView(account: account, index: index)
+                            .modifier(SlideEffect(offset: (offset * CGFloat(index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0)))
+                            .transition(.slide)
+                            .gesture(tapGesture(account: account))
+                            .opacity(viewModel.isSelected(index: index) ? opacity : 1)
+                            .zIndex(viewModel.isSelected(index: index) ? 200 : zIndex)
                     }
                 }
                 .confirmationDialog("Reset all accounts", isPresented: $reset, titleVisibility: .visible) {
                     Button("Reset", role: .destructive) {
                         SnabblePay.reset()
-                        viewModel.loadAccounts()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.viewModel.loadAccounts()
+                        }
+                    }
+                }
+                .onChange(of: animationStarted) { value in
+                    if value == true {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                            withAnimation(.easeOut(duration: 0.35)) {
+                                animationOffset = 0
+                                opacity = 1
+                                animationStarted = false
+                                zIndex = 0
+                            }
+                        }
                     }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            viewModel.loadAccountCheck()
+                            viewModel.startAccountCheck()
                         }) {
                             Image(systemName: "plus")
                         }
@@ -108,15 +115,7 @@ struct AccountsView: View {
             } else {
                 ZStack {
                     BackgroundView()
-                    
-                    VStack {
-                        Image("Title")
-                        Text("The Future of Mobile Payment")
-                    }
-                    .offset(y: -300)
-                    .shadow(radius: 3)
-                    .shadow(radius: 3)
-
+                    header
                     AddFirstAccount(viewModel: viewModel)
                 }
                 .onAppear {
