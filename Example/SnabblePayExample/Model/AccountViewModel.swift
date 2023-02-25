@@ -16,12 +16,10 @@ class AccountViewModel: ObservableObject {
         didSet {
             if autostart == false {
                 resetTimer()
-            } else {
-                self.startSession()
             }
         }
     }
-    
+
     private var refreshTimer: Timer?
     
     private func resetTimer() {
@@ -34,6 +32,7 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+
     init(account: Account, autostart: Bool = true) {
         self.account = account
         self.autostart = autostart

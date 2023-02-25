@@ -14,20 +14,20 @@ struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
     @State private var offset: CGFloat = 60
     @State private var animationOffset: CGFloat = 0
-    @State private var opacity: CGFloat = 1.0
     @State private var zIndex: Double = 0
     @State private var reset: Bool = false
     @State private var animationStarted = false
+    let inTime = 0.35
+    let outTime = 0.25
     
     private func tapGesture(account: Account) -> some Gesture {
         LongPressGesture(minimumDuration: 0.05)
                 .onChanged { change in
                     if viewModel.canSelect, !animationStarted {
-                        withAnimation(.easeIn(duration: 0.25)) {
+                        withAnimation(.easeIn(duration: inTime)) {
                             animationStarted = true
                             animationOffset = -60
                             zIndex = 300
-                            opacity = 0
                             viewModel.selectedAccount = account
                         }
                     }
@@ -70,9 +70,7 @@ struct AccountsView: View {
                     ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
                         cardView(account: account, index: index)
                             .modifier(SlideEffect(offset: (offset * CGFloat(index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0)))
-                            .transition(.slide)
                             .gesture(tapGesture(account: account))
-                            .opacity(viewModel.isSelected(index: index) ? opacity : 1)
                             .zIndex(viewModel.isSelected(index: index) ? 200 : zIndex)
                     }
                 }
@@ -86,12 +84,15 @@ struct AccountsView: View {
                 }
                 .onChange(of: animationStarted) { value in
                     if value == true {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
-                            withAnimation(.easeOut(duration: 0.35)) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.1) {
+                            withAnimation(.easeIn(duration: outTime)) {
                                 animationOffset = 0
-                                opacity = 1
                                 animationStarted = false
                                 zIndex = 0
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
+                                    viewModel.selectedAccountModel?.startSession()
+                                }
                             }
                         }
                     }

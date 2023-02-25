@@ -48,7 +48,6 @@ class AccountsViewModel: ObservableObject {
             if let model = selectedAccountModel {
                 UserDefaults.selectedAccount = model.account.name
                 model.autostart = true
-                model.refresh()
             }
             self.ordered = accountStack()
         }
@@ -83,7 +82,10 @@ class AccountsViewModel: ObservableObject {
     func loadAccounts() {
         snabblePay.accounts { [weak self] in
             self?.accounts = try? $0.get()
-        }
+            if let model = self?.selectedAccountModel {
+                model.refresh()
+            }
+       }
     }
 }
 

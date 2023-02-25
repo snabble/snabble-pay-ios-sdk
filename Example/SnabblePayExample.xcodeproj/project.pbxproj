@@ -155,12 +155,12 @@
 		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
 			isa = PBXGroup;
 			children = (
+				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
 				E1C205A72982700000D4F894 /* Helper */,
-				76E4728029A7809000BBCCC9 /* Views */,
 				76E4727F29A7806900BBCCC9 /* Model */,
+				76E4728029A7809000BBCCC9 /* Views */,
 				76E4728529A781F800BBCCC9 /* Utilities */,
 				E17B75512975514D00392861 /* Info.plist */,
-				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
 				76344D0229A8BE3000211A1B /* Localizable.strings */,
 				E193765D2941E7AB001C8866 /* Assets.xcassets */,
 				E193765F2941E7AB001C8866 /* Preview Content */,

@@ -97,7 +97,7 @@ struct CardView: View {
         }
         .onChange(of: model.sessionUpdated) { _ in
             withAnimation {
-                toggleSize = true
+                toggleSize = model.autostart
             }
         }
         .cardStyle(top: model.autostart)
