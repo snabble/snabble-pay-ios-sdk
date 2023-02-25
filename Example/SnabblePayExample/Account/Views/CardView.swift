@@ -131,5 +131,6 @@ struct CardView: View {
         .background(model.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         .rotation3DEffect(.degrees(motionManager.xCoordinate * 20), axis: (x: 0, y: 1, z: 0))
         .padding([.leading, .trailing])
+        .shadow(radius: 4, y: 2)
     }
 }
