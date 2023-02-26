@@ -9,7 +9,12 @@ import Foundation
 import SnabblePay
 
 extension SnabblePay {
-    static var shared: SnabblePay = {
+    private static var _shared: SnabblePay?
+    
+    static var shared: SnabblePay {
+        guard _shared == nil else {
+            return _shared!
+        }
         var credentials: Credentials?
         if let savedPerson = UserDefaults.credentials {
             credentials = try? JSONDecoder().decode(Credentials.self, from: savedPerson)
@@ -21,11 +26,15 @@ extension SnabblePay {
         )
         snabblePay.environment = .development
         snabblePay.delegate = snabblePay
+        _shared = snabblePay
         return snabblePay
-    }()
+    }
 
     static func reset() {
         UserDefaults.credentials = nil
+        UserDefaults.selectedAccount = nil
+        
+        _shared = nil
     }
 }
 

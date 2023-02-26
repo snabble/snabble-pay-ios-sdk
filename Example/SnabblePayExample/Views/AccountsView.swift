@@ -12,21 +12,30 @@ import BetterSafariView
 
 struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
-    @State private var offset: CGFloat = 60
+
+    @State private var reset: Bool = false
+
+    @State private var animationStarted = false
     @State private var animationOffset: CGFloat = 0
     @State private var zIndex: Double = 0
-    @State private var reset: Bool = false
-    @State private var animationStarted = false
+
     let inTime = 0.35
     let outTime = 0.25
+    let cardOffset = 60
     
-    private func tapGesture(account: Account) -> some Gesture {
+    private func startAnimationOffset(index: Int) -> CGFloat {
+        CGFloat((((viewModel.accounts?.count ?? 1) - (index + 1)) * cardOffset) * -1)
+    }
+    private func cardPosition(index: Int) -> CGFloat {
+        CGFloat((cardOffset * index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0.0)
+    }
+    private func tapGesture(account: Account, index: Int) -> some Gesture {
         LongPressGesture(minimumDuration: 0.05)
-                .onChanged { change in
+                .onChanged { _ in
                     if viewModel.canSelect, !animationStarted {
                         withAnimation(.easeIn(duration: inTime)) {
                             animationStarted = true
-                            animationOffset = -60
+                            animationOffset = startAnimationOffset(index: index)
                             zIndex = 300
                             viewModel.selectedAccount = account
                         }
@@ -54,7 +63,6 @@ struct AccountsView: View {
             Text("The Future of Mobile Payment")
                 .foregroundColor(.accentColor)
         }
-        .offset(y: -280)
         .shadow(radius: 3)
         .shadow(radius: 3)
     }
@@ -64,33 +72,38 @@ struct AccountsView: View {
             if let ordered = viewModel.ordered, !ordered.isEmpty {
                 ZStack {
                     BackgroundView()
-                    
-                    header
-                    
-                    ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
-                        cardView(account: account, index: index)
-                            .modifier(SlideEffect(offset: (offset * CGFloat(index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0)))
-                            .gesture(tapGesture(account: account))
-                            .zIndex(viewModel.isSelected(index: index) ? 200 : zIndex)
+                    VStack {
+                        header
+                            .padding(.top, 36)
+                        
+                        ScrollView(.vertical) {
+                            ZStack(alignment: .center) {
+                                ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
+                                    cardView(account: account, index: index)
+                                        .modifier(SlideEffect(offset: cardPosition(index: index)))
+                                        .gesture(tapGesture(account: account, index: index))
+                                        .zIndex(viewModel.isSelected(index: index) ? 200 : zIndex)
+                                }
+                            }
+                            .offset(y: CGFloat(cardOffset * (viewModel.accounts?.count ?? 0)))
+                        }
                     }
                 }
                 .confirmationDialog("Reset all accounts", isPresented: $reset, titleVisibility: .visible) {
                     Button("Reset", role: .destructive) {
                         SnabblePay.reset()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.viewModel.loadAccounts()
-                        }
+                        viewModel.loadAccounts()
                     }
                 }
                 .onChange(of: animationStarted) { value in
                     if value == true {
                         DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.1) {
-                            withAnimation(.easeIn(duration: outTime)) {
-                                animationOffset = 0
+                            withAnimation(.easeOut(duration: outTime)) {
                                 animationStarted = false
+                                animationOffset = 0
                                 zIndex = 0
                                 
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.20) {
                                     viewModel.selectedAccountModel?.startSession()
                                 }
                             }
@@ -116,8 +129,15 @@ struct AccountsView: View {
             } else {
                 ZStack {
                     BackgroundView()
-                    header
-                    AddFirstAccount(viewModel: viewModel)
+                    VStack {
+                        header
+                            .padding(.top, 80)
+                        
+                        AddFirstAccount(viewModel: viewModel)
+                            .padding(.top, 100)
+
+                        Spacer()
+                   }
                 }
                 .onAppear {
                     viewModel.loadAccounts()

@@ -85,6 +85,7 @@ struct CardView: View {
             .foregroundColor(model.autostart ? .primary : .secondary)
             
         }
+        .cardStyle(top: model.autostart)
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
                 model.refresh()
@@ -100,6 +101,5 @@ struct CardView: View {
                 toggleSize = model.autostart
             }
         }
-        .cardStyle(top: model.autostart)
     }
 }

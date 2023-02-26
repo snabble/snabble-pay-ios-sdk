@@ -9,7 +9,9 @@ import SnabblePay
 import Combine
 
 class AccountsViewModel: ObservableObject {
-    private let snabblePay: SnabblePay = .shared
+    private var snabblePay: SnabblePay {
+        return .shared
+    }
 
     @Published var accounts: [Account]? {
         didSet {
