@@ -23,11 +23,14 @@ struct AccountsView: View {
     let outTime = 0.25
     let cardOffset = 60
     
+    private var cardPosition: CGFloat {
+        CGFloat(cardOffset * (viewModel.accounts?.count ?? 0))
+    }
+    private func slidePosition(index: Int) -> CGFloat {
+        CGFloat((cardOffset * index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0.0)
+    }
     private func startAnimationOffset(index: Int) -> CGFloat {
         CGFloat((((viewModel.accounts?.count ?? 1) - (index + 1)) * cardOffset) * -1)
-    }
-    private func cardPosition(index: Int) -> CGFloat {
-        CGFloat((cardOffset * index) * -1) - CGFloat(viewModel.isSelected(index: index) ? animationOffset : 0.0)
     }
     private func tapGesture(account: Account, index: Int) -> some Gesture {
         LongPressGesture(minimumDuration: 0.05)
@@ -44,7 +47,7 @@ struct AccountsView: View {
     }
 
     @ViewBuilder
-    private func cardView(account: Account, index: Int) -> some View {
+    private func cardView(account: Account) -> some View {
         if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
                 NavigationLink {
                     AccountView(viewModel: model)
@@ -79,13 +82,13 @@ struct AccountsView: View {
                         ScrollView(.vertical) {
                             ZStack(alignment: .center) {
                                 ForEach(Array(ordered.enumerated()), id: \.offset) { index, account in
-                                    cardView(account: account, index: index)
-                                        .modifier(SlideEffect(offset: cardPosition(index: index)))
+                                    cardView(account: account)
+                                        .slideEffect(offset: slidePosition(index: index))
                                         .gesture(tapGesture(account: account, index: index))
                                         .zIndex(viewModel.isSelected(index: index) ? 200 : zIndex)
                                 }
                             }
-                            .offset(y: CGFloat(cardOffset * (viewModel.accounts?.count ?? 0)))
+                            .offset(y: cardPosition)
                         }
                     }
                 }

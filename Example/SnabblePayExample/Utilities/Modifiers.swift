@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct ParallaxMotionModifier: ViewModifier {
+    @ObservedObject var manager: MotionManager
+    var magnitude: Double
+    
+    func body(content: Content) -> some View {
+        content
+            .offset(x: CGFloat(manager.xCoordinate * magnitude), y: CGFloat(manager.yCoordinate * magnitude))
+    }
+}
+
+extension View {
+    func parallaxEffect(magnitude: Double) -> some View {
+        modifier(ParallaxMotionModifier(manager: MotionManager.shared, magnitude: magnitude))
+    }
+}
+
 struct SlideEffect: AnimatableModifier {
     var offset: CGFloat = 0
 
@@ -22,6 +38,12 @@ struct SlideEffect: AnimatableModifier {
     func body(content: Content) -> some View {
         content
             .offset(y: offset)
+    }
+}
+
+extension View {
+    func slideEffect(offset: CGFloat) -> some View {
+        modifier(SlideEffect(offset: offset))
     }
 }
 

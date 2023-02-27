@@ -7,16 +7,6 @@
 import SwiftUI
 import CoreMotion
 
-struct ParallaxMotionModifier: ViewModifier {
-    @ObservedObject var manager: MotionManager
-    var magnitude: Double
-    
-    func body(content: Content) -> some View {
-        content
-            .offset(x: CGFloat(manager.xCoordinate * magnitude), y: CGFloat(manager.yCoordinate * magnitude))
-    }
-}
-
 class MotionManager: ObservableObject {
     static let shared = MotionManager()
     
