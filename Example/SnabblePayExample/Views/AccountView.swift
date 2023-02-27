@@ -64,6 +64,9 @@ extension AccountViewModel {
             return Image(systemName: "xmark.circle.fill")
         }
     }
+    var backgroundMaterial: Material {
+        return autostart ? CardStyle.topMaterial : CardStyle.regularMaterial
+    }
 }
 
 struct AccountView: View {
@@ -90,7 +93,7 @@ struct AccountView: View {
                     .padding([.bottom], 8)
             }
         }
-        .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
         .padding([.leading, .trailing])
     }
     
@@ -109,7 +112,7 @@ struct AccountView: View {
                                 .padding()
                         }
                     }
-                    .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
                     .padding([.leading, .trailing])
                    
                     HStack {
@@ -122,7 +125,7 @@ struct AccountView: View {
                                 .padding()
                         }
                     }
-                    .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
                     .padding([.leading, .trailing])
               }
             }
@@ -132,7 +135,7 @@ struct AccountView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
             }
-            .background(viewModel.autostart ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
             .padding([.leading, .trailing])
         }
     }

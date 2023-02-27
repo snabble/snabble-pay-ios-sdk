@@ -106,7 +106,7 @@ struct AccountsView: View {
                                 animationOffset = 0
                                 zIndex = 0
                                 
-                                DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.20) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.15) {
                                     viewModel.selectedAccountModel?.startSession()
                                 }
                             }
