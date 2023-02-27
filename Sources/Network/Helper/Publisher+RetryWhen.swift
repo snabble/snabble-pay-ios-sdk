@@ -13,7 +13,7 @@ extension Publisher {
          upstream: Upstream,
          retries: Int,
          when predicate: @escaping (Upstream.Failure) -> Bool,
-         doBefore handler: () -> Void,
+         doBefore handler: () -> Void
       ) -> AnyPublisher<Upstream.Output, Upstream.Failure> {
 
       upstream
