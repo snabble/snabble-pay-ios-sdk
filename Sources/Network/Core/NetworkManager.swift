@@ -40,53 +40,18 @@ public class NetworkManager {
             .flatMap { [self] endpoint in
                 urlSession.publisher(for: endpoint)
             }
-            .retry(1, when: { [self] networkError in
+            .retry(1, when: { networkError in
                 if case .httpError(let httpError) = networkError {
                     if case .invalidResponse(let statusCode, _) = httpError, statusCode == .unauthorized {
-                        authenticator.invalidateToken()
                         return true
                     }
                 }
                 return false
+            }, doBefore: { [weak self] in
+                self?.authenticator.invalidateToken()
             })
             .eraseToAnyPublisher()
     }
-//            .tryCatch { [self] _ in
-//                return authenticator.validToken(
-//                    forceRefresh: true,
-//                    onEnvironment: endpoint.environment
-//                )
-//                    .map { token in
-//                        var endpoint = endpoint
-//                        endpoint.token = token
-//                        return endpoint
-//                    }
-//                    .flatMap { [self] endpoint in
-//                        urlSession.publisher(for: endpoint).eraseToAnyPublisher()
-//                    }
-
-//                if case .httpError(let httpError) = networkError {
-//                    if case .invalidResponse(let statusCode, _) = httpError, statusCode == .unauthorized {
-//                        return authenticator.validToken(
-//                            forceRefresh: true,
-//                            onEnvironment: endpoint.environment
-//                        )
-//                            .map { token in
-//                                var endpoint = endpoint
-//                                endpoint.token = token
-//                                return endpoint
-//                            }
-//                            .flatMap { [self] endpoint in
-//                                urlSession.publisher(for: endpoint)
-//                            }
-////                            .setFailureType(to: NetworkError.self)
-//                    }
-//                }
-//                throw networkError
-//            }
-//            .mapError({ $0 as! NetworkError })
-//            .eraseToAnyPublisher()
-//    }
 }
 
 extension NetworkManager: AuthenticatorDelegate {

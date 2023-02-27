@@ -12,7 +12,8 @@ extension Publisher {
    func retryOnly<Upstream: Publisher>(
          upstream: Upstream,
          retries: Int,
-         when predicate: @escaping (Upstream.Failure) -> Bool
+         when predicate: @escaping (Upstream.Failure) -> Bool,
+         doBefore handler: () -> Void,
       ) -> AnyPublisher<Upstream.Output, Upstream.Failure> {
 
       upstream
@@ -31,7 +32,7 @@ extension Publisher {
          .eraseToAnyPublisher()
    }
 
-   func retry(_ retries: Int, when predicate: @escaping (Failure) -> Bool) -> AnyPublisher<Output, Failure> {
-      return retryOnly(upstream: self, retries: retries, when: predicate)
+    func retry(_ retries: Int, when predicate: @escaping (Failure) -> Bool, doBefore handler: () -> Void) -> AnyPublisher<Output, Failure> {
+      return retryOnly(upstream: self, retries: retries, when: predicate, doBefore: handler)
    }
 }
