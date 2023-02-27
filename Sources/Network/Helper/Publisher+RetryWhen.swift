@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Combine
 
 extension Publisher {
-   private func retryOnly<Upstream: Publisher>(
+   func retryOnly<Upstream: Publisher>(
          upstream: Upstream,
          retries: Int,
          when predicate: @escaping (Upstream.Failure) -> Bool
