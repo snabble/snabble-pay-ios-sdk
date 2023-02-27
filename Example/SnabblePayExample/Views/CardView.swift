@@ -60,14 +60,11 @@ struct CardView: View {
         }
     }
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center) {
-                Spacer()
-                qrImage
-                    .padding([.top])
-                    .frame(width: toggleSize ? 150 : 80)
-                Spacer()
-            }
+        VStack(alignment: .center, spacing: 0) {
+            Spacer(minLength: 0)
+            qrImage
+                .padding([.top])
+                .frame(width: toggleSize ? 160 : 60)
             Spacer()
             
             VStack(alignment: .leading, spacing: 6) {
@@ -76,14 +73,13 @@ struct CardView: View {
                     Spacer()
                     Text(model.account.bank)
                 }
-                Text(model.account.iban.rawValue.replacingOccurrences(of: "*", with: "•"))
+                Text(model.ibanString)
                     .font(.custom("Menlo", size: 16))
                     .fontWeight(.bold)
             }
             .padding([.leading, .trailing])
             .padding([.bottom], model.autostart ? 20 : 10)
             .foregroundColor(model.autostart ? .primary : .secondary)
-            
         }
         .cardStyle(top: model.autostart)
         .onChange(of: scenePhase) { newPhase in
