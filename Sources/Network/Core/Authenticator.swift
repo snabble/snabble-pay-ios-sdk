@@ -19,10 +19,6 @@ public class Authenticator {
 
     weak var delegate: AuthenticatorDelegate?
 
-    enum Error: Swift.Error {
-        case unknown
-    }
-
     private(set) var token: Token?
     private(set) var credentials: Credentials? {
         didSet {
@@ -32,7 +28,7 @@ public class Authenticator {
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
 
-    private var refreshPublisher: AnyPublisher<Token, Swift.Error>?
+    private var refreshPublisher: AnyPublisher<Token, NetworkError>?
 
     init(apiKey: String, credentials: Credentials?, urlSession: URLSession) {
         self.urlSession = urlSession
@@ -40,11 +36,15 @@ public class Authenticator {
         self.credentials = credentials
     }
 
-    private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, Swift.Error> {
+    func invalidateToken() {
+        token = nil
+    }
+
+    private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, NetworkError> {
         // scenario 1: app instance is registered
         if let credentials = self.credentials {
             return Just(credentials)
-                .setFailureType(to: Swift.Error.self)
+                .setFailureType(to: NetworkError.self)
                 .eraseToAnyPublisher()
         }
 
@@ -64,7 +64,7 @@ public class Authenticator {
     func validToken(
         forceRefresh: Bool = false,
         onEnvironment environment: Environment = .production
-    ) -> AnyPublisher<Token, Swift.Error> {
+    ) -> AnyPublisher<Token, NetworkError> {
         return queue.sync { [weak self] in
             // scenario 1: we're already loading a new token
             if let publisher = self?.refreshPublisher {
@@ -74,7 +74,7 @@ public class Authenticator {
             // scenario 2: we already have a valid token and don't want to force a refresh
             if let token = token, token.isValid(), !forceRefresh {
                 return Just(token)
-                    .setFailureType(to: Swift.Error.self)
+                    .setFailureType(to: NetworkError.self)
                     .eraseToAnyPublisher()
             }
 
@@ -88,7 +88,7 @@ public class Authenticator {
                 }
                 .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
                     guard let urlSession = self?.urlSession else {
-                        throw Error.unknown
+                        throw NetworkError.missingURLSession
                     }
                     return (urlSession, endpoint)
                 }
