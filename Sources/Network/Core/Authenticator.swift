@@ -86,12 +86,13 @@ public class Authenticator {
                         onEnvironment: environment
                     )
                 }
-                .tryMap { endpoint -> (URLSession, Endpoint<Token>) in
+                .tryMap { tokenEndpoint -> (URLSession, Endpoint<Token>) in
                     guard let urlSession = self?.urlSession else {
                         throw NetworkError.missingURLSession
                     }
-                    return (urlSession, endpoint)
+                    return (urlSession, tokenEndpoint)
                 }
+                .mapError { $0 as? NetworkError ?? .unexpected }
                 .flatMap { urlSession, endpoint in
                     return urlSession.publisher(for: endpoint)
                 }
