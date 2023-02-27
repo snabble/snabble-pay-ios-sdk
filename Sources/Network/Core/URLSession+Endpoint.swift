@@ -41,6 +41,8 @@ extension URLSession {
             .decode(type: Response.self, decoder: endpoint.jsonDecoder)
             .mapError { error -> NetworkError in
                 switch error {
+                case let urlError as URLError:
+                    return .urlError(urlError)
                 case let httpError as HTTPError:
                     return .httpError(httpError)
                 case let decodingError as DecodingError:
