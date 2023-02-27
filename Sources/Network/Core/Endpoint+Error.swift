@@ -25,23 +25,6 @@ extension NetworkError {
     }
 }
 
-//extension Error: CustomStringConvertible {
-//    public var description: String {
-//        switch self {
-//        case .mandateNotAccepted(let message):
-//            return message
-//        case .accountNotFound(let message):
-//            return message
-//        case .validationError(let message):
-//            return message
-//        case .parsing:
-//            return "A parsing error occured."
-//        case .unexpected:
-//            return "An unexpected error occured."
-//        }
-//    }
-//}
-
 extension Endpoints {
     public struct Error: Decodable, Equatable {
         public let reason: Reason

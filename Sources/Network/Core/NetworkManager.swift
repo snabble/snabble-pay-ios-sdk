@@ -12,34 +12,6 @@ public protocol NetworkManagerDelegate: AnyObject {
     func networkManager(_ networkManager: NetworkManager, didUpdateCredentials credentials: Credentials?)
 }
 
-extension Publisher {
-   private func retryOnly<U: Publisher>(
-         upstream: U,
-         retries: Int,
-         when predicate: @escaping (U.Failure) -> Bool
-      ) -> AnyPublisher<U.Output, U.Failure> {
-
-      upstream
-         .map { v -> Result<U.Output, U.Failure> in .success(v) }
-         .catch { err -> AnyPublisher<Result<U.Output, U.Failure>, U.Failure> in
-            if predicate(err) {
-               return Fail(error: err).eraseToAnyPublisher()
-            } else {
-               return Just(.failure(err))
-                  .setFailureType(to: U.Failure.self)
-                  .eraseToAnyPublisher()
-            }
-         }
-         .retry(retries)
-         .flatMap { result in result.publisher }
-         .eraseToAnyPublisher()
-   }
-
-   func retry(_ retries: Int, when predicate: @escaping (Failure) -> Bool) -> AnyPublisher<Output, Failure> {
-      return retryOnly(upstream: self, retries: retries, when: predicate)
-   }
-}
-
 public class NetworkManager {
     public let urlSession: URLSession
 
