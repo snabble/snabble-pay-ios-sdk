@@ -7,24 +7,6 @@
 
 import Foundation
 
-public enum NetworkError: Swift.Error {
-    case missingURLSession
-    case endpointError(Endpoints.Error?)
-    case httpError(HTTPError)
-    case decodingError(DecodingError)
-    case urlError(URLError)
-    case unexpected
-}
-
-extension NetworkError {
-    var isFatal: Bool {
-        if case NetworkError.unexpected = self {
-            return true
-        }
-        return false
-    }
-}
-
 extension Endpoints {
     public struct Error: Decodable, Equatable {
         public let reason: Reason

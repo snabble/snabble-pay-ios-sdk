@@ -50,6 +50,7 @@ extension Endpoint {
         }
 
         guard let url = components?.url else {
+//            throw APIError.invalidRequestError("baseURL: \(environment.baseURL), path: \(path)")
             preconditionFailure("Couldn't create a url from components...")
         }
 

@@ -10,33 +10,41 @@ import SnabblePayNetwork
 
 extension SnabblePay {
     public enum Error: Swift.Error {
-        case unknown(error: Swift.Error)
-        case network(httpStatusCode: Int)
-        case mandateNotAccepted
-        case accountNotFound
+        /// Invalid request, e.g. invalid URL
+        case invalidRequestError(String)
+
+        /// Indicates an error on the transport layer, e.g. not being able to connect to the server
+        case transportError(URLError)
+
+        /// Received an invalid response, e.g. non-HTTP result
+        case invalidResponse(URLResponse)
+
+        /// Server-side validation error
+        case validationError(httpStatusCode: HTTPStatusCode, error: Endpoints.Error?)
+
+        /// The server sent data in an unexpected format
+        case decodingError(DecodingError)
+
+        /// Unexpected error within the flow
+        case unexpected(Swift.Error)
     }
 }
 
-extension Endpoints.Error {
-    func toModel(withStatusCode statusCode: Int) -> SnabblePay.Error {
-        switch reason {
-        case .unknown:
-            return .network(httpStatusCode: statusCode)
-        case .accountNotFound, .validationError:
-            return .accountNotFound
-        case .mandateNotAccepted:
-            return .mandateNotAccepted
-        }
-    }
-}
-
-extension HTTPError: ToModel {
+extension APIError: ToModel {
     func toModel() -> SnabblePay.Error {
         switch self {
-        case .invalidResponse(let httpStatusCode, let endpointError):
-            return endpointError?.toModel(withStatusCode: httpStatusCode.rawValue) ?? .network(httpStatusCode: httpStatusCode.rawValue)
-        case .unknownResponse:
-            return .unknown(error: self)
+        case .invalidRequestError(let details):
+            return .invalidRequestError(details)
+        case .transportError(let urlError):
+            return .transportError(urlError)
+        case .invalidResponse(let urlResponse):
+            return .invalidResponse(urlResponse)
+        case .validationError(let httpStatusCode, let error):
+            return .validationError(httpStatusCode: httpStatusCode, error: error)
+        case .decodingError(let decodingError):
+            return .decodingError(decodingError)
+        case .unexpected(let error):
+            return .unexpected(error)
         }
     }
 }

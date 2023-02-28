@@ -26,9 +26,13 @@ public class Authenticator {
         }
     }
 
+    enum Error: Swift.Error {
+        case missingURLSession
+    }
+
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
 
-    private var refreshPublisher: AnyPublisher<Token, NetworkError>?
+    private var refreshPublisher: AnyPublisher<Token, APIError>?
 
     init(apiKey: String, credentials: Credentials?, urlSession: URLSession) {
         self.urlSession = urlSession
@@ -40,11 +44,11 @@ public class Authenticator {
         token = nil
     }
 
-    private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, NetworkError> {
+    private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, APIError> {
         // scenario 1: app instance is registered
         if let credentials = self.credentials {
             return Just(credentials)
-                .setFailureType(to: NetworkError.self)
+                .setFailureType(to: APIError.self)
                 .eraseToAnyPublisher()
         }
 
@@ -64,7 +68,7 @@ public class Authenticator {
     func validToken(
         forceRefresh: Bool = false,
         onEnvironment environment: Environment = .production
-    ) -> AnyPublisher<Token, NetworkError> {
+    ) -> AnyPublisher<Token, APIError> {
         return queue.sync { [weak self] in
             // scenario 1: we're already loading a new token
             if let publisher = self?.refreshPublisher {
@@ -74,7 +78,7 @@ public class Authenticator {
             // scenario 2: we already have a valid token and don't want to force a refresh
             if let token = token, token.isValid(), !forceRefresh {
                 return Just(token)
-                    .setFailureType(to: NetworkError.self)
+                    .setFailureType(to: APIError.self)
                     .eraseToAnyPublisher()
             }
 
@@ -88,11 +92,11 @@ public class Authenticator {
                 }
                 .tryMap { tokenEndpoint -> (URLSession, Endpoint<Token>) in
                     guard let urlSession = self?.urlSession else {
-                        throw NetworkError.missingURLSession
+                        throw APIError.unexpected(Error.missingURLSession)
                     }
                     return (urlSession, tokenEndpoint)
                 }
-                .mapError { $0 as? NetworkError ?? .unexpected }
+                .mapError { $0 as? APIError ?? .unexpected($0) }
                 .flatMap { urlSession, endpoint in
                     return urlSession.publisher(for: endpoint)
                 }

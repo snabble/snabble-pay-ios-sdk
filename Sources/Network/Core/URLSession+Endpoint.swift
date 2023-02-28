@@ -21,34 +21,41 @@ private extension URLResponse {
 }
 
 private extension Publisher where Output == (data: Data, response: URLResponse), Failure == URLError {
-    func tryVerifyResponse() -> AnyPublisher<Output, Swift.Error> {
+    func tryVerifyResponse() -> AnyPublisher<Output, HTTPError> {
         tryMap { (data, response) throws -> Output in
             try response.verify(with: data)
             return (data, response)
         }
+        .mapError { $0 as? HTTPError ?? .unexpected($0) }
         .eraseToAnyPublisher()
     }
 }
 
-@available(iOS 13, *)
 extension URLSession {
     func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>
-    ) -> AnyPublisher<Response, NetworkError> {
+    ) -> AnyPublisher<Response, APIError> {
         dataTaskPublisher(for: endpoint.urlRequest)
             .tryVerifyResponse()
             .map(\.data)
             .decode(type: Response.self, decoder: endpoint.jsonDecoder)
-            .mapError { error -> NetworkError in
+            .mapError { error -> APIError in
                 switch error {
                 case let urlError as URLError:
-                    return .urlError(urlError)
+                    return .transportError(urlError)
                 case let httpError as HTTPError:
-                    return .httpError(httpError)
+                    switch httpError {
+                    case .unknownResponse(let urlResponse):
+                        return APIError.invalidResponse(urlResponse)
+                    case .invalidResponse(let statusCode, let endpointError):
+                        return APIError.validationError(httpStatusCode: statusCode, error: endpointError)
+                    case .unexpected:
+                        return APIError.unexpected(error)
+                    }
                 case let decodingError as DecodingError:
                     return .decodingError(decodingError)
                 default:
-                    return .unexpected
+                    return .unexpected(error)
                 }
             }
             .eraseToAnyPublisher()

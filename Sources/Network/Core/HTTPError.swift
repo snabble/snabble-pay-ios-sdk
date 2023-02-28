@@ -7,9 +7,10 @@
 
 import Foundation
 
-public enum HTTPError: Equatable {
+enum HTTPError {
     case invalidResponse(HTTPStatusCode, Endpoints.Error?)
     case unknownResponse(URLResponse)
+    case unexpected(Error)
 }
 
 extension HTTPError: LocalizedError {
@@ -19,6 +20,8 @@ extension HTTPError: LocalizedError {
             return "Error: \(statusCode) \(String(describing: error))"
         case let .unknownResponse(response):
             return "Error: unknown \(response)"
+        case .unexpected:
+            return "Error: unexpected should not happen"
         }
     }
 }
