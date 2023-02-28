@@ -71,7 +71,9 @@ extension AccountViewModel {
 
 struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
-        
+    @State private var edit = false
+    @State private var name: String = ""
+    
     @ViewBuilder
     var mandateInfo: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -158,6 +160,25 @@ struct AccountView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(viewModel.account.name)
+        .navigationTitle(viewModel.customName)
+        .alert("Your account", isPresented: $edit) {
+            TextField("Account Name", text: $name)
+            Button("OK", action: submit)
+        } message: {
+            Text("Give this account a name.")
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    name = viewModel.customName
+                    edit.toggle()
+                }) {
+                    Image(systemName: "square.and.pencil")
+                }
+            }
+        }
+    }
+    func submit() {
+        viewModel.customName = !name.isEmpty ? name : viewModel.account.name
     }
 }

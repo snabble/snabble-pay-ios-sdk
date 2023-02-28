@@ -15,7 +15,7 @@ class AccountsViewModel: ObservableObject {
 
     @Published var accounts: [Account]? {
         didSet {
-            if let selectedID = UserDefaults.selectedAccount, let account = accounts?.first(where: { $0.name == selectedID }) {
+            if let selectedID = UserDefaults.selectedAccount, let account = accounts?.first(where: { $0.id.rawValue == selectedID }) {
                 selectedAccount = account
             } else if let first = accounts?.first {
                 selectedAccount = first
@@ -48,7 +48,7 @@ class AccountsViewModel: ObservableObject {
         }
         didSet {
             if let model = selectedAccountModel {
-                UserDefaults.selectedAccount = model.account.name
+                UserDefaults.selectedAccount = model.account.id.rawValue
                 model.autostart = true
             }
             self.ordered = accountStack()
