@@ -30,7 +30,7 @@ public class NetworkManager {
         self.authenticator.delegate = self
     }
 
-    public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {
+    public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, APIError> {
         return authenticator.validToken(onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
@@ -40,20 +40,16 @@ public class NetworkManager {
             .flatMap { [self] endpoint in
                 urlSession.publisher(for: endpoint)
             }
-            .tryCatch { [self] error in
-                if case HTTPError.invalidResponse(let statusCode, _) = error, statusCode == .unauthorized {
-                    return authenticator.validToken(forceRefresh: true, onEnvironment: endpoint.environment)
-                        .map { token in
-                            var endpoint = endpoint
-                            endpoint.token = token
-                            return endpoint
-                        }
-                        .flatMap { [self] endpoint in
-                            urlSession.publisher(for: endpoint)
-                        }
+            .retry(1, when: { apiError in
+                switch apiError {
+                case .validationError(let httpStatusCode, _):
+                    return httpStatusCode == .unauthorized
+                default:
+                    return false
                 }
-                throw error
-            }
+            }, doBefore: { [weak self] in
+                self?.authenticator.invalidateToken()
+            })
             .eraseToAnyPublisher()
     }
 }

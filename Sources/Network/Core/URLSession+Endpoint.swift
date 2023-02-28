@@ -20,26 +20,54 @@ private extension URLResponse {
     }
 }
 
-private extension Publisher where Output == (data: Data, response: URLResponse), Failure == any Error {
-    func tryVerifyResponse() -> AnyPublisher<Output, Failure> {
+private extension Publisher where Output == (data: Data, response: URLResponse), Failure == URLError {
+    func tryVerifyResponse() -> AnyPublisher<Output, HTTPError> {
         tryMap { (data, response) throws -> Output in
             try response.verify(with: data)
             return (data, response)
         }
+        .mapError { $0 as? HTTPError ?? .unexpected($0) }
         .eraseToAnyPublisher()
     }
 }
 
-@available(iOS 13, *)
 extension URLSession {
     func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>
-    ) -> AnyPublisher<Response, Swift.Error> {
-        dataTaskPublisher(for: endpoint.urlRequest)
-            .mapError({ $0 as Swift.Error })
+    ) -> AnyPublisher<Response, APIError> {
+        let urlRequest: URLRequest
+        do {
+            urlRequest = try endpoint.urlRequest()
+        } catch let error as APIError {
+            return Fail(error: error).eraseToAnyPublisher()
+        } catch {
+            return Fail(error: APIError.unexpected(error)).eraseToAnyPublisher()
+        }
+        return dataTaskPublisher(for: urlRequest)
             .tryVerifyResponse()
             .map(\.data)
             .decode(type: Response.self, decoder: endpoint.jsonDecoder)
+            .mapError { error -> APIError in
+                switch error {
+                case let urlError as URLError:
+                    return .transportError(urlError)
+                case let httpError as HTTPError:
+                    switch httpError {
+                    case .unknownResponse(let urlResponse):
+                        return APIError.invalidResponse(urlResponse)
+                    case .invalidResponse(let statusCode, let endpointError):
+                        return APIError.validationError(httpStatusCode: statusCode, error: endpointError)
+                    case .unexpected:
+                        return APIError.unexpected(error)
+                    }
+                case let decodingError as DecodingError:
+                    return .decodingError(decodingError)
+                case let apiError as APIError:
+                    return apiError
+                default:
+                    return .unexpected(error)
+                }
+            }
             .eraseToAnyPublisher()
     }
 }

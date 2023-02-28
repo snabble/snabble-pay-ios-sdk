@@ -64,7 +64,6 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertTrue(true)
                 case .failure(let error):
                     XCTAssertNotNil(error)
-                    XCTAssertNotNil(error is URLError)
                 }
                 expectation.fulfill()
             } receiveValue: { credentials in
@@ -96,8 +95,7 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertTrue(true)
                 case .failure(let error):
                     XCTAssertNotNil(error)
-                    XCTAssertTrue(error is HTTPError)
-                    if case HTTPError.invalidResponse(let statusCode, let endpointError) = error {
+                    if case APIError.validationError(let statusCode, let endpointError) = error {
                         XCTAssertEqual(statusCode, .notFound)
                         XCTAssertEqual(endpointError?.reason, .unknown)
                     } else {
@@ -134,7 +132,6 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertTrue(true)
                 case .failure(let error):
                     XCTAssertNotNil(error)
-                    XCTAssertTrue(error is HTTPError)
                 }
                 expectation.fulfill()
             } receiveValue: { credentials in

@@ -55,11 +55,11 @@ final class EndpointTests: XCTestCase {
     func testToken() throws {
         var endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .get(nil))
         XCTAssertNil(endpoint.token)
-        XCTAssertNil(endpoint.urlRequest.allHTTPHeaderFields?["Authentication"])
+        XCTAssertNil(try! endpoint.urlRequest().allHTTPHeaderFields?["Authentication"])
         
         endpoint.token = .init(accessToken: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
         XCTAssertNotNil(endpoint.token)
-        XCTAssertEqual(endpoint.urlRequest.allHTTPHeaderFields?["Authorization"], "Bearer accessToken")
+        XCTAssertEqual(try! endpoint.urlRequest().allHTTPHeaderFields?["Authorization"], "Bearer accessToken")
     }
 
     func testGETURLRequestWithQueryItems() throws {
@@ -67,7 +67,7 @@ final class EndpointTests: XCTestCase {
             .init(name: "foobar", value: "1"),
             .init(name: "barfoo", value: "100")
         ]))
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "GET")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock?barfoo=100&foobar=1")
@@ -80,7 +80,7 @@ final class EndpointTests: XCTestCase {
             .init(name: "barfoo", value: "100")
         ]))
         endpoint.headerFields = ["Content-Type": "application/text"]
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "GET")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/text"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock?barfoo=100&foobar=1")
@@ -102,7 +102,7 @@ final class EndpointTests: XCTestCase {
         """
         let jsonData = Data(jsonString.utf8)
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .post(jsonData))
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "POST")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
@@ -124,7 +124,7 @@ final class EndpointTests: XCTestCase {
         """
         let jsonData = Data(jsonString.utf8)
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .put(jsonData))
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "PUT")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
@@ -146,7 +146,7 @@ final class EndpointTests: XCTestCase {
         """
         let jsonData = Data(jsonString.utf8)
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .patch(jsonData))
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "PATCH")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
@@ -155,7 +155,7 @@ final class EndpointTests: XCTestCase {
 
     func testDELETEURLRequest() throws {
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .delete)
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "DELETE")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
@@ -164,7 +164,7 @@ final class EndpointTests: XCTestCase {
 
     func testHEADURLRequest() throws {
         let endpoint: Endpoint<Mock> = .init(path: "/apps/mock", method: .head)
-        let urlRequest = endpoint.urlRequest
+        let urlRequest = try! endpoint.urlRequest()
         XCTAssertEqual(urlRequest.httpMethod, "HEAD")
         XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
         XCTAssertEqual(urlRequest.url, "https://payment.snabble.io/apps/mock")
