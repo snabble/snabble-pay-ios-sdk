@@ -30,7 +30,7 @@ public class NetworkManager {
         self.authenticator.delegate = self
     }
 
-    public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, Swift.Error> {
+    public func publisher<Response: Decodable>(for endpoint: Endpoint<Response>) -> AnyPublisher<Response, APIError> {
         return authenticator.validToken(onEnvironment: endpoint.environment)
             .map { token in
                 var endpoint = endpoint
@@ -50,7 +50,6 @@ public class NetworkManager {
             }, doBefore: { [weak self] in
                 self?.authenticator.invalidateToken()
             })
-            .mapError { $0 as Swift.Error }
             .eraseToAnyPublisher()
     }
 }

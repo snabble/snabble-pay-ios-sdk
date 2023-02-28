@@ -35,7 +35,7 @@ public struct Endpoint<Response> {
 }
 
 extension Endpoint {
-    public var urlRequest: URLRequest {
+    public func urlRequest() throws -> URLRequest {
         var components = URLComponents(
             url: environment.baseURL,
             resolvingAgainstBaseURL: false
@@ -50,8 +50,7 @@ extension Endpoint {
         }
 
         guard let url = components?.url else {
-//            throw APIError.invalidRequestError("baseURL: \(environment.baseURL), path: \(path)")
-            preconditionFailure("Couldn't create a url from components...")
+            throw APIError.invalidRequestError("baseURL: \(environment.baseURL), path: \(path)")
         }
 
         var request = URLRequest(url: url)

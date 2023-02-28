@@ -35,7 +35,15 @@ extension URLSession {
     func publisher<Response: Decodable>(
         for endpoint: Endpoint<Response>
     ) -> AnyPublisher<Response, APIError> {
-        dataTaskPublisher(for: endpoint.urlRequest)
+        let urlRequest: URLRequest
+        do {
+            urlRequest = try endpoint.urlRequest()
+        } catch let error as APIError {
+            return Fail(error: error).eraseToAnyPublisher()
+        } catch {
+            return Fail(error: APIError.unexpected(error)).eraseToAnyPublisher()
+        }
+        return dataTaskPublisher(for: urlRequest)
             .tryVerifyResponse()
             .map(\.data)
             .decode(type: Response.self, decoder: endpoint.jsonDecoder)
@@ -54,6 +62,8 @@ extension URLSession {
                     }
                 case let decodingError as DecodingError:
                     return .decodingError(decodingError)
+                case let apiError as APIError:
+                    return apiError
                 default:
                     return .unexpected(error)
                 }
