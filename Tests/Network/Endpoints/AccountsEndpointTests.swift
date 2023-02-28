@@ -20,7 +20,9 @@ final class AccountsEndpointTests: XCTestCase {
             .init(name: "city", value: "Bonn")
         ]))
         XCTAssertEqual(endpoint.environment, .production)
-        XCTAssertEqual(endpoint.urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/accounts/check?appUri=snabble-pay://account/check&city=Bonn&countryCode=DE")
+        XCTAssertNoThrow(try endpoint.urlRequest())
+        let urlRequest = try! endpoint.urlRequest()
+        XCTAssertEqual(urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/accounts/check?appUri=snabble-pay://account/check&city=Bonn&countryCode=DE")
     }
 
     func testGetEndpoint() throws {
