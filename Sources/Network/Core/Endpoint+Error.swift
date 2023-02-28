@@ -25,6 +25,9 @@ extension Endpoints {
             case mandateNotAccepted = "mandate_not_accepted"
             case accountNotFound = "account_not_found"
             case validationError = "validation_error"
+            case sessionNotFound = "session_not_found"
+            case invalidSessionState = "invalid_session_state"
+            case unauthorized = "unauthorized"
             case unknown
         }
 
