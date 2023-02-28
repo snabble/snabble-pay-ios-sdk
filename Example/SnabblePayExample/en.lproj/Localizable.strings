@@ -10,3 +10,6 @@
 "PENDING" = "SEPA mandate pending";
 "DECLINED" = "SEPA mandate declined";
 
+"Your account" = "Your account";
+"Account Name" = "Account Name";
+"Give this account a name." = "Give this account a name.";

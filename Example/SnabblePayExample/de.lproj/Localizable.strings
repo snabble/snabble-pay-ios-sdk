@@ -18,3 +18,7 @@
 "Accept" = "Ich stimme zu";
 "Decline" = "Ich stimme nicht zu";
 "No Mandate" = "Kein Mandat vorhanden.";
+
+"Your account" = "Dein Konto";
+"Account Name" = "Kontobezeichnung";
+"Give this account a name." = "Gib deinem Konto einen Namen.";

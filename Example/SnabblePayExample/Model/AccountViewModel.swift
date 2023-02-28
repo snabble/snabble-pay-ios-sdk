@@ -36,6 +36,12 @@ class AccountViewModel: ObservableObject {
     init(account: Account, autostart: Bool = true) {
         self.account = account
         self.autostart = autostart
+        
+        if let name = UserDefaults.standard.string(forKey: account.id.rawValue) {
+            self.customName = name
+        } else {
+            self.customName = account.name
+        }
     }
 
     @Published var mandate: Account.Mandate?
@@ -46,7 +52,15 @@ class AccountViewModel: ObservableObject {
     }
     @Published var sessionUpdated = false
     @Published var isLoading = false
-    
+    @Published var customName: String {
+        didSet {
+            if !customName.isEmpty {
+                UserDefaults.standard.set(customName, forKey: account.id.rawValue)
+            } else {
+                UserDefaults.standard.set(nil, forKey: account.id.rawValue)
+            }
+        }
+    }
     func createMandate() {
         snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
             self?.mandate = try? result.get()
