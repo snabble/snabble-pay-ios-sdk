@@ -82,10 +82,17 @@ class AccountsViewModel: ObservableObject {
     }
 
     func loadAccounts() {
-        snabblePay.accounts { [weak self] in
-            self?.accounts = try? $0.get()
-            if let model = self?.selectedAccountModel {
-                model.refresh()
+        snabblePay.accounts { [weak self]  result in
+            // self?.accounts = try? $0.get()
+            switch result {
+            case .success(let accounts):
+                self?.accounts = accounts
+                if let model = self?.selectedAccountModel {
+                    model.refresh()
+                }
+
+            case .failure(let error):
+                print("error: \(error.localizedDescription)")
             }
        }
     }
