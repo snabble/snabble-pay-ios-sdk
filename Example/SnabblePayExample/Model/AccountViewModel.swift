@@ -135,6 +135,11 @@ extension AccountViewModel {
         return session.refreshAt.timeIntervalSince(.now) <= 0
     }
     
+    func sleep() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+    
     func refresh() {
         if needsRefresh {
             startSession()
