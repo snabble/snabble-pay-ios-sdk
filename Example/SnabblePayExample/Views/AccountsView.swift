@@ -20,7 +20,6 @@ struct AccountsView: View {
     @State private var animationOffset: CGFloat = 0
     @State private var zIndex: Double = 0
     @State private var showError = false
-    @State private var errorMessage = ""
     
     let inTime = 0.35
     let outTime = 0.25
@@ -171,8 +170,7 @@ struct AccountsView: View {
             }
         }
         .onChange(of: errorHandler.error) { error in
-            if let message = error?.localizedMessage {
-                errorMessage = message
+            if error != nil {
                 showError = true
             }
         }
