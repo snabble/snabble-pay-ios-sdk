@@ -176,7 +176,9 @@ struct AccountsView: View {
                 showError = true
             }
         }
-        .alert(errorMessage, isPresented: $showError) {
+        .alert(isPresented: $showError) {
+            Alert(title: Text(errorHandler.error?.localizedAction ?? "Error"),
+                  message: Text(errorHandler.error?.localizedReason ?? "An error occured"))
         }
         .edgesIgnoringSafeArea(.all)
         .sheet(

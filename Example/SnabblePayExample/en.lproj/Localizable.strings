@@ -10,6 +10,10 @@
 "PENDING" = "SEPA mandate pending";
 "DECLINED" = "SEPA mandate declined";
 
+"Accept" = "Confirm Mandate";
+"Decline" = "Revoke Mandate";
+"No Mandate" = "Mandate could not be loaded.";
+
 "Your account" = "Your account";
 "Account Name" = "Account Name";
 "Give this account a name." = "Give this account a name.";

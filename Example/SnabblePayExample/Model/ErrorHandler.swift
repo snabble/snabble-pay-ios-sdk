@@ -27,7 +27,7 @@ struct ErrorInfo: Identifiable, Equatable {
     }
     var localizedAction: String {
         let format = NSLocalizedString("Error for action", comment: "" )
-        return String.localizedStringWithFormat(format, NSLocalizedString(action, comment: "")) + "!"
+        return String.localizedStringWithFormat(format, NSLocalizedString(action, comment: ""))
     }
     var localizedMessage: String {
         return localizedAction + "\n\n" + localizedReason
