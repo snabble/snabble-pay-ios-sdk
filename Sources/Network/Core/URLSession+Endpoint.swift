@@ -21,12 +21,11 @@ private extension URLResponse {
 }
 
 private extension Publisher where Output == (data: Data, response: URLResponse), Failure == URLError {
-    func tryVerifyResponse() -> AnyPublisher<Output, HTTPError> {
+    func tryVerifyResponse() -> AnyPublisher<Output, Swift.Error> {
         tryMap { (data, response) throws -> Output in
             try response.verify(with: data)
             return (data, response)
         }
-        .mapError { $0 as? HTTPError ?? .unexpected($0) }
         .eraseToAnyPublisher()
     }
 }
