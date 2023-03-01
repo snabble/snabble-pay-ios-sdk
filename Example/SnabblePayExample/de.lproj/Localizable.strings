@@ -22,3 +22,15 @@
 "Your account" = "Dein Konto";
 "Account Name" = "Kontobezeichnung";
 "Give this account a name." = "Gib deinem Konto einen Namen.";
+
+/* Error handling */
+"Error for action" = "Fehler beim %@";
+
+"Loading Accounts" = "Laden der Konten";
+"Start Account Check" = "Starten der Kontoprüfung";
+
+"Create Mandate" = "Anfragen des Mandats";
+"Accept Mandate" = "Akzeptieren des Mandats";
+"Decline Mandate" = "Widerrufen des Mandats";
+
+"Start Session" = "Laden des QR Codes";
