@@ -83,8 +83,13 @@ struct CardView: View {
         }
         .cardStyle(top: model.autostart)
         .onChange(of: scenePhase) { newPhase in
+            guard model.autostart else {
+                return
+            }
             if newPhase == .active {
                 model.refresh()
+            } else if newPhase == .background {
+                model.sleep()
             }
         }
         .onAppear {

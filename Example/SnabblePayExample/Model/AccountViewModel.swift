@@ -61,21 +61,40 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+    
     func createMandate() {
         snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
+            switch result {
+            case .success(let mandate):
+                self?.mandate = mandate
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Create Mandate")
+            }
         }
     }
 
     func decline(mandateId: Account.Mandate.ID) {
         snabblePay.declineMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
-        }
+            switch result {
+            case .success(let mandate):
+                self?.mandate = mandate
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Decline Mandate")
+            }
+       }
     }
 
     func accept(mandateId: Account.Mandate.ID) {
         snabblePay.acceptMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            self?.mandate = try? result.get()
+            switch result {
+            case .success(let mandate):
+                self?.mandate = mandate
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Accept Mandate")
+            }
         }
     }
 
@@ -84,14 +103,18 @@ class AccountViewModel: ObservableObject {
             return
         }
         isLoading = true
+        
         snabblePay.startSession(withAccountId: account.id) { [weak self] result in
-            if let session = try? result.get() {
-                self?.session = session
-            } else {
-                self?.session = nil
-            }
-            self?.sessionUpdated.toggle()
             self?.isLoading = false
+            
+            switch result {
+            case .success(let session):
+                self?.session = session
+                self?.sessionUpdated.toggle()
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Start Session")
+            }
         }
     }
 }
@@ -110,6 +133,11 @@ extension AccountViewModel {
             return true
         }
         return session.refreshAt.timeIntervalSince(.now) <= 0
+    }
+    
+    func sleep() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
     }
     
     func refresh() {

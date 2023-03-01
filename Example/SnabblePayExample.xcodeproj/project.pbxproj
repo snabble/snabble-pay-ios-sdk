@@ -10,6 +10,7 @@
 		76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76344CFC29A86FAC00211A1B /* BackgroundView.swift */; };
 		76344D0029A8BE3000211A1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 76344D0229A8BE3000211A1B /* Localizable.strings */; };
 		769026E029A9BB3200D39218 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769026DF29A9BB3200D39218 /* Modifiers.swift */; };
+		76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */; };
 		76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */; };
 		76E4727E29A7804500BBCCC9 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727D29A7804500BBCCC9 /* CardView.swift */; };
 		76E4728229A780B000BBCCC9 /* AccountsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */; };
@@ -51,6 +52,7 @@
 		76344D0129A8BE3000211A1B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		76344D0329A8BE4300211A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		769026DF29A9BB3200D39218 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
+		76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		76E4727D29A7804500BBCCC9 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsViewModel.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */,
 				76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */,
+				76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */,
 				76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */,
 				769026E029A9BB3200D39218 /* Modifiers.swift in Sources */,
+				76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */,
 				E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E1C205AB2982A6EC00D4F894 /* QRCodeView.swift in Sources */,
@@ -554,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"SnabblePayExample/Preview Content\"";
 				DEVELOPMENT_TEAM = 53K7JS449L;
 				ENABLE_PREVIEWS = YES;
@@ -587,7 +591,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"SnabblePayExample/Preview Content\"";
 				DEVELOPMENT_TEAM = 53K7JS449L;
 				ENABLE_PREVIEWS = YES;

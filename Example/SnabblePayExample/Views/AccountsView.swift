@@ -12,13 +12,15 @@ import BetterSafariView
 
 struct AccountsView: View {
     @ObservedObject var viewModel: AccountsViewModel = .init()
+    @ObservedObject var errorHandler: ErrorHandler = .shared
 
     @State private var reset: Bool = false
 
     @State private var animationStarted = false
     @State private var animationOffset: CGFloat = 0
     @State private var zIndex: Double = 0
-
+    @State private var showError = false
+    
     let inTime = 0.35
     let outTime = 0.25
     let cardOffset = 60
@@ -113,12 +115,23 @@ struct AccountsView: View {
                         }
                     }
                 }
+                
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            viewModel.startAccountCheck()
-                        }) {
-                            Image(systemName: "plus")
+                    if errorHandler.error != nil {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                viewModel.loadAccounts()
+                            }) {
+                                Image(systemName: "arrow.counterclockwise")
+                            }
+                        }
+                    } else {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                viewModel.startAccountCheck()
+                            }) {
+                                Image(systemName: "plus")
+                            }
                         }
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -142,10 +155,28 @@ struct AccountsView: View {
                         Spacer()
                    }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            viewModel.loadAccounts()
+                        }) {
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                    }
+                }
                 .onAppear {
                     viewModel.loadAccounts()
                 }
             }
+        }
+        .onChange(of: errorHandler.error) { error in
+            if error != nil {
+                showError = true
+            }
+        }
+        .alert(isPresented: $showError) {
+            Alert(title: Text(errorHandler.error?.localizedAction ?? "Error"),
+                  message: Text(errorHandler.error?.localizedReason ?? "An error occured"))
         }
         .edgesIgnoringSafeArea(.all)
         .sheet(
