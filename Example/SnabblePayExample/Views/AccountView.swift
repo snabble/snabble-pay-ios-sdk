@@ -135,6 +135,7 @@ struct AccountView: View {
             HStack {
                 Text("No Mandate")
                     .frame(maxWidth: .infinity)
+                    .foregroundColor(.red)
                     .padding()
             }
             .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))

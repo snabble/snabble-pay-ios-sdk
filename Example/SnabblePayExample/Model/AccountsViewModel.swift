@@ -25,7 +25,6 @@ class AccountsViewModel: ObservableObject {
         }
     }
     @Published var accountCheck: Account.Check?
-    @Published var session: Session?
     @Published var ordered: [Account]?
     
     private func accountStack() -> [Account]? {
@@ -76,16 +75,33 @@ class AccountsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     func startAccountCheck() {
-        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { [weak self] in
-            self?.accountCheck = try? $0.get()
+        snabblePay.accountCheck(withAppUri: "snabble-pay://account/check", city: "Bonn", countryCode: "DE") { [weak self] result in
+            switch result {
+            case .success(let accountCheck):
+                self?.accountCheck = accountCheck
+                if let model = self?.selectedAccountModel {
+                    model.refresh()
+                }
+                ErrorHandler.shared.error = nil
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Start Account Check")
+            }
         }
     }
 
     func loadAccounts() {
-        snabblePay.accounts { [weak self] in
-            self?.accounts = try? $0.get()
-            if let model = self?.selectedAccountModel {
-                model.refresh()
+        snabblePay.accounts { [weak self]  result in
+            switch result {
+            case .success(let accounts):
+                self?.accounts = accounts
+                if let model = self?.selectedAccountModel {
+                    model.refresh()
+                }
+                ErrorHandler.shared.error = nil
+                
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Loading Accounts")
             }
        }
     }

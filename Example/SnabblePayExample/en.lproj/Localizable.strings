@@ -10,6 +10,23 @@
 "PENDING" = "SEPA mandate pending";
 "DECLINED" = "SEPA mandate declined";
 
+"Accept" = "Confirm Mandate";
+"Decline" = "Revoke Mandate";
+"No Mandate" = "Mandate could not be loaded.";
+
 "Your account" = "Your account";
 "Account Name" = "Account Name";
 "Give this account a name." = "Give this account a name.";
+
+/* Error handling */
+"Error for action" = "Error while %@";
+
+"Loading Accounts" = "loading accounts";
+"Start Account Check" = "starting account check";
+
+"Create Mandate" = "requesting the mandate";
+"Accept Mandate" = "confirming the mandate";
+"Decline Mandate" = "revoking the mandate";
+
+"Start Session" = "loading QRCode";
+
