@@ -8,6 +8,7 @@
 import Foundation
 import SnabblePayNetwork
 import Combine
+import Tagged
 
 public protocol SnabblePayDelegate: AnyObject {
     func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?)
