@@ -9,25 +9,33 @@ import Foundation
 
 public struct Session: Decodable {
     public let id: String
-    public let token: String
+    public let token: Session.Token
     public let createdAt: Date
-    public let refreshAt: Date
-    public let validUntil: Date
-    public let transaction: Transaction?
+    public let transaction: Session.Transaction?
 }
 
-public struct Transaction: Decodable {
-    public let id: String
-    public let state: State
-    public let amount: String
-    public let currency: String
+extension Session {
+    public struct Token: Decodable {
+        public let id: String
+        public let value: String
+        public let createdAt: Date
+        public let refreshAt: Date
+        public let validUntil: Date
+    }
 
-    public enum State: String, Decodable {
-        case ongoing = "ONGOING"
-        case pending = "PENDING"
-        case successful = "SUCCESSFUL"
-        case failed = "FAILED"
-        case errored = "ERRORED"
-        case aborted = "ABORTED"
+    public struct Transaction: Decodable {
+        public let id: String
+        public let state: State
+        public let amount: String
+        public let currency: String
+
+        public enum State: String, Decodable {
+            case ongoing = "ONGOING"
+            case pending = "PENDING"
+            case successful = "SUCCESSFUL"
+            case failed = "FAILED"
+            case errored = "ERRORED"
+            case aborted = "ABORTED"
+        }
     }
 }

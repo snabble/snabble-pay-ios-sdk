@@ -38,17 +38,17 @@ final class TokenEndpointTests: XCTestCase {
     func testDecodingCredentials() throws {
         let data = try loadResource(inBundle: .module, filename: "token", withExtension: "json")
         let decodedObject = try TestingDefaults.jsonDecoder.decode(Token.self, from: data)
-        XCTAssertEqual(decodedObject.accessToken, "ZMNBLHLDNJM6JI-LSW8X-Q")
+        XCTAssertEqual(decodedObject.value, "ZMNBLHLDNJM6JI-LSW8X-Q")
         XCTAssertEqual(decodedObject.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T12:53:55+02:00"))
         XCTAssertEqual(decodedObject.scope, .all)
         XCTAssertEqual(decodedObject.type, .bearer)
     }
 
     func testTokenIsValid() throws {
-        let tokenIsInvalid = Token(accessToken: "123", expiresAt: Date.init(timeIntervalSinceNow: -5), scope: .all, type: .bearer)
+        let tokenIsInvalid = Token(value: "123", expiresAt: Date.init(timeIntervalSinceNow: -5), scope: .all, type: .bearer)
         XCTAssertFalse(tokenIsInvalid.isValid())
 
-        let tokenIsValid = Token(accessToken: "1234", expiresAt: Date.init(timeIntervalSinceNow: 5), scope: .all, type: .bearer)
+        let tokenIsValid = Token(value: "1234", expiresAt: Date.init(timeIntervalSinceNow: 5), scope: .all, type: .bearer)
         XCTAssertTrue(tokenIsValid.isValid())
     }
 }

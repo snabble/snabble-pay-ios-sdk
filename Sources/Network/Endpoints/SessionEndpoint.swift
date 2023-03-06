@@ -34,3 +34,11 @@ extension Endpoints {
         }
     }
 }
+
+extension Endpoints.Session {
+    public enum Token {
+        public static func post(sessionId: String, onEnvironment environment: Environment = .production) -> Endpoint<ModelSession.Token> {
+            return .init(path: "/apps/sessions/\(sessionId)/token", method: .post(nil), environment: environment)
+        }
+    }
+}

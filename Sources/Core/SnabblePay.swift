@@ -167,6 +167,15 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
+    public func refreshToken(withSessionId sessionId: Session.ID) -> AnyPublisher<Session.Token, SnabblePay.Error> {
+        let endpoint = Endpoints.Session.Token.post(sessionId: sessionId.rawValue)
+        return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
+            .mapError { $0.toModel() }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     public func session(withId id: Session.ID) -> AnyPublisher<Session, SnabblePay.Error> {
         let endpoint = Endpoints.Session.get(
             id: id.rawValue,
@@ -331,6 +340,21 @@ extension SnabblePay {
 
     public func startSession(withAccountId accountId: Account.ID, completionHandler: @escaping (Result<Session, SnabblePay.Error>) -> Void) {
         startSession(withAccountId: accountId)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
+    public func refreshToken(withSessionId sessionId: Session.ID, completionHandler: @escaping (Result<Session.Token, SnabblePay.Error>) -> Void) {
+        refreshToken(withSessionId: sessionId)
             .sink {
                 switch $0 {
                 case .finished:

@@ -66,7 +66,7 @@ extension Endpoint {
         request.allHTTPHeaderFields = headerFields
 
         if let token = token {
-            request.setValue("\(token.type.rawValue) \(token.accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("\(token.type.rawValue) \(token.value)", forHTTPHeaderField: "Authorization")
         }
 
         request.httpMethod = method.value
