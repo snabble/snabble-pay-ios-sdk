@@ -27,7 +27,7 @@ public class Authenticator {
     }
 
     enum Error: Swift.Error {
-        case missingURLSession
+        case missingAuthenticator
     }
 
     private let queue: DispatchQueue = .init(label: "io.snabble.pay.authenticator.\(UUID().uuidString)")
@@ -70,20 +70,27 @@ public class Authenticator {
         onEnvironment environment: Environment = .production
     ) -> AnyPublisher<Token, APIError> {
         return queue.sync { [weak self] in
+            guard let self = self else {
+                return Fail(
+                    outputType: Token.self,
+                    failure: APIError.unexpected(Error.missingAuthenticator)
+                ).eraseToAnyPublisher()
+            }
+
             // scenario 1: we're already loading a new token
-            if let publisher = self?.refreshPublisher {
+            if let publisher = self.refreshPublisher {
                 return publisher
             }
 
             // scenario 2: we already have a valid token and don't want to force a refresh
-            if let token = token, token.isValid(), !forceRefresh {
+            if let token = self.token, token.isValid(), !forceRefresh {
                 return Just(token)
                     .setFailureType(to: APIError.self)
                     .eraseToAnyPublisher()
             }
 
             // scenario 3: we need a new token
-            let publisher = validateCredentials(onEnvironment: environment)
+            let publisher = self.validateCredentials(onEnvironment: environment)
                 .map { credentials -> Endpoint<Token> in
                     return Endpoints.Token.get(
                         withCredentials: credentials,
@@ -91,10 +98,7 @@ public class Authenticator {
                     )
                 }
                 .tryMap { tokenEndpoint -> (URLSession, Endpoint<Token>) in
-                    guard let urlSession = self?.urlSession else {
-                        throw APIError.unexpected(Error.missingURLSession)
-                    }
-                    return (urlSession, tokenEndpoint)
+                    return (self.urlSession, tokenEndpoint)
                 }
                 .mapError { $0 as? APIError ?? .unexpected($0) }
                 .flatMap { urlSession, endpoint in
@@ -102,15 +106,15 @@ public class Authenticator {
                 }
                 .share()
                 .handleEvents(receiveOutput: { token in
-                    self?.token = token
+                    self.token = token
                 }, receiveCompletion: { _ in
-                    self?.queue.sync {
-                        self?.refreshPublisher = nil
+                    self.queue.sync {
+                        self.refreshPublisher = nil
                     }
                 })
                 .eraseToAnyPublisher()
 
-            self?.refreshPublisher = publisher
+            self.refreshPublisher = publisher
             return publisher
         }
     }
