@@ -52,7 +52,6 @@
 		76344CFC29A86FAC00211A1B /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		76344D0129A8BE3000211A1B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		76344D0329A8BE4300211A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		763E246029B63C3D0032B07F /* SnabblePayExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SnabblePayExample.entitlements; sourceTree = "<group>"; };
 		764E08B729B634C2001190FD /* HTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLView.swift; sourceTree = "<group>"; };
 		769026DF29A9BB3200D39218 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
@@ -162,7 +161,6 @@
 		E19376582941E7AA001C8866 /* SnabblePayExample */ = {
 			isa = PBXGroup;
 			children = (
-				763E246029B63C3D0032B07F /* SnabblePayExample.entitlements */,
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
 				E17B754F297550B200392861 /* AppDelegate.swift */,
 				E1C205A72982700000D4F894 /* Helper */,
