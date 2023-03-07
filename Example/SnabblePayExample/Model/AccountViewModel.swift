@@ -44,7 +44,13 @@ class AccountViewModel: ObservableObject {
         }
     }
 
-    @Published var mandate: Account.Mandate?
+    @Published var mandate: Account.Mandate? {
+        didSet {
+            if let mandateID = mandate?.id.rawValue, let html = mandate?.htmlText {
+                UserDefaults.standard.set(html, forKey: mandateID)
+            }
+        }
+    }
     @Published var session: Session? {
         didSet {
             resetTimer()
@@ -102,6 +108,10 @@ class AccountViewModel: ObservableObject {
         guard self.autostart else {
             return
         }
+        guard account.mandateState == .accepted else {
+            return
+        }
+        
         isLoading = true
         
         snabblePay.startSession(withAccountId: account.id) { [weak self] result in

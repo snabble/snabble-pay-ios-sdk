@@ -49,6 +49,17 @@ struct CardView: View {
     }
  
     @ViewBuilder
+    var mandateState: some View {
+        if !self.expand, model.account.mandateState != .accepted {
+            HStack {
+                model.mandateStateImage
+                    .foregroundStyle(.white, model.mandateStateColor, model.mandateStateColor)
+                Text(model.mandateStateString)
+            }
+        }
+    }
+    
+    @ViewBuilder
     var qrImage: some View {
         if let session = model.session {
             QRCodeView(code: session.token.rawValue)
@@ -62,6 +73,7 @@ struct CardView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Spacer(minLength: 0)
+            mandateState
             qrImage
                 .padding([.top])
                 .frame(width: toggleSize ? 160 : 60)
