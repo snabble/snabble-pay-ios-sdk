@@ -50,7 +50,7 @@ struct CardView: View {
  
     @ViewBuilder
     var mandateState: some View {
-        if !self.expand, model.account.mandateState != .accepted {
+        if !self.expand, model.mandateState != .accepted {
             HStack {
                 model.mandateStateImage
                     .foregroundStyle(.white, model.mandateStateColor, model.mandateStateColor)

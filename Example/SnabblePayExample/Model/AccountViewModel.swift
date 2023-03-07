@@ -51,6 +51,14 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+
+    var mandateState: Account.Mandate.State {
+        guard let mandate = mandate else {
+            return account.mandateState
+        }
+        return mandate.state
+    }
+    
     @Published var session: Session? {
         didSet {
             resetTimer()
@@ -108,7 +116,7 @@ class AccountViewModel: ObservableObject {
         guard self.autostart else {
             return
         }
-        guard account.mandateState == .accepted else {
+        guard self.mandateState == .accepted else {
             return
         }
         

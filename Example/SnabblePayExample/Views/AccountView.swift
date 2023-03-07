@@ -38,10 +38,10 @@ extension AccountViewModel {
         return mandate?.id.rawValue ?? ""
     }
     var mandateStateString: String {
-        return NSLocalizedString(account.mandateState.rawValue, comment: "")
+        return NSLocalizedString(mandateState.rawValue, comment: "")
     }
     var mandateStateColor: Color {
-        switch account.mandateState {
+        switch self.mandateState {
         case .pending:
             return Color.yellow
         case .accepted:
@@ -55,7 +55,7 @@ extension AccountViewModel {
         return iban.prettyPrint(template: "DEpp bbbb bbbb kkkk kkkk kk")
     }
     var mandateStateImage: Image {
-        switch account.mandateState {
+        switch self.mandateState {
         case .pending:
             return Image(systemName: "questionmark.circle.fill")
         case .accepted:
@@ -68,6 +68,7 @@ extension AccountViewModel {
         return autostart ? CardStyle.topMaterial : CardStyle.regularMaterial
     }
 }
+
 extension AccountViewModel {
     var htmlText: String? {
         guard let mandateID = mandate?.id.rawValue,
@@ -115,7 +116,7 @@ struct AccountStateView: View {
     @State private var showMandate = false
     
     var canToggleHTML: Bool {
-       return viewModel.account.mandateState == .accepted && viewModel.htmlText != nil
+       return viewModel.mandateState == .accepted && viewModel.htmlText != nil
     }
 
     @ViewBuilder
