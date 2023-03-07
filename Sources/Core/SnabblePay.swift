@@ -10,26 +10,43 @@ import SnabblePayNetwork
 import Combine
 import Tagged
 
+/// The methods that you use to receive events from an associated snabblepay object
 public protocol SnabblePayDelegate: AnyObject {
+
+    /// Tells the delegate that the location manager was unable to retrieve a location value
+    /// - Parameters:
+    ///   - snabblePay: The snabblepay object that received the updated credentials
+    ///   - credentials: The updated `Credentials`
     func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?)
 }
 
 public class SnabblePay {
+    /// The network manager object that handles the network requests
     public let networkManager: NetworkManager
+
+    /// The environment which is used for all network requests
     public var environment: Environment = .production
 
+    /// The delegate object to receive update events
     public weak var delegate: SnabblePayDelegate?
 
+    /// Identifier for you project
     public var apiKey: String {
         networkManager.authenticator.apiKey
     }
 
+    /// `URLSession` which is used for all network requests
     public var urlSession: URLSession {
         networkManager.urlSession
     }
 
     var cancellables = Set<AnyCancellable>()
 
+    /// The object that you use for SnabblePay
+    /// - Parameters:
+    ///   - apiKey: The key to identify your project
+    ///   - credentials: User credentials if available otherwise these will be created and reported to you via `SnabblePayDelegate`
+    ///   - urlSession: `URLSession` which should be used for network requests. Default is `.shared`
     public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
         self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials?.toDTO(), urlSession: urlSession)
         self.networkManager.delegate = self
@@ -234,4 +251,3 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 }
-
