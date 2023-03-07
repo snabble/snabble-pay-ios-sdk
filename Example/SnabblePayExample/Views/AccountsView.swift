@@ -178,6 +178,7 @@ struct AccountsView: View {
             Alert(title: Text(errorHandler.error?.localizedAction ?? "Error"),
                   message: Text(errorHandler.error?.localizedReason ?? "An error occured"))
         }
+        .preferredColorScheme(.dark)
         .edgesIgnoringSafeArea(.all)
         .sheet(
             item: $viewModel.accountCheck,
