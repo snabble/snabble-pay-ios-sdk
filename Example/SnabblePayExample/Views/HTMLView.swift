@@ -24,7 +24,9 @@ struct WebViewRepresentable: UIViewRepresentable {
         guard let string = string else {
             return
         }
-        uiView.loadHTMLString(string, baseURL: nil)
+        DispatchQueue.main.async {
+            uiView.loadHTMLString(string, baseURL: nil)
+        }
     }
 }
 
