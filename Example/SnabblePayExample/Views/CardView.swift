@@ -61,8 +61,8 @@ struct CardView: View {
     
     @ViewBuilder
     var qrImage: some View {
-        if let session = model.session {
-            QRCodeView(code: session.token.value)
+        if let qrCode = model.token?.value {
+            QRCodeView(code: qrCode)
         } else {
             Image(systemName: "qrcode")
                 .resizable()
@@ -106,7 +106,7 @@ struct CardView: View {
         }
         .onAppear {
             withAnimation {
-                self.toggleSize = self.expand || self.model.session != nil
+                self.toggleSize = self.expand || self.model.token != nil
             }
         }
         .onChange(of: model.sessionUpdated) { _ in

@@ -109,7 +109,7 @@ struct AccountsView: View {
                                 zIndex = 0
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.15) {
-                                    viewModel.selectedAccountModel?.startSession()
+                                    viewModel.selectedAccountModel?.refresh()
                                 }
                             }
                         }

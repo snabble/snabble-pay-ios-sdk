@@ -28,7 +28,7 @@ class AccountViewModel: ObservableObject {
         
         if autostart, let refreshAt = session?.token.refreshAt {
             self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
-                self.startSession()
+                self.refreshToken()
             }
         }
     }
@@ -59,11 +59,14 @@ class AccountViewModel: ObservableObject {
         return mandate.state
     }
     
-    @Published var session: Session? {
+    private var session: Session?
+    @Published var token: Session.Token? {
         didSet {
             resetTimer()
+            sessionUpdated.toggle()
         }
     }
+        
     @Published var sessionUpdated = false
     @Published var isLoading = false
     @Published var customName: String {
@@ -112,7 +115,7 @@ class AccountViewModel: ObservableObject {
         }
     }
 
-    func startSession() {
+    private func startSession() {
         guard self.autostart else {
             return
         }
@@ -128,11 +131,31 @@ class AccountViewModel: ObservableObject {
             switch result {
             case .success(let session):
                 self?.session = session
-                self?.sessionUpdated.toggle()
-
+                self?.token = session.token
+                
             case .failure(let error):
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Start Session")
             }
+        }
+    }
+    private func refreshToken() {
+        guard let session = self.session else {
+            return
+        }
+        isLoading = true
+        
+        snabblePay.refreshToken(withSessionId: session.id) { [weak self] result in
+            self?.isLoading = false
+            
+            switch result {
+            case .success(let token):
+                print("token refreshed \(token)")
+                self?.token = token
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Refresh Token")
+            }
+
         }
     }
 }
@@ -160,7 +183,11 @@ extension AccountViewModel {
     
     func refresh() {
         if needsRefresh {
-            startSession()
+            if self.session != nil {
+                refreshToken()
+            } else {
+                startSession()
+            }
         }
     }
 }
