@@ -1,7 +1,7 @@
 on: 
   workflow_dispatch:
   push:
-    branches: [ apps-711 ]
+    branches: [ main ]
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
