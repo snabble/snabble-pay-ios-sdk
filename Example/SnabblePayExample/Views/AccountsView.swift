@@ -20,6 +20,7 @@ struct AccountsView: View {
     @State private var animationOffset: CGFloat = 0
     @State private var zIndex: Double = 0
     @State private var showError = false
+    @State private var needsReload = false
     
     let inTime = 0.35
     let outTime = 0.25
@@ -52,7 +53,7 @@ struct AccountsView: View {
     private func cardView(account: Account) -> some View {
         if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
                 NavigationLink {
-                    AccountView(viewModel: model)
+                    AccountView(viewModel: model, needsReload: $needsReload)
                 } label: {
                     CardView(model: model)
                 }
@@ -167,6 +168,11 @@ struct AccountsView: View {
                 .onAppear {
                     viewModel.loadAccounts()
                 }
+            }
+        }
+        .onChange(of: needsReload) { newValue in
+            if newValue {
+                viewModel.loadAccounts()
             }
         }
         .onChange(of: errorHandler.error) { error in

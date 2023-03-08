@@ -22,11 +22,18 @@ class AccountViewModel: ObservableObject {
 
     private var refreshTimer: Timer?
     
+    private var refreshAt: Date? {
+        guard let token = self.token else {
+            return session?.token.refreshAt
+        }
+        return token.refreshAt
+    }
+    
     private func resetTimer() {
         refreshTimer?.invalidate()
         refreshTimer = nil
         
-        if autostart, let refreshAt = session?.token.refreshAt {
+        if autostart, let refreshAt = self.refreshAt {
             self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
                 self.refreshToken()
             }
@@ -42,6 +49,7 @@ class AccountViewModel: ObservableObject {
         } else {
             self.customName = account.name
         }
+        self.needsReload = false
     }
 
     @Published var mandate: Account.Mandate? {
@@ -51,7 +59,8 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
-
+    @Published var needsReload: Bool
+    
     var mandateState: Account.Mandate.State {
         guard let mandate = mandate else {
             return account.mandateState
@@ -108,6 +117,10 @@ class AccountViewModel: ObservableObject {
             switch result {
             case .success(let mandate):
                 self?.mandate = mandate
+                
+                if mandate.state == .accepted {
+                    self?.needsReload = true
+                }
 
             case .failure(let error):
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Accept Mandate")
@@ -170,10 +183,10 @@ extension AccountViewModel {
         guard self.autostart else {
             return false
         }
-        guard let session = self.session else {
+        guard let refreshAt = self.refreshAt else {
             return true
         }
-        return session.token.refreshAt.timeIntervalSince(.now) <= 0
+        return refreshAt.timeIntervalSince(.now) <= 0
     }
     
     func sleep() {

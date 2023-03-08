@@ -230,6 +230,8 @@ struct AccountStateView: View {
 
 struct AccountView: View {
     @ObservedObject var viewModel: AccountViewModel
+    @Binding var needsReload: Bool
+    
     @State private var edit = false
     @State private var name: String = ""
     
@@ -246,6 +248,11 @@ struct AccountView: View {
             .padding([.bottom], 40)
             .onAppear {
                 viewModel.createMandate()
+            }
+            .onChange(of: viewModel.needsReload) { newReload in
+                if newReload {
+                    needsReload = true
+                }
             }
         }
         .edgesIgnoringSafeArea(.all)
