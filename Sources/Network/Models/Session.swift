@@ -30,8 +30,8 @@ extension Session {
         public let currency: String
 
         public enum State: String, Decodable {
-            case ongoing = "ONGOING"
-            case pending = "PENDING"
+            case preauthorized = "PREAUTHORIZED"
+            case preauthorizationFailed = "PREAUTH_FAILED"
             case successful = "SUCCESSFUL"
             case failed = "FAILED"
             case errored = "ERRORED"

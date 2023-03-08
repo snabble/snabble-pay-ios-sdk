@@ -22,7 +22,7 @@ public protocol SnabblePayDelegate: AnyObject {
 
 public class SnabblePay {
     /// The network manager object that handles the network requests
-    public let networkManager: NetworkManager
+    let networkManager: NetworkManager
 
     /// The environment which is used for all network requests
     public var environment: Environment = .production
@@ -40,6 +40,7 @@ public class SnabblePay {
         networkManager.urlSession
     }
 
+    /// An array of type-erasing cancellable objects
     var cancellables = Set<AnyCancellable>()
 
     /// The object that you use for SnabblePay
