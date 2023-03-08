@@ -20,6 +20,7 @@ public protocol SnabblePayDelegate: AnyObject {
     func snabblePay(_ snabblePay: SnabblePay, didUpdateCredentials credentials: Credentials?)
 }
 
+/// The object that you use integrate SnabblePay
 public class SnabblePay {
     /// The network manager object that handles the network requests
     let networkManager: NetworkManager
