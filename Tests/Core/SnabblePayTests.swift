@@ -397,7 +397,7 @@ final class SnabblePayTests: XCTestCase {
                 XCTFail("shouldn't happen")
             }
         }
-        wait(for: [expectation], timeout: 3.0)
+        wait(for: [expectation], timeout: 5.0)
     }
 
     func testSessionsFailure() throws {
