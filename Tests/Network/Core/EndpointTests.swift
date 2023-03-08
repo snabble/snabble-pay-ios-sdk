@@ -57,7 +57,7 @@ final class EndpointTests: XCTestCase {
         XCTAssertNil(endpoint.token)
         XCTAssertNil(try! endpoint.urlRequest().allHTTPHeaderFields?["Authentication"])
         
-        endpoint.token = .init(accessToken: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
+        endpoint.token = .init(value: "accessToken", expiresAt: .distantFuture, scope: .all, type: .bearer)
         XCTAssertNotNil(endpoint.token)
         XCTAssertEqual(try! endpoint.urlRequest().allHTTPHeaderFields?["Authorization"], "Bearer accessToken")
     }

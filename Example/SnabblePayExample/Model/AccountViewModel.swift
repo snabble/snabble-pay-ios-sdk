@@ -26,7 +26,7 @@ class AccountViewModel: ObservableObject {
         refreshTimer?.invalidate()
         refreshTimer = nil
         
-        if autostart, let refreshAt = session?.refreshAt {
+        if autostart, let refreshAt = session?.token.refreshAt {
             self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
                 self.startSession()
             }
@@ -132,7 +132,7 @@ extension AccountViewModel {
         guard let session = self.session else {
             return true
         }
-        return session.refreshAt.timeIntervalSince(.now) <= 0
+        return session.token.refreshAt.timeIntervalSince(.now) <= 0
     }
     
     func sleep() {

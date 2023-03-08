@@ -158,6 +158,21 @@ extension SnabblePay {
             .store(in: &cancellables)
     }
 
+    public func refreshToken(withSessionId sessionId: Session.ID, completionHandler: @escaping (Result<Session.Token, SnabblePay.Error>) -> Void) {
+        refreshToken(withSessionId: sessionId)
+            .sink {
+                switch $0 {
+                case .finished:
+                    break
+                case let .failure(error):
+                    completionHandler(.failure(error))
+                }
+            } receiveValue: {
+                completionHandler(.success($0))
+            }
+            .store(in: &cancellables)
+    }
+
     public func session(withId id: Session.ID, completionHandler: @escaping (Result<Session, SnabblePay.Error>) -> Void) {
         session(withId: id)
             .sink {

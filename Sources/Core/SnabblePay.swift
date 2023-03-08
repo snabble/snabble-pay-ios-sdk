@@ -221,6 +221,21 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
+    /// Refresh a token of a session
+    /// - Parameter sessionId: The id of the session which needs to refresh its token
+    /// - Returns: An AnyPublisher wrapping a `Session.Token`
+    public func refreshToken(withSessionId sessionId: Session.ID) -> AnyPublisher<Session.Token, SnabblePay.Error> {
+        let endpoint = Endpoints.Session.Token.post(
+            sessionId: sessionId.rawValue,
+            onEnvironment: environment
+        )
+        return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
+            .mapError { $0.toModel() }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     /// Looking for a session with a specific id
     /// - Parameter id: The id of the session you are looking for
     /// - Returns: An AnyPublisher wrapping a `Session`

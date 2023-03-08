@@ -1,10 +1,14 @@
 [
     {
       "id": "1",
-      "token": "token",
+      "token": {
+          "id": "1",
+          "value": "token",
+          "createdAt": "2022-12-22T09:24:38Z",
+          "refreshAt": "2022-12-22T09:34:38Z",
+          "validUntil": "2022-12-22T09:44:38Z"
+      },
       "createdAt": "2022-12-22T09:24:38Z",
-      "refreshAt": "2022-12-22T09:34:38Z",
-      "validUntil": "2022-12-22T09:44:38Z",
       "transaction": {
         "id": "1",
         "state": "ONGOING",
