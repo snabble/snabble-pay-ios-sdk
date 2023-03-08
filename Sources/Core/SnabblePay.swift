@@ -169,7 +169,10 @@ extension SnabblePay {
     }
 
     public func refreshToken(withSessionId sessionId: Session.ID) -> AnyPublisher<Session.Token, SnabblePay.Error> {
-        let endpoint = Endpoints.Session.Token.post(sessionId: sessionId.rawValue)
+        let endpoint = Endpoints.Session.Token.post(
+            sessionId: sessionId.rawValue,
+            onEnvironment: environment
+        )
         return networkManager.publisher(for: endpoint)
             .map { $0.toModel() }
             .mapError { $0.toModel() }
