@@ -19,10 +19,10 @@ jobs:
         run: xcodebuild docbuild -scheme SnabblePay -destination 'generic/platform=iOS' -derivedDataPath ${{ runner.temp }}/docc
         
       - name: Static Website
-        run: $(xcrun --find docc) process-archive transform-for-static-hosting ${{ runner.temp }}/docc/Build/Products/Debug-iphoneos/SnabblePay.doccarchive --output-path ${{ runner.temp }}/docs --hosting-base-path snabble-pay-ios-sdk
+        run: $(xcrun --find docc) process-archive transform-for-static-hosting ${{ runner.temp }}/docc/Build/Products/Debug-iphoneos/SnabblePay.doccarchive --output-path ./docs --hosting-base-path snabble-pay-ios-sdk
 
       - name: Zip
-        run: zip -r static-website.zip ${{ runner.temp }}/docs
+        run: zip -r static-website.zip ./docs
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           email: info@snabble.io
-          build_dir: ${{ runner.temp }}/docs
+          build_dir: ./
           branch: gh-pages
           commit_message: update documentation
