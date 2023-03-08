@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Documentation
-        run: xcodebuild docbuild -scheme SnabblePay -derivedDataPath docc -destination 'generic/platform=iOS' -derivedDataPath ${{ runner.temp }}/docc
+        run: xcodebuild docbuild -scheme SnabblePay -destination 'generic/platform=iOS' -derivedDataPath ${{ runner.temp }}/docc
         
       - name: Static Website
         run: $(xcrun --find docc) process-archive transform-for-static-hosting ${{ runner.temp }}/docc/Build/Products/Debug-iphoneos/SnabblePay.doccarchive --output-path ${{ runner.temp }}/docs --hosting-base-path snabble-pay-ios-sdk
