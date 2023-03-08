@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           email: info@snabble.io
-          build_dir: ./
+          build_dir: docs
           branch: gh-pages
           commit_message: update documentation
