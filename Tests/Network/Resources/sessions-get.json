@@ -10,7 +10,7 @@
   "createdAt": "2022-12-22T09:24:38Z",
   "transaction": {
     "id": "1",
-    "state": "ONGOING",
+    "state": "PREAUTHORIZED",
     "amount": "3.99",
     "currency": "EUR"
   }

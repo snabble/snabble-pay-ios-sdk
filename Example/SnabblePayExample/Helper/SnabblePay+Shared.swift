@@ -51,7 +51,7 @@ extension SnabblePay: SnabblePayDelegate {
 extension Credentials: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let identifier = try container.decode(Credentials.Idenitifer.self, forKey: .identifier)
+        let identifier = try container.decode(Credentials.Identifier.self, forKey: .identifier)
         let secret = try container.decode(Credentials.Secret.self, forKey: .secret)
         self.init(identifier: identifier, secret: secret)
     }
