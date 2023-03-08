@@ -531,8 +531,8 @@ final class SnabblePayTests: XCTestCase {
             case let .success(result):
                 XCTAssertNotNil(result)
                 expectation.fulfill()
-            case .failure:
-                XCTFail("shouldn't happen")
+            case .failure(let error):
+                XCTFail("shouldn't happen \(error)")
             }
         }
         wait(for: [expectation], timeout: 3.0)
