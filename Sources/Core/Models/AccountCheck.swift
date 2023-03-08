@@ -9,10 +9,14 @@ import Foundation
 import SnabblePayNetwork
 
 extension Account {
+    /// Tink Account Check Object
     public struct Check {
+        /// Link to start account check verification process
         public let validationURL: URL
+        /// Your custom url-scheme of the hosted app
         public let appUri: URL
 
+        /// validate url if it matches `appUri`
         public func validate(url: URL) -> Bool {
             return appUri == url
         }
@@ -20,6 +24,7 @@ extension Account {
 }
 
 extension Account.Check: Identifiable {
+    /// id is the `validationURL`. It's added to support `Identifiable` protocol
     public var id: URL {
         validationURL
     }

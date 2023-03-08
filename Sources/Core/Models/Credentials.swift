@@ -9,14 +9,23 @@ import Foundation
 import Tagged
 import SnabblePayNetwork
 
+/// A class that contains credentials for a user of your app
 public struct Credentials {
-    public let identifier: Idenitifer
+    /// application identifier
+    public let identifier: Identifier
+    /// application secret
     public let secret: Secret
 
-    public typealias Idenitifer = Tagged<(Credentials, identifier: ()), String>
+    /// Type Safe Identifier
+    public typealias Identifier = Tagged<(Credentials, identifier: ()), String>
+    /// Type Safe Secret
     public typealias Secret = Tagged<(Credentials, secret: ()), String>
 
-    public init(identifier: Idenitifer, secret: Secret) {
+    /// Create an credentials instance
+    /// - Parameters:
+    ///   - identifier: Application identifier
+    ///   - secret: Application secret
+    public init(identifier: Identifier, secret: Secret) {
         self.identifier = identifier
         self.secret = secret
     }
@@ -24,7 +33,7 @@ public struct Credentials {
 
 extension Credentials: FromDTO {
     init(fromDTO dto: SnabblePayNetwork.Credentials) {
-        self.identifier = Idenitifer(dto.identifier)
+        self.identifier = Identifier(dto.identifier)
         self.secret = Secret(dto.secret)
     }
 }

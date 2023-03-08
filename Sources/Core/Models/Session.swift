@@ -9,41 +9,67 @@ import Foundation
 import Tagged
 import SnabblePayNetwork
 
+/// The Session is the beginning a potentiel payment process
 public struct Session {
+    /// Unique identifier of a session
     public let id: ID
+    /// The data for the QR code, which must be presented at the point of sale
     public let token: Token
+    /// Date of creation
     public let createdAt: Date
+    /// If a token has been presented at the point of sale a transaction might have been started
     public let transaction: Transaction?
 
+    /// Type Safe Identifier
     public typealias ID = Tagged<Session, String>
 }
 
 extension Session {
+    /// The transaction object of a `Session`
     public struct Transaction {
+        /// Unique identifier of a transaction
         public let id: ID
+        /// Current State of the transaction see `Session.Transaction.State`
         public let state: State
+        /// A string that represents an amount of money
         public let amount: String
+        /// A string that represents the used currency
         public let currency: String
 
+        /// Type Safe Identifier
         public typealias ID = Tagged<Transaction, String>
 
+        /// Constants indicating the transaction's state
         public enum State: String, Decodable {
-            case ongoing = "ONGOING"
-            case pending = "PENDING"
+            /// Amount was sucessfully preauthorized
+            case preauthorized = "PREAUTHORIZED"
+            /// Preauthorization failed
+            case preauthorizationFailed = "PREAUTH_FAILED"
+            /// Transaction was successfuly captured
             case successful = "SUCCESSFUL"
+            /// Capture failed
             case failed = "FAILED"
+            /// Error while processing the transaction
             case errored = "ERRORED"
+            /// Transaction aborted
             case aborted = "ABORTED"
         }
     }
 
+    /// The object for the QR code, which must be presented at the point of sale
     public struct Token {
+        /// Unique identifier of the token
         public let id: ID
+        /// The string for the QR code, which must be presented at the point of sale
         public let value: String
+        /// Date of creation
         public let createdAt: Date
+        /// Date as soon as the token should be updated. See `SnabblePay.refreshToken(withSessionId:)`.
         public let refreshAt: Date
+        /// Date until the token can be used to be shown at a point of sale
         public let validUntil: Date
 
+        /// Type Safe Identifier
         public typealias ID = Tagged<Token, String>
     }
 }
@@ -51,10 +77,10 @@ extension Session {
 extension Session.Transaction.State: FromDTO {
     init(fromDTO dto: SnabblePayNetwork.Session.Transaction.State) {
         switch dto {
-        case .ongoing:
-            self = .ongoing
-        case .pending:
-            self = .pending
+        case .preauthorized:
+            self = .preauthorized
+        case .preauthorizationFailed:
+            self = .preauthorizationFailed
         case .successful:
             self = .successful
         case .failed:

@@ -9,6 +9,7 @@ import Foundation
 import SnabblePayNetwork
 
 extension SnabblePay {
+    /// Public snabble pay error
     public enum Error: Swift.Error {
         /// Invalid request, e.g. invalid URL
         case invalidRequestError(String)
