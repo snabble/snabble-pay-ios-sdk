@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 import SnabblePayNetwork
 
-/// The back account information
+/// The bank account information
 public struct Account: Identifiable {
     /// Unique identifier 
     public let id: ID
