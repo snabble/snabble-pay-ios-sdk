@@ -1,1 +1,0 @@
-snabble-pay-ios-sdk
