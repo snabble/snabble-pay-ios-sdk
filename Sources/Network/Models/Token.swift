@@ -8,7 +8,7 @@
 import Foundation
 
 struct Token: Decodable {
-    let accessToken: String
+    let value: String
     let expiresAt: Date
     let scope: Scope
     let type: `Type`
@@ -22,7 +22,7 @@ struct Token: Decodable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case accessToken
+        case value = "accessToken"
         case expiresAt
         case scope
         case type = "tokenType"
