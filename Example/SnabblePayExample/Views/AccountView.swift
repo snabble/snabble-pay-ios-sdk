@@ -229,12 +229,18 @@ struct AccountStateView: View {
 }
 
 struct AccountView: View {
+    @ObservedObject var accountsModel: AccountsViewModel
+    
     @ObservedObject var viewModel: AccountViewModel
-    @Binding var needsReload: Bool
+    
+   // @Binding var needsReload: Bool
     
     @State private var edit = false
     @State private var name: String = ""
-    
+    init(accountsModel: AccountsViewModel) {
+        self.accountsModel = accountsModel
+        self.viewModel = accountsModel.selectedAccountModel!
+    }
     var body: some View {
         ZStack {
             BackgroundView()
@@ -251,7 +257,8 @@ struct AccountView: View {
             }
             .onChange(of: viewModel.needsReload) { newReload in
                 if newReload {
-                    needsReload = true
+                    accountsModel.loadAccounts()
+//                    needsReload = true
                 }
             }
         }

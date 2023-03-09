@@ -29,7 +29,8 @@
 "Loading Accounts" = "Laden der Konten";
 "Start Account Check" = "Starten der Kontoprüfung";
 
-"Create Mandate" = "Anfragen des Mandats";
+"Request Mandate" = "Anfragen des Mandats";
+"Create Mandate" = "Erstellen des Mandats";
 "Accept Mandate" = "Akzeptieren des Mandats";
 "Decline Mandate" = "Widerrufen des Mandats";
 
