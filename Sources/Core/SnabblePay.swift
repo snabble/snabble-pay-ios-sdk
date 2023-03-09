@@ -13,7 +13,7 @@ import Tagged
 /// The methods that you use to receive events from an associated snabblepay object
 public protocol SnabblePayDelegate: AnyObject {
 
-    /// Tells the delegate that the location manager was unable to retrieve a location value
+    /// Tells the delegate that the snabble pay did update the credentials
     /// - Parameters:
     ///   - snabblePay: The snabblepay object that received the updated credentials
     ///   - credentials: The updated `Credentials`

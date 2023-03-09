@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Tagged
 
 extension SnabblePay {
     public func accountCheck(withAppUri appUri: URL, city: String, countryCode: String, completionHandler: @escaping (Result<Account.Check, SnabblePay.Error>) -> Void) {
