@@ -44,6 +44,9 @@ public class SnabblePay {
     /// An array of type-erasing cancellable objects
     var cancellables = Set<AnyCancellable>()
 
+    /// The current debug level default value is `.off`
+    public static var debugLevel: DebugLevel = .off
+
     /// The object that you use for SnabblePay
     /// - Parameters:
     ///   - apiKey: The key to identify your project
