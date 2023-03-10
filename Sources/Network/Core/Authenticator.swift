@@ -8,6 +8,7 @@
 import Foundation
 import Dispatch
 import Combine
+import SnabbleLogger
 
 protocol AuthenticatorDelegate: AnyObject {
     func authenticator(_ authenticator: Authenticator, didUpdateCredentials credentials: Credentials?)
@@ -19,9 +20,14 @@ public class Authenticator {
 
     weak var delegate: AuthenticatorDelegate?
 
-    private(set) var token: Token?
+    private(set) var token: Token? {
+        didSet {
+            Logger.shared.debug("Update Token: \(String(describing: token))")
+        }
+    }
     private(set) var credentials: Credentials? {
         didSet {
+            Logger.shared.debug("Update Credentials: \(String(describing: credentials))")
             delegate?.authenticator(self, didUpdateCredentials: credentials)
         }
     }
@@ -47,6 +53,7 @@ public class Authenticator {
     private func validateCredentials(onEnvironment environment: Environment = .production) -> AnyPublisher<Credentials, APIError> {
         // scenario 1: app instance is registered
         if let credentials = self.credentials {
+            Logger.shared.debug("Uses Credentials: \(credentials)")
             return Just(credentials)
                 .setFailureType(to: APIError.self)
                 .eraseToAnyPublisher()
@@ -71,6 +78,7 @@ public class Authenticator {
     ) -> AnyPublisher<Token, APIError> {
         return queue.sync { [weak self] in
             guard let self = self else {
+                Logger.shared.error("Unexpected: Authenticator is missing")
                 return Fail(
                     outputType: Token.self,
                     failure: APIError.unexpected(Error.missingAuthenticator)
@@ -84,12 +92,14 @@ public class Authenticator {
 
             // scenario 2: we already have a valid token and don't want to force a refresh
             if let token = self.token, token.isValid(), !forceRefresh {
+                Logger.shared.debug("Uses Token: \(token)")
                 return Just(token)
                     .setFailureType(to: APIError.self)
                     .eraseToAnyPublisher()
             }
 
             // scenario 3: we need a new token
+            Logger.shared.debug("Token is refreshed")
             let publisher = self.validateCredentials(onEnvironment: environment)
                 .map { credentials -> Endpoint<Token> in
                     return Endpoints.Token.get(

@@ -67,6 +67,7 @@ public class SnabblePay {
             credentials: credentials?.toDTO(),
             urlSession: urlSession
         )
+        Logger.shared.logLevel = .debug
         self.networkManager.delegate = self
     }
 }
