@@ -9,6 +9,7 @@ import Foundation
 import SnabblePayNetwork
 import Combine
 import Tagged
+import SnabbleLogger
 
 /// The methods that you use to receive events from an associated snabblepay object
 public protocol SnabblePayDelegate: AnyObject {
@@ -44,8 +45,16 @@ public class SnabblePay {
     /// An array of type-erasing cancellable objects
     var cancellables = Set<AnyCancellable>()
 
-    /// The current debug level default value is `.off`
-    public static var debugLevel: DebugLevel = .off
+    /// The current debug level default value is `.info`
+    public static var logLevel: Logger.Level {
+        get {
+            Logger.shared.logLevel
+        }
+        set {
+            Logger.shared.logLevel = newValue
+        }
+
+    }
 
     /// The object that you use for SnabblePay
     /// - Parameters:
@@ -53,7 +62,11 @@ public class SnabblePay {
     ///   - credentials: User credentials if available otherwise these will be created and reported to you via `SnabblePayDelegate`
     ///   - urlSession: `URLSession` which should be used for network requests. Default is `.shared`
     public init(apiKey: String, credentials: Credentials?, urlSession: URLSession = .shared) {
-        self.networkManager = NetworkManager(apiKey: apiKey, credentials: credentials?.toDTO(), urlSession: urlSession)
+        self.networkManager = NetworkManager(
+            apiKey: apiKey,
+            credentials: credentials?.toDTO(),
+            urlSession: urlSession
+        )
         self.networkManager.delegate = self
     }
 }
