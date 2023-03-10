@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SnabbleLogger
 
 /// A namespace for types that serve as `Endpoint`.
 ///
@@ -23,7 +24,15 @@ public struct Endpoint<Response> {
         return jsonDecoder
     }()
 
-    var token: Token?
+    var token: Token? {
+        didSet {
+            if let token = token {
+                Logger.shared.debug("Endpoint \(self.path) uses token: \(token.value)")
+            } else {
+                Logger.shared.debug("Endpoint \(self.path) uses token: nil")
+            }
+        }
+    }
 
     var headerFields: [String: String] = [:]
 
@@ -50,10 +59,12 @@ extension Endpoint {
         }
 
         guard let url = components?.url else {
+            Logger.shared.error("invalidRequest with baseURL: \(environment.baseURL), path: \(path)")
             throw APIError.invalidRequestError("baseURL: \(environment.baseURL), path: \(path)")
         }
 
         var request = URLRequest(url: url)
+        Logger.shared.debug("Endpoint \(self.path) uses url: \(url)")
 
         switch method {
         case .post(let data), .put(let data), .patch(let data):
@@ -64,12 +75,15 @@ extension Endpoint {
 
         let headerFields = environment.headerFields.merging(headerFields, uniquingKeysWith: { _, new in new })
         request.allHTTPHeaderFields = headerFields
+        Logger.shared.debug("Endpoint \(self.path) uses headerFields: \(headerFields)")
 
         if let token = token {
             request.setValue("\(token.type.rawValue) \(token.value)", forHTTPHeaderField: "Authorization")
+            Logger.shared.debug("Endpoint \(self.path) sets Authorization HeaderField: \(token.type.rawValue) \(token.value)")
         }
 
         request.httpMethod = method.value
+        Logger.shared.debug("Endpoint \(self.path) uses HTTPMethod: \(method.value)")
         request.cachePolicy = .useProtocolCachePolicy
 
         return request

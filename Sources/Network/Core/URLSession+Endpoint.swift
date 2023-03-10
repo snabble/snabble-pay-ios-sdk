@@ -7,14 +7,17 @@
 
 import Foundation
 import Combine
+import SnabbleLogger
 
 private extension URLResponse {
     func verify(with data: Data) throws {
         guard let httpResponse = self as? HTTPURLResponse else {
+            Logger.shared.error("Unknown Response \(self)")
             throw HTTPError.unknownResponse(self)
         }
         guard httpResponse.httpStatusCode.responseType == .success else {
             let endpointError = try? JSONDecoder().decode(Endpoints.Error.self, from: data)
+            Logger.shared.error("Invalid Response with statusCode \(httpResponse.statusCode) and errorObject \(String(describing: endpointError))")
             throw HTTPError.invalidResponse(httpResponse.httpStatusCode, endpointError)
         }
     }
@@ -38,10 +41,13 @@ extension URLSession {
         do {
             urlRequest = try endpoint.urlRequest()
         } catch let error as APIError {
+            Logger.shared.error("APIError \(error)")
             return Fail(error: error).eraseToAnyPublisher()
         } catch {
+            Logger.shared.error("APIError unexpected \(error)")
             return Fail(error: APIError.unexpected(error)).eraseToAnyPublisher()
         }
+        Logger.shared.debug("Start URLRequest: \(urlRequest)")
         return dataTaskPublisher(for: urlRequest)
             .tryVerifyResponse()
             .map(\.data)

@@ -15,19 +15,30 @@ let package = Package(
             targets: ["SnabblePay"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0")
+        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     ],
     targets: [
         .target(
+            name: "SnabbleLogger",
+            dependencies: [
+                .product(name: "Logging", package: "swift-log"),
+            ],
+            path: "Sources/Logger"
+        ),
+        .target(
             name: "SnabblePayNetwork",
-            dependencies: [],
+            dependencies: [
+                "SnabbleLogger",
+            ],
             path: "Sources/Network"
         ),
         .target(
             name: "SnabblePay",
             dependencies: [
-                "SnabblePayNetwork",
                 .product(name: "Tagged", package: "swift-tagged"),
+                "SnabblePayNetwork",
+                "SnabbleLogger",
             ],
             path: "Sources/Core"
         ),

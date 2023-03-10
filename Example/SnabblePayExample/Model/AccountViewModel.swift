@@ -5,8 +5,9 @@
 //  Created by Uwe Tilemann on 23.02.23.
 //
 import Foundation
-import SnabblePay
 import Combine
+import SnabblePay
+import SnabbleLogger
 
 class AccountViewModel: ObservableObject {
     private let snabblePay: SnabblePay = .shared
@@ -79,6 +80,7 @@ class AccountViewModel: ObservableObject {
             switch result {
             case .success(let mandate):
                 self?.mandate = mandate
+                Logger.shared.debug("Decline Mandate: \(mandate)")
 
             case .failure(let error):
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Decline Mandate")
@@ -91,7 +93,8 @@ class AccountViewModel: ObservableObject {
             switch result {
             case .success(let mandate):
                 self?.mandate = mandate
-
+                Logger.shared.debug("Accept Mandate: \(mandate)")
+                
             case .failure(let error):
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Accept Mandate")
             }
