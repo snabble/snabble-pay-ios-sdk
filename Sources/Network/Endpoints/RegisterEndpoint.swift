@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import SnabbleLogger
 
 extension Endpoints {
     enum Register {
         static func post(apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<Credentials> {
+            Logger.shared.debug("Uses apiKey: \(apiKeyValue)")
             var endpoint: Endpoint<Credentials> = .init(path: "/apps/register", method: .post(nil), environment: environment)
             endpoint.headerFields = ["snabblePayKey": apiKeyValue]
             return endpoint

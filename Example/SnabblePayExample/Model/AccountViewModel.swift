@@ -5,8 +5,9 @@
 //  Created by Uwe Tilemann on 23.02.23.
 //
 import Foundation
-import SnabblePay
 import Combine
+import SnabblePay
+import SnabbleLogger
 
 class AccountViewModel: ObservableObject {
     private let snabblePay: SnabblePay = .shared
@@ -93,6 +94,7 @@ class AccountViewModel: ObservableObject {
         case .success(let mandate):
             self.mandate = mandate
             if account.mandateState != mandate.state {
+                Logger.shared.debug("Mandate State changed to: \(mandate.state)")
                 self.needsReload = true
             }
             
