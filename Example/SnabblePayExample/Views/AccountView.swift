@@ -230,11 +230,8 @@ struct AccountStateView: View {
 
 struct AccountView: View {
     @ObservedObject var accountsModel: AccountsViewModel
-    
     @ObservedObject var viewModel: AccountViewModel
-    
-   // @Binding var needsReload: Bool
-    
+        
     @State private var edit = false
     @State private var name: String = ""
     init(accountsModel: AccountsViewModel) {
@@ -258,7 +255,6 @@ struct AccountView: View {
             .onChange(of: viewModel.needsReload) { newReload in
                 if newReload {
                     accountsModel.loadAccounts()
-//                    needsReload = true
                 }
             }
         }
