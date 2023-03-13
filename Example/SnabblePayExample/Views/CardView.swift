@@ -49,9 +49,20 @@ struct CardView: View {
     }
  
     @ViewBuilder
+    var mandateState: some View {
+        if !self.expand, model.mandateState != .accepted {
+            HStack {
+                model.mandateStateImage
+                    .foregroundStyle(.white, model.mandateStateColor, model.mandateStateColor)
+                Text(model.mandateStateString)
+            }
+        }
+    }
+    
+    @ViewBuilder
     var qrImage: some View {
-        if let session = model.session {
-            QRCodeView(code: session.token.value)
+        if let qrCode = model.token?.value {
+            QRCodeView(code: qrCode)
         } else {
             Image(systemName: "qrcode")
                 .resizable()
@@ -62,6 +73,7 @@ struct CardView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Spacer(minLength: 0)
+            mandateState
             qrImage
                 .padding([.top])
                 .frame(width: toggleSize ? 160 : 60)
@@ -94,7 +106,7 @@ struct CardView: View {
         }
         .onAppear {
             withAnimation {
-                self.toggleSize = self.expand || self.model.session != nil
+                self.toggleSize = self.expand || self.model.token != nil
             }
         }
         .onChange(of: model.sessionUpdated) { _ in

@@ -23,13 +23,20 @@ class AccountViewModel: ObservableObject {
 
     private var refreshTimer: Timer?
     
+    private var refreshDate: Date? {
+        guard let token = self.token else {
+            return session?.token.refreshAt
+        }
+        return token.refreshAt
+    }
+    
     private func resetTimer() {
         refreshTimer?.invalidate()
         refreshTimer = nil
         
-        if autostart, let refreshAt = session?.token.refreshAt {
+        if autostart, let refreshAt = self.refreshDate {
             self.refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshAt.timeIntervalSince(.now), repeats: false) { _ in
-                self.startSession()
+                self.refreshToken()
             }
         }
     }
@@ -43,16 +50,34 @@ class AccountViewModel: ObservableObject {
         } else {
             self.customName = account.name
         }
+        self.needsReload = false
     }
 
-    @Published var mandate: Account.Mandate?
-    @Published var session: Session? {
+    @Published var mandate: Account.Mandate? {
         didSet {
-            resetTimer()
+            if let mandateID = mandate?.id.rawValue, let html = mandate?.htmlText {
+                UserDefaults.standard.set(html, forKey: mandateID)
+            }
         }
     }
+    @Published var needsReload: Bool
+    
+    var mandateState: Account.Mandate.State {
+        guard let mandate = mandate else {
+            return account.mandateState
+        }
+        return mandate.state
+    }
+    
+    private var session: Session?
+    @Published var token: Session.Token? {
+        didSet {
+            resetTimer()
+            sessionUpdated.toggle()
+        }
+    }
+        
     @Published var sessionUpdated = false
-    @Published var isLoading = false
     @Published var customName: String {
         didSet {
             if !customName.isEmpty {
@@ -62,47 +87,50 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+    var cancellables = Set<AnyCancellable>()
+
+    func update(action: String, result: Result<Account.Mandate, SnabblePay.Error>) {
+        switch result {
+        case .success(let mandate):
+            self.mandate = mandate
+            if account.mandateState != mandate.state {
+                Logger.shared.debug("Mandate State changed to: \(mandate.state)")
+                self.needsReload = true
+            }
+            
+        case .failure(let error):
+            ErrorHandler.shared.error = ErrorInfo(error: error, action: action)
+        }
+    }
     
     func createMandate() {
-        snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
-            switch result {
-            case .success(let mandate):
-                self?.mandate = mandate
-
-            case .failure(let error):
-                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Create Mandate")
+        if [.pending, .declined].contains(mandateState) {
+            snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
+                self?.update(action: "Create Mandate", result: result)
+            }
+        } else {
+            snabblePay.mandate(forAccountId: account.id) { [weak self] result in
+                self?.update(action: "Request Mandate", result: result)
             }
         }
     }
 
     func decline(mandateId: Account.Mandate.ID) {
         snabblePay.declineMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            switch result {
-            case .success(let mandate):
-                self?.mandate = mandate
-                Logger.shared.debug("Decline Mandate: \(mandate)")
-
-            case .failure(let error):
-                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Decline Mandate")
-            }
+            self?.update(action: "Decline Mandate", result: result)
        }
     }
 
     func accept(mandateId: Account.Mandate.ID) {
         snabblePay.acceptMandate(withId: mandateId, forAccountId: account.id) { [weak self] result in
-            switch result {
-            case .success(let mandate):
-                self?.mandate = mandate
-                Logger.shared.debug("Accept Mandate: \(mandate)")
-                
-            case .failure(let error):
-                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Accept Mandate")
-            }
+            self?.update(action: "Accept Mandate", result: result)
         }
     }
 
-    func startSession() {
-        guard self.autostart else {
+    private var isLoading = false
+
+    private func startSession() {
+        guard self.autostart, self.mandateState == .accepted else {
             return
         }
         isLoading = true
@@ -113,10 +141,27 @@ class AccountViewModel: ObservableObject {
             switch result {
             case .success(let session):
                 self?.session = session
-                self?.sessionUpdated.toggle()
-
+                self?.token = session.token
+                
             case .failure(let error):
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Start Session")
+            }
+        }
+    }
+    private func refreshToken() {
+        guard let session = self.session else {
+            return
+        }
+        isLoading = true
+        snabblePay.refreshToken(withSessionId: session.id) { [weak self] result in
+            self?.isLoading = false
+            
+            switch result {
+            case .success(let token):
+                self?.token = token
+
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Refresh Token")
             }
         }
     }
@@ -132,10 +177,10 @@ extension AccountViewModel {
         guard self.autostart else {
             return false
         }
-        guard let session = self.session else {
+        guard let refreshAt = self.refreshDate else {
             return true
         }
-        return session.token.refreshAt.timeIntervalSince(.now) <= 0
+        return refreshAt.timeIntervalSince(.now) <= 0
     }
     
     func sleep() {
@@ -145,7 +190,11 @@ extension AccountViewModel {
     
     func refresh() {
         if needsRefresh {
-            startSession()
+            if self.session != nil {
+                refreshToken()
+            } else {
+                startSession()
+            }
         }
     }
 }

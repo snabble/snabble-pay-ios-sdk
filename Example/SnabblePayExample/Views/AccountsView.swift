@@ -52,7 +52,7 @@ struct AccountsView: View {
     private func cardView(account: Account) -> some View {
         if viewModel.selectedAccount == account, let model = viewModel.selectedAccountModel {
                 NavigationLink {
-                    AccountView(viewModel: model)
+                    AccountView(accountsModel: viewModel)
                 } label: {
                     CardView(model: model)
                 }
@@ -109,7 +109,7 @@ struct AccountsView: View {
                                 zIndex = 0
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + inTime + 0.15) {
-                                    viewModel.selectedAccountModel?.startSession()
+                                    viewModel.selectedAccountModel?.refresh()
                                 }
                             }
                         }
@@ -178,6 +178,7 @@ struct AccountsView: View {
             Alert(title: Text(errorHandler.error?.localizedAction ?? "Error"),
                   message: Text(errorHandler.error?.localizedReason ?? "An error occured"))
         }
+        .preferredColorScheme(.dark)
         .edgesIgnoringSafeArea(.all)
         .sheet(
             item: $viewModel.accountCheck,

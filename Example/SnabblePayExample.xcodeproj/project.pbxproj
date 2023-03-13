@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76344CFC29A86FAC00211A1B /* BackgroundView.swift */; };
 		76344D0029A8BE3000211A1B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 76344D0229A8BE3000211A1B /* Localizable.strings */; };
+		764E08B829B634C2001190FD /* HTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E08B729B634C2001190FD /* HTMLView.swift */; };
 		769026E029A9BB3200D39218 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769026DF29A9BB3200D39218 /* Modifiers.swift */; };
 		76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */; };
 		76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */; };
@@ -51,6 +52,7 @@
 		76344CFC29A86FAC00211A1B /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		76344D0129A8BE3000211A1B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		76344D0329A8BE4300211A1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		764E08B729B634C2001190FD /* HTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLView.swift; sourceTree = "<group>"; };
 		769026DF29A9BB3200D39218 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				E1C20595297FC70E00D4F894 /* AccountsView.swift */,
 				E1F9993929A62F2B00904912 /* AccountView.swift */,
 				76E4727D29A7804500BBCCC9 /* CardView.swift */,
+				764E08B729B634C2001190FD /* HTMLView.swift */,
 				E1C205AA2982A6EC00D4F894 /* QRCodeView.swift */,
 			);
 			path = Views;
@@ -159,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				E19376592941E7AA001C8866 /* SnabblePayExampleApp.swift */,
+				E17B754F297550B200392861 /* AppDelegate.swift */,
 				E1C205A72982700000D4F894 /* Helper */,
 				76E4727F29A7806900BBCCC9 /* Model */,
 				76E4728029A7809000BBCCC9 /* Views */,
@@ -167,7 +171,6 @@
 				76344D0229A8BE3000211A1B /* Localizable.strings */,
 				E193765D2941E7AB001C8866 /* Assets.xcassets */,
 				E193765F2941E7AB001C8866 /* Preview Content */,
-				E17B754F297550B200392861 /* AppDelegate.swift */,
 			);
 			path = SnabblePayExample;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				E1F9993A29A62F2B00904912 /* AccountView.swift in Sources */,
 				76E4728429A781F200BBCCC9 /* MotionManager.swift in Sources */,
 				76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */,
+				764E08B829B634C2001190FD /* HTMLView.swift in Sources */,
 				76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */,
 				769026E029A9BB3200D39218 /* Modifiers.swift in Sources */,
 				76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */,
@@ -569,6 +573,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -602,6 +607,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
