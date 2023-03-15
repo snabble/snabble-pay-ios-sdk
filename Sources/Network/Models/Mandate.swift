@@ -14,6 +14,7 @@ extension Account {
         public let htmlText: String?
 
         public enum State: String, Decodable {
+            case missing = "MISSING"
             case pending = "PENDING"
             case accepted = "ACCEPTED"
             case declined = "DECLINED"
