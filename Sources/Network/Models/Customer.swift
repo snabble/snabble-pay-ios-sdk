@@ -8,6 +8,6 @@
 import Foundation
 
 public struct Customer: Decodable {
-    let id: String?
-    let loyaltyId: String?
+    public let id: String?
+    public let loyaltyId: String?
 }

@@ -10,16 +10,26 @@ import Combine
 
 extension Endpoints {
     public enum Customer {
-        public static func put(id: String, loyaltyId: String, onEnvironment environment: Environment = .production) -> Endpoint<Customer> {
-            .init(path: "/apps/customer",
-                  method: .put(
+        public static func put(id: String?, loyaltyId: String?, onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Customer> {
+            .init(
+                path: "/apps/customer",
+                method: .put(
                     data(forId: id, loyaltyId: loyaltyId)
-                  ),
-                  environment: environment
+                ),
+                environment: environment
             )
         }
+
+        public static func delete(onEnvironment environment: Environment = .production) -> Endpoint<SnabblePayNetwork.Customer> {
+            .init(
+                path: "/apps/customer",
+                method: .delete,
+                environment: environment
+            )
+        }
+
         // swiftlint:disable force_try
-        private static func data(forId id: String, loyaltyId: String) -> Data {
+        private static func data(forId id: String?, loyaltyId: String?) -> Data {
             let jsonObject = [
                 "id": id,
                 "loyaltyId": loyaltyId
