@@ -94,7 +94,7 @@ struct CardView: View {
                                 .opacity(opactiyOff)
                         }
                    } else {
-                        Text(expand ? model.account.bank : model.customName)
+                       Text(expand || !model.hasCustomName ? model.account.bank : model.customName)
                     }
                 }
                 Text(model.ibanString)

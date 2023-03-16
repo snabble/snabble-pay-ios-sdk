@@ -87,6 +87,12 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+    var hasCustomName: Bool {
+        if !customName.isEmpty, customName != account.name {
+            return true
+        }
+        return false
+    }
     var cancellables = Set<AnyCancellable>()
 
     func update(action: String, result: Result<Account.Mandate, SnabblePay.Error>) {
@@ -161,6 +167,8 @@ class AccountViewModel: ObservableObject {
                 self?.token = token
 
             case .failure(let error):
+                self?.token = nil
+                self?.sleep()
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Refresh Token")
             }
         }
