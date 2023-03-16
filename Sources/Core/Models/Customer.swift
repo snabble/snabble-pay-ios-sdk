@@ -8,8 +8,11 @@
 import Foundation
 import SnabblePayNetwork
 
+/// Customer information
 public struct Customer: Decodable {
+    /// id of the customer in your database
     let id: String?
+    /// loyalty number or id in your database
     let loyaltyId: String?
 }
 
