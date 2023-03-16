@@ -42,7 +42,7 @@ extension AccountViewModel {
     }
     var mandateStateColor: Color {
         switch self.mandateState {
-        case .pending:
+        case .missing, .pending:
             return Color.yellow
         case .accepted:
             return Color.green
@@ -56,7 +56,7 @@ extension AccountViewModel {
     }
     var mandateStateImage: Image {
         switch self.mandateState {
-        case .pending:
+        case .missing, .pending:
             return Image(systemName: "questionmark.circle.fill")
         case .accepted:
             return Image(systemName: "checkmark.circle.fill")

@@ -97,7 +97,7 @@ final class AccountsEndpointTests: XCTestCase {
         XCTAssertEqual(instance.first?.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.first?.bank, "Bank Name")
         XCTAssertEqual(instance.first?.iban, "DE123**********")
-        XCTAssertEqual(instance.first?.mandateState, .accepted)
+        XCTAssertEqual(instance.first?.mandateState, .missing)
     }
 
     func testDecodingMany() throws {

@@ -31,10 +31,10 @@ extension Session {
         public let id: ID
         /// Current State of the transaction see `Session.Transaction.State`
         public let state: State
-        /// A string that represents an amount of money
-        public let amount: String
+        /// A Integer that represents an amount of money in the minor unit of the `currencyCode`
+        public let amount: Int
         /// A string that represents the used currency
-        public let currency: String
+        public let currencyCode: String
 
         /// Type Safe Identifier
         public typealias ID = Tagged<Transaction, String>
@@ -42,9 +42,9 @@ extension Session {
         /// Constants indicating the transaction's state
         public enum State: String, Decodable {
             /// Amount was sucessfully preauthorized
-            case preauthorized = "PREAUTHORIZED"
+            case preauthorizationSuccessful = "PREAUTHORIZATION_SUCCESSFUL"
             /// Preauthorization failed
-            case preauthorizationFailed = "PREAUTH_FAILED"
+            case preauthorizationFailed = "PREAUTHORIZATION_FAILED"
             /// Transaction was successfuly captured
             case successful = "SUCCESSFUL"
             /// Capture failed
@@ -77,8 +77,8 @@ extension Session {
 extension Session.Transaction.State: FromDTO {
     init(fromDTO dto: SnabblePayNetwork.Session.Transaction.State) {
         switch dto {
-        case .preauthorized:
-            self = .preauthorized
+        case .preauthorizationSuccessful:
+            self = .preauthorizationSuccessful
         case .preauthorizationFailed:
             self = .preauthorizationFailed
         case .successful:
@@ -108,7 +108,7 @@ extension Session.Transaction: FromDTO {
         self.id = ID(dto.id)
         self.state = .init(fromDTO: dto.state)
         self.amount = dto.amount
-        self.currency = dto.currency
+        self.currencyCode = dto.currencyCode
     }
 }
 

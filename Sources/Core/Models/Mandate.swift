@@ -23,6 +23,8 @@ extension Account {
 
         /// Constants indicating the mandate's state to use snabble pay
         public enum State: String, Decodable {
+            /// Mandate has to be created
+            case missing = "MISSING"
             /// The user has not chosen whether the linked bank account can be used for a session
             case pending = "PENDING"
             /// The user authorized the mandate to be able to use the linked bank account for a session
@@ -53,6 +55,8 @@ extension Account.Mandate: FromDTO {
 extension Account.Mandate.State: FromDTO {
     init(fromDTO dto: SnabblePayNetwork.Account.Mandate.State) {
         switch dto {
+        case .missing:
+            self = .missing
         case .declined:
             self = .declined
         case .pending:

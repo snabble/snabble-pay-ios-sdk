@@ -106,22 +106,22 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertEqual(instance.token.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
         XCTAssertNotNil(instance.transaction)
         XCTAssertEqual(instance.transaction?.id, "1")
-        XCTAssertEqual(instance.transaction?.state, .preauthorized)
-        XCTAssertEqual(instance.transaction?.amount, "3.99")
-        XCTAssertEqual(instance.transaction?.currency, "EUR")
+        XCTAssertEqual(instance.transaction?.state, .preauthorizationSuccessful)
+        XCTAssertEqual(instance.transaction?.amount, 399)
+        XCTAssertEqual(instance.transaction?.currencyCode, "EUR")
     }
 
     func testTransactionState() throws {
         var state: Session.Transaction.State = .preauthorizationFailed
-        XCTAssertEqual(state.rawValue, "PREAUTH_FAILED")
+        XCTAssertEqual(state.rawValue, "PREAUTHORIZATION_FAILED")
         state = .aborted
         XCTAssertEqual(state.rawValue, "ABORTED")
         state = .errored
         XCTAssertEqual(state.rawValue, "ERRORED")
         state = .failed
         XCTAssertEqual(state.rawValue, "FAILED")
-        state = .preauthorized
-        XCTAssertEqual(state.rawValue, "PREAUTHORIZED")
+        state = .preauthorizationSuccessful
+        XCTAssertEqual(state.rawValue, "PREAUTHORIZATION_SUCCESSFUL")
         state = .successful
         XCTAssertEqual(state.rawValue, "SUCCESSFUL")
     }

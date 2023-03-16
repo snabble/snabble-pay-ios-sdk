@@ -26,12 +26,12 @@ extension Session {
     public struct Transaction: Decodable {
         public let id: String
         public let state: State
-        public let amount: String
-        public let currency: String
+        public let amount: Int
+        public let currencyCode: String
 
         public enum State: String, Decodable {
-            case preauthorized = "PREAUTHORIZED"
-            case preauthorizationFailed = "PREAUTH_FAILED"
+            case preauthorizationSuccessful = "PREAUTHORIZATION_SUCCESSFUL"
+            case preauthorizationFailed = "PREAUTHORIZATION_FAILED"
             case successful = "SUCCESSFUL"
             case failed = "FAILED"
             case errored = "ERRORED"
