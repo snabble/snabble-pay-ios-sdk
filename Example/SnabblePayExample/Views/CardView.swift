@@ -37,6 +37,9 @@ struct CardView: View {
     private let expand: Bool
     
     @State private var toggleSize = false
+    @State private var topAnimation = false
+    @State private var opactiyOn = 1.0
+    @State private var opactiyOff = 0.0
 
     init(model: AccountViewModel, expand: Bool = false) {
         self.model = model
@@ -83,7 +86,16 @@ struct CardView: View {
                 HStack {
                     Text(model.account.holderName)
                     Spacer()
-                    Text(model.account.bank)
+                    if topAnimation {
+                        ZStack(alignment: .trailing) {
+                            Text(model.customName)
+                                .opacity(opactiyOn)
+                            Text(model.account.bank)
+                                .opacity(opactiyOff)
+                        }
+                   } else {
+                        Text(expand ? model.account.bank : model.customName)
+                    }
                 }
                 Text(model.ibanString)
                     .font(.custom("Menlo", size: 16))
@@ -105,6 +117,17 @@ struct CardView: View {
             }
         }
         .onAppear {
+            if model.autostart, !expand {
+                let baseAnimation = Animation.easeInOut(duration: 1).delay(5)
+                let repeated = baseAnimation.repeatForever(autoreverses: true)
+                topAnimation = true
+                
+                withAnimation(repeated) {
+                    opactiyOn = 0.0
+                    opactiyOff = 1.0
+                }
+            }
+            
             withAnimation {
                 self.toggleSize = self.expand || self.model.token != nil
             }
