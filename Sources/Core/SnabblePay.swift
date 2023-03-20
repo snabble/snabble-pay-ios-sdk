@@ -88,9 +88,9 @@ extension SnabblePay {
             .eraseToAnyPublisher()
     }
 
-    /// Delete customer data
+    /// Delete customer information
     /// - Returns: An AnyPublisher wrapping the deleted customer
-    public func delete() -> AnyPublisher<Customer, SnabblePay.Error> {
+    public func deleteCustomer() -> AnyPublisher<Customer, SnabblePay.Error> {
         let endpoint = Endpoints.Customer.delete(onEnvironment: environment)
         return networkManager.publisher(for: endpoint)
             .map { $0.toModel() }
