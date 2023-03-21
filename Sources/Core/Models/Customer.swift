@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Customer.swift
 //  
 //
 //  Created by Andreas Osberghaus on 2023-03-16.
