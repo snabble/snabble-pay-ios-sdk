@@ -76,7 +76,7 @@ extension SnabblePay {
 
     /// A publisher to update the `Customer`
     /// - Parameters:
-    ///   - id: customer id
+    ///   - id: customer id in your database
     ///   - loyaltyId: loyalty id could be a customer card number
     /// - Returns: An AnyPublisher wrapping a customer
     public func updateCustomer(withId id: String?, loyaltyId: String?) -> AnyPublisher<Customer, SnabblePay.Error> {
