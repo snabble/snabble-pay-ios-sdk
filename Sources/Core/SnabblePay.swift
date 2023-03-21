@@ -74,6 +74,31 @@ public class SnabblePay {
 // MARK: Combine
 extension SnabblePay {
 
+    /// A publisher to update the `Customer`
+    /// - Parameters:
+    ///   - id: customer id in your database
+    ///   - loyaltyId: loyalty id could be a customer card number
+    /// - Returns: An AnyPublisher wrapping a customer
+    public func updateCustomer(withId id: String?, loyaltyId: String?) -> AnyPublisher<Customer, SnabblePay.Error> {
+        let endpoint = Endpoints.Customer.put(id: id, loyaltyId: loyaltyId, onEnvironment: environment)
+        return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
+            .mapError { $0.toModel() }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    /// Delete customer information
+    /// - Returns: An AnyPublisher wrapping the deleted customer
+    public func deleteCustomer() -> AnyPublisher<Customer, SnabblePay.Error> {
+        let endpoint = Endpoints.Customer.delete(onEnvironment: environment)
+        return networkManager.publisher(for: endpoint)
+            .map { $0.toModel() }
+            .mapError { $0.toModel() }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     /// A publisher that wraps an `Account.Check`
     /// - Parameters:
     ///   - appUri: Callback URLScheme to inform the app that the process is completed
