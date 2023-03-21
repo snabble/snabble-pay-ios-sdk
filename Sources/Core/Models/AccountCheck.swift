@@ -15,11 +15,6 @@ extension Account {
         public let validationURL: URL
         /// Your custom url-scheme of the hosted app
         public let appUri: URL
-
-        /// validate url if it matches `appUri`
-        public func validate(url: URL) -> Bool {
-            return appUri == url
-        }
     }
 }
 
