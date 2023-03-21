@@ -189,10 +189,8 @@ struct AccountsView: View {
             }
         )
         .onOpenURL {
-            guard viewModel.accountCheck?.validate(url: $0) ?? false else {
-                #warning("do something")
-                return
-            }
+            #warning("check appURI")
+            print("appURI: ", $0.absoluteString)
             viewModel.accountCheck = nil
             viewModel.loadAccounts()
         }
