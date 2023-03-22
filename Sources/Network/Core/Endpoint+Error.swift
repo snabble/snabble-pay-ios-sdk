@@ -23,9 +23,11 @@ extension Endpoints {
 
         public enum Reason: String, Decodable {
             case notFound = "not_found"
+            case mandateNotAccepted = "mandate_not_accepted"
             case validationError = "validation_error"
             case sessionTokenExpired = "session_token_expired"
             case transactionAlreadyStarted = "transaction_already_started"
+            case invalidSessionState = "invalid_session_state"
             case invalidTransactionState = "invalid_transaction_state"
             case internalServerError = "internal_server_error"
             case unauthorized = "unauthorized"

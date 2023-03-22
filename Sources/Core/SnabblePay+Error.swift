@@ -57,8 +57,10 @@ public struct ValidationError {
     public enum Reason: String, Decodable {
         case notFound = "not_found"
         case validationError = "validation_error"
+        case mandateNotAccepted = "mandate_not_accepted"
         case sessionTokenExpired = "session_token_expired"
         case transactionAlreadyStarted = "transaction_already_started"
+        case invalidSessionState = "invalid_session_state"
         case invalidTransactionState = "invalid_transaction_state"
         case internalServerError = "internal_server_error"
         case unauthorized = "unauthorized"
@@ -86,10 +88,14 @@ extension Endpoints.Error.Reason: ToModel {
             return .notFound
         case .validationError:
             return .validationError
+        case .mandateNotAccepted:
+            return .mandateNotAccepted
         case .sessionTokenExpired:
             return .sessionTokenExpired
         case .transactionAlreadyStarted:
             return .transactionAlreadyStarted
+        case .invalidSessionState:
+            return .invalidSessionState
         case .invalidTransactionState:
             return .invalidTransactionState
         case .internalServerError:
