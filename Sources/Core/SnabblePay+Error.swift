@@ -55,15 +55,22 @@ public struct ValidationError {
     let message: String?
 
     public enum Reason: String, Decodable {
-        case notFound = "not_found"
+        case internalError = "internal_error"
+        case unauthorized = "unauthorized"
+        case userNotFound = "user_not_found"
+        case tokenNotFound = "token_not_found"
+        case accountNotFound = "account_not_found"
+        case sessionNotFound = "session_not_found"
+        case transactionNotFound = "transaction_not_found"
+        case customerNotFound = "customer_not_found"
         case validationError = "validation_error"
-        case mandateNotAccepted = "mandate_not_accepted"
         case sessionTokenExpired = "session_token_expired"
-        case transactionAlreadyStarted = "transaction_already_started"
+        case mandateNotAccepted = "mandate_not_accepted"
         case invalidSessionState = "invalid_session_state"
         case invalidTransactionState = "invalid_transaction_state"
-        case internalServerError = "internal_server_error"
-        case unauthorized = "unauthorized"
+        case sessionHasTransaction = "session_has_transaction"
+        case transactionAlreadyStarted = "transaction_already_started"
+        case localMandate = "local_mandate"
         case unknown
     }
 }
@@ -84,24 +91,38 @@ extension Endpoints.Error: ToModel {
 extension Endpoints.Error.Reason: ToModel {
     func toModel() -> ValidationError.Reason {
         switch self {
-        case .notFound:
-            return .notFound
+        case .internalError:
+            return .internalError
+        case .unauthorized:
+            return .unauthorized
+        case .userNotFound:
+            return .userNotFound
+        case .tokenNotFound:
+            return .tokenNotFound
+        case .accountNotFound:
+            return .accountNotFound
+        case .sessionNotFound:
+            return .sessionNotFound
+        case .transactionNotFound:
+            return .transactionNotFound
+        case .customerNotFound:
+            return .customerNotFound
         case .validationError:
             return .validationError
-        case .mandateNotAccepted:
-            return .mandateNotAccepted
         case .sessionTokenExpired:
             return .sessionTokenExpired
-        case .transactionAlreadyStarted:
-            return .transactionAlreadyStarted
+        case .mandateNotAccepted:
+            return .mandateNotAccepted
         case .invalidSessionState:
             return .invalidSessionState
         case .invalidTransactionState:
             return .invalidTransactionState
-        case .internalServerError:
-            return .internalServerError
-        case .unauthorized:
-            return .unauthorized
+        case .sessionHasTransaction:
+            return .sessionHasTransaction
+        case .transactionAlreadyStarted:
+            return .transactionAlreadyStarted
+        case .localMandate:
+            return .localMandate
         case .unknown:
             return .unknown
         }
