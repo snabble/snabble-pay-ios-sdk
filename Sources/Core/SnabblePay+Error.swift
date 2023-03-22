@@ -55,11 +55,12 @@ public struct ValidationError {
     let message: String?
 
     public enum Reason: String, Decodable {
-        case mandateNotAccepted = "mandate_not_accepted"
-        case accountNotFound = "account_not_found"
+        case notFound = "not_found"
         case validationError = "validation_error"
-        case sessionNotFound = "session_not_found"
-        case invalidSessionState = "invalid_session_state"
+        case sessionTokenExpired = "session_token_expired"
+        case transactionAlreadyStarted = "transaction_already_started"
+        case invalidTransactionState = "invalid_transaction_state"
+        case internalServerError = "internal_server_error"
         case unauthorized = "unauthorized"
         case unknown
     }
@@ -81,16 +82,18 @@ extension Endpoints.Error: ToModel {
 extension Endpoints.Error.Reason: ToModel {
     func toModel() -> ValidationError.Reason {
         switch self {
-        case .mandateNotAccepted:
-            return .mandateNotAccepted
-        case .accountNotFound:
-            return .accountNotFound
+        case .notFound:
+            return .notFound
         case .validationError:
             return .validationError
-        case .sessionNotFound:
-            return .sessionNotFound
-        case .invalidSessionState:
-            return .invalidSessionState
+        case .sessionTokenExpired:
+            return .sessionTokenExpired
+        case .transactionAlreadyStarted:
+            return .transactionAlreadyStarted
+        case .invalidTransactionState:
+            return .invalidTransactionState
+        case .internalServerError:
+            return .internalServerError
         case .unauthorized:
             return .unauthorized
         case .unknown:
