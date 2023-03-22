@@ -21,7 +21,7 @@ extension SnabblePay {
         case invalidResponse(URLResponse)
 
         /// Server-side validation error
-        case validationError(httpStatusCode: HTTPStatusCode, error: Endpoints.Error?)
+        case validationError(ValidationError)
 
         /// The server sent data in an unexpected format
         case decodingError(DecodingError)
@@ -40,12 +40,61 @@ extension APIError: ToModel {
             return .transportError(urlError)
         case .invalidResponse(let urlResponse):
             return .invalidResponse(urlResponse)
-        case .validationError(let httpStatusCode, let error):
-            return .validationError(httpStatusCode: httpStatusCode, error: error)
+        case .validationError(_, let error):
+            return .validationError(error.toModel())
         case .decodingError(let decodingError):
             return .decodingError(decodingError)
         case .unexpected(let error):
             return .unexpected(error)
+        }
+    }
+}
+
+public struct ValidationError {
+    let reason: Reason
+    let message: String?
+
+    public enum Reason: String, Decodable {
+        case mandateNotAccepted = "mandate_not_accepted"
+        case accountNotFound = "account_not_found"
+        case validationError = "validation_error"
+        case sessionNotFound = "session_not_found"
+        case invalidSessionState = "invalid_session_state"
+        case unauthorized = "unauthorized"
+        case unknown
+    }
+}
+
+extension ValidationError: FromDTO {
+    init(fromDTO dto: Endpoints.Error) {
+        reason = dto.reason.toModel()
+        message = dto.message
+    }
+}
+
+extension Endpoints.Error: ToModel {
+    func toModel() -> ValidationError {
+        .init(fromDTO: self)
+    }
+}
+
+extension Endpoints.Error.Reason: ToModel {
+    func toModel() -> ValidationError.Reason {
+        switch self {
+        case .mandateNotAccepted:
+            return .mandateNotAccepted
+        case .accountNotFound:
+            return .accountNotFound
+        case .validationError:
+            return .validationError
+        case .sessionNotFound:
+            return .sessionNotFound
+        case .invalidSessionState:
+            return .invalidSessionState
+        case .unauthorized:
+            return .unauthorized
+        case .unknown:
+            return .unknown
         }
     }
 }

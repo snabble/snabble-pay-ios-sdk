@@ -37,6 +37,15 @@ extension Endpoints {
             self.reason = try container.decode(Endpoints.Error.Reason.self, forKey: Endpoints.Error.CodingKeys.reason)
             self.message = try container.decodeIfPresent(String.self, forKey: Endpoints.Error.CodingKeys.message)
         }
+
+        private init(reason: Reason, message: String?) {
+            self.reason = reason
+            self.message = message
+        }
+
+        static var unknown: Self {
+            Endpoints.Error(reason: .unknown, message: nil)
+        }
     }
 }
 
