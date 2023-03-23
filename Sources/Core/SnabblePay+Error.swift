@@ -51,8 +51,8 @@ extension APIError: ToModel {
 }
 
 public struct ValidationError {
-    let reason: Reason
-    let message: String?
+    public let reason: Reason
+    public let message: String?
 
     public enum Reason: String, Decodable {
         case internalError = "internal_error"
