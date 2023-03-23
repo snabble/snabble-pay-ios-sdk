@@ -16,9 +16,9 @@ private extension URLResponse {
             throw HTTPError.unknownResponse(self)
         }
         guard httpResponse.httpStatusCode.responseType == .success else {
-            let endpointError = try? JSONDecoder().decode(Endpoints.Error.self, from: data)
-            Logger.shared.error("Invalid Response with statusCode \(httpResponse.statusCode) and errorObject \(String(describing: endpointError))")
-            throw HTTPError.invalidResponse(httpResponse.httpStatusCode, endpointError)
+            let error: Endpoints.Error = (try? JSONDecoder().decode(Endpoints.Error.self, from: data)) ?? .unknown
+            Logger.shared.error("Invalid Response with errorObject \(error)")
+            throw HTTPError.invalidResponse(httpResponse.httpStatusCode, error)
         }
     }
 }
@@ -60,8 +60,8 @@ extension URLSession {
                     switch httpError {
                     case .unknownResponse(let urlResponse):
                         return APIError.invalidResponse(urlResponse)
-                    case .invalidResponse(let statusCode, let endpointError):
-                        return APIError.validationError(httpStatusCode: statusCode, error: endpointError)
+                    case .invalidResponse(let httpStatusCode, let endpointError):
+                        return APIError.validationError(httpStatusCode, endpointError)
                     case .unexpected:
                         return APIError.unexpected(error)
                     }

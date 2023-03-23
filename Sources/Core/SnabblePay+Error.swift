@@ -21,7 +21,7 @@ extension SnabblePay {
         case invalidResponse(URLResponse)
 
         /// Server-side validation error
-        case validationError(httpStatusCode: HTTPStatusCode, error: Endpoints.Error?)
+        case validationError(ValidationError)
 
         /// The server sent data in an unexpected format
         case decodingError(DecodingError)
@@ -40,12 +40,91 @@ extension APIError: ToModel {
             return .transportError(urlError)
         case .invalidResponse(let urlResponse):
             return .invalidResponse(urlResponse)
-        case .validationError(let httpStatusCode, let error):
-            return .validationError(httpStatusCode: httpStatusCode, error: error)
+        case .validationError(_, let error):
+            return .validationError(error.toModel())
         case .decodingError(let decodingError):
             return .decodingError(decodingError)
         case .unexpected(let error):
             return .unexpected(error)
+        }
+    }
+}
+
+public struct ValidationError {
+    public let reason: Reason
+    public let message: String?
+
+    public enum Reason: String, Decodable {
+        case internalError = "internal_error"
+        case unauthorized = "unauthorized"
+        case userNotFound = "user_not_found"
+        case tokenNotFound = "token_not_found"
+        case accountNotFound = "account_not_found"
+        case sessionNotFound = "session_not_found"
+        case transactionNotFound = "transaction_not_found"
+        case customerNotFound = "customer_not_found"
+        case validationError = "validation_error"
+        case sessionTokenExpired = "session_token_expired"
+        case mandateNotAccepted = "mandate_not_accepted"
+        case invalidSessionState = "invalid_session_state"
+        case invalidTransactionState = "invalid_transaction_state"
+        case sessionHasTransaction = "session_has_transaction"
+        case transactionAlreadyStarted = "transaction_already_started"
+        case localMandate = "local_mandate"
+        case unknown
+    }
+}
+
+extension ValidationError: FromDTO {
+    init(fromDTO dto: Endpoints.Error) {
+        reason = dto.reason.toModel()
+        message = dto.message
+    }
+}
+
+extension Endpoints.Error: ToModel {
+    func toModel() -> ValidationError {
+        .init(fromDTO: self)
+    }
+}
+
+extension Endpoints.Error.Reason: ToModel {
+    func toModel() -> ValidationError.Reason {
+        switch self {
+        case .internalError:
+            return .internalError
+        case .unauthorized:
+            return .unauthorized
+        case .userNotFound:
+            return .userNotFound
+        case .tokenNotFound:
+            return .tokenNotFound
+        case .accountNotFound:
+            return .accountNotFound
+        case .sessionNotFound:
+            return .sessionNotFound
+        case .transactionNotFound:
+            return .transactionNotFound
+        case .customerNotFound:
+            return .customerNotFound
+        case .validationError:
+            return .validationError
+        case .sessionTokenExpired:
+            return .sessionTokenExpired
+        case .mandateNotAccepted:
+            return .mandateNotAccepted
+        case .invalidSessionState:
+            return .invalidSessionState
+        case .invalidTransactionState:
+            return .invalidTransactionState
+        case .sessionHasTransaction:
+            return .sessionHasTransaction
+        case .transactionAlreadyStarted:
+            return .transactionAlreadyStarted
+        case .localMandate:
+            return .localMandate
+        case .unknown:
+            return .unknown
         }
     }
 }

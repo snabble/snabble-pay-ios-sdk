@@ -22,12 +22,22 @@ extension Endpoints {
         }
 
         public enum Reason: String, Decodable {
-            case mandateNotAccepted = "mandate_not_accepted"
-            case accountNotFound = "account_not_found"
-            case validationError = "validation_error"
-            case sessionNotFound = "session_not_found"
-            case invalidSessionState = "invalid_session_state"
+            case internalError = "internal_error"
             case unauthorized = "unauthorized"
+            case userNotFound = "user_not_found"
+            case tokenNotFound = "token_not_found"
+            case accountNotFound = "account_not_found"
+            case sessionNotFound = "session_not_found"
+            case transactionNotFound = "transaction_not_found"
+            case customerNotFound = "customer_not_found"
+            case validationError = "validation_error"
+            case sessionTokenExpired = "session_token_expired"
+            case mandateNotAccepted = "mandate_not_accepted"
+            case invalidSessionState = "invalid_session_state"
+            case invalidTransactionState = "invalid_transaction_state"
+            case sessionHasTransaction = "session_has_transaction"
+            case transactionAlreadyStarted = "transaction_already_started"
+            case localMandate = "local_mandate"
             case unknown
         }
 
@@ -36,6 +46,15 @@ extension Endpoints {
             let container = try topLevelContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .error)
             self.reason = try container.decode(Endpoints.Error.Reason.self, forKey: Endpoints.Error.CodingKeys.reason)
             self.message = try container.decodeIfPresent(String.self, forKey: Endpoints.Error.CodingKeys.message)
+        }
+
+        private init(reason: Reason, message: String?) {
+            self.reason = reason
+            self.message = message
+        }
+
+        static var unknown: Self {
+            Endpoints.Error(reason: .unknown, message: nil)
         }
     }
 }

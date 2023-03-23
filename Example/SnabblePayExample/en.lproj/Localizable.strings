@@ -6,6 +6,7 @@
   
 */
 
+"MISSING" = "SEPA mandate not available";
 "ACCEPTED" = "SEPA mandate accepted";
 "PENDING" = "SEPA mandate pending";
 "DECLINED" = "SEPA mandate declined";

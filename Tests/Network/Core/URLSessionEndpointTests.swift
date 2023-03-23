@@ -97,7 +97,7 @@ final class URLSessionEndpointTests: XCTestCase {
                     XCTAssertNotNil(error)
                     if case APIError.validationError(let statusCode, let endpointError) = error {
                         XCTAssertEqual(statusCode, .notFound)
-                        XCTAssertEqual(endpointError?.reason, .unknown)
+                        XCTAssertEqual(endpointError.reason, .unknown)
                     } else {
                         XCTFail("should ne httpError invalidResponse")
                     }

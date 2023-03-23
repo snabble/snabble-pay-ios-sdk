@@ -6,6 +6,7 @@
   
 */
 
+"MISSING" = "SEPA Mandat nicht vorhanden";
 "ACCEPTED" = "SEPA Mandat erteilt";
 "PENDING" = "SEPA Mandat ausstehend";
 "DECLINED" = "SEPA Mandat abgelehnt";

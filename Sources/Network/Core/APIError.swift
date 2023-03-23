@@ -18,7 +18,7 @@ public enum APIError: LocalizedError {
     case invalidResponse(URLResponse)
 
     /// Server-side validation error
-    case validationError(httpStatusCode: HTTPStatusCode, error: Endpoints.Error?)
+    case validationError(HTTPStatusCode, Endpoints.Error)
 
     /// The server sent data in an unexpected format
     case decodingError(DecodingError)
