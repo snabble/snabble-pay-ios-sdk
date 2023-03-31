@@ -101,7 +101,8 @@ class AccountViewModel: ObservableObject {
             self.mandate = mandate
             if account.mandateState != mandate.state {
                 Logger.shared.debug("Mandate State changed to: \(mandate.state)")
-                self.needsReload = true
+                needsReload.toggle()
+                self.objectWillChange.send()
             }
             
         case .failure(let error):
@@ -110,7 +111,7 @@ class AccountViewModel: ObservableObject {
     }
     
     func createMandate() {
-        if [.pending, .declined].contains(mandateState) {
+        if [.missing, .pending, .declined].contains(mandateState) {
             snabblePay.createMandate(forAccountId: account.id) { [weak self] result in
                 self?.update(action: "Create Mandate", result: result)
             }
@@ -133,7 +134,7 @@ class AccountViewModel: ObservableObject {
         }
     }
 
-    private var isLoading = false
+   private var isLoading = false
 
     private func startSession() {
         guard self.autostart, self.mandateState == .accepted else {
@@ -154,6 +155,7 @@ class AccountViewModel: ObservableObject {
             }
         }
     }
+
     private func refreshToken() {
         guard let session = self.session else {
             return

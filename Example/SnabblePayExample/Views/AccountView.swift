@@ -179,21 +179,26 @@ struct AccountStateView: View {
     
     @ViewBuilder
     var mandateInfo: some View {
-        VStack(alignment: .center, spacing: 0) {
-            HStack {
-                Spacer()
-                mandateState
-                    .font(.headline)
-                    .padding([.top])
-                Spacer()
-            }
-            if viewModel.mandate != nil {
-                Text(viewModel.mandateIDString)
-                    .foregroundColor(.secondary)
-                    .font(.footnote)
-                    .padding([.top, .bottom], 8)
-                if showMandate, let markup = viewModel.markup {
-                    HTMLView(string: markup)
+        VStack(spacing: 0) {
+            VStack(spacing: 8) {
+                HStack {
+                    Spacer()
+                    mandateState
+                        .font(.headline)
+                    Spacer()
+                }
+                .padding([.top, .leading, .trailing])
+                .padding(.bottom, viewModel.mandate != nil ? 0 : 20)
+
+                if viewModel.mandate != nil {
+                    Text(viewModel.mandateIDString)
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
+                        .padding([.bottom], 8)
+                    
+                    if showMandate, let markup = viewModel.markup {
+                        HTMLView(string: markup)
+                    }
                 }
             }
         }
@@ -209,13 +214,7 @@ struct AccountStateView: View {
     }
 
     var body: some View {
-        if let mandate = viewModel.mandate {
-            if mandate.state == .pending {
-                mandatePending
-            } else {
-                mandateInfo
-            }
-        } else {
+        if viewModel.mandateState == .missing {
             HStack {
                 Text("No Mandate")
                     .frame(maxWidth: .infinity)
@@ -224,6 +223,12 @@ struct AccountStateView: View {
             }
             .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
             .padding([.leading, .trailing])
+        } else {
+            if viewModel.mandateState == .pending {
+                mandatePending
+            } else {
+                mandateInfo
+            }
         }
     }
 }
@@ -234,10 +239,12 @@ struct AccountView: View {
         
     @State private var edit = false
     @State private var name: String = ""
+
     init(accountsModel: AccountsViewModel) {
         self.accountsModel = accountsModel
         self.viewModel = accountsModel.selectedAccountModel!
     }
+
     var body: some View {
         ZStack {
             BackgroundView()
@@ -248,7 +255,7 @@ struct AccountView: View {
                 Spacer()
             }
             .padding([.top], 100)
-            .padding([.bottom], 40)
+            .padding([.bottom], 20)
             .onAppear {
                 viewModel.createMandate()
             }
