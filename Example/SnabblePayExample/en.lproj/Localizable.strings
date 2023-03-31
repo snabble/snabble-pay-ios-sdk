@@ -18,6 +18,8 @@
 "Your account" = "Your account";
 "Account Name" = "Account Name";
 "Give this account a name." = "Give this account a name.";
+"Delete account" = "Delete account";
+"Delete" = "Delete";
 
 /* Error handling */
 "Error for action" = "Error while %@";

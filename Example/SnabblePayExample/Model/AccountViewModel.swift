@@ -101,7 +101,9 @@ class AccountViewModel: ObservableObject {
             self.mandate = mandate
             if account.mandateState != mandate.state {
                 Logger.shared.debug("Mandate State changed to: \(mandate.state)")
-                needsReload.toggle()
+                if mandate.state != .pending {
+                    needsReload.toggle()
+                }
                 self.objectWillChange.send()
             }
             

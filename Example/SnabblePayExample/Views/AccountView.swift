@@ -236,8 +236,10 @@ struct AccountStateView: View {
 struct AccountView: View {
     @ObservedObject var accountsModel: AccountsViewModel
     @ObservedObject var viewModel: AccountViewModel
-        
+    @Environment(\.presentationMode) var presentationMode
+    
     @State private var edit = false
+    @State private var delete = false
     @State private var name: String = ""
 
     init(accountsModel: AccountsViewModel) {
@@ -250,7 +252,16 @@ struct AccountView: View {
             BackgroundView()
             
             VStack(spacing: 24) {
-                CardView(model: viewModel, expand: true)
+                ZStack(alignment: .topTrailing) {
+                    CardView(model: viewModel, expand: true)
+                    Button(action: {
+                        delete.toggle()
+                    }) {
+                        Image(systemName: "trash")
+                    }
+                    .padding(.trailing, 30)
+                    .padding(.top, 10)
+                }
                 AccountStateView(viewModel: viewModel)
                 Spacer()
             }
@@ -273,6 +284,12 @@ struct AccountView: View {
             Button("OK", action: submit)
         } message: {
             Text("Give this account a name.")
+        }
+        .confirmationDialog("Delete account", isPresented: $delete, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                accountsModel.delete(account: viewModel.account)
+                self.presentationMode.wrappedValue.dismiss()
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
