@@ -50,27 +50,48 @@ extension APIError: ToModel {
     }
 }
 
+/// Validation error on the server
 public struct ValidationError {
+    /// Defined error cause
     public let reason: Reason
+    /// Optional hint to understand the error
     public let message: String?
 
+    /// Known validation error reasons
     public enum Reason: String, Decodable {
+        /// Internal Server Error
         case internalError = "internal_error"
+        /// Unauthorized
         case unauthorized = "unauthorized"
+        /// User not found
         case userNotFound = "user_not_found"
+        /// Token not found
         case tokenNotFound = "token_not_found"
+        /// Account not found
         case accountNotFound = "account_not_found"
+        /// Session not found
         case sessionNotFound = "session_not_found"
+        /// Transaction not found
         case transactionNotFound = "transaction_not_found"
+        /// Customer not found
         case customerNotFound = "customer_not_found"
+        /// Validation Error
         case validationError = "validation_error"
+        /// Session token has expired
         case sessionTokenExpired = "session_token_expired"
+        /// Mandates has not yet been accepted
         case mandateNotAccepted = "mandate_not_accepted"
+        /// Invalid session state
         case invalidSessionState = "invalid_session_state"
+        /// Invalid status for the transaction
         case invalidTransactionState = "invalid_transaction_state"
+        /// Session already has a transaction
         case sessionHasTransaction = "session_has_transaction"
+        /// Transaction has already started
         case transactionAlreadyStarted = "transaction_already_started"
+        /// Can not start transaction with locale mandate
         case localMandate = "local_mandate"
+        /// Unknown error (maybe you have to update the SDK)
         case unknown
     }
 }
