@@ -180,7 +180,6 @@ class AccountViewModel: ObservableObject {
 }
 
 extension AccountViewModel {
-    
     var canSelect: Bool {
         return isLoading == false
     }

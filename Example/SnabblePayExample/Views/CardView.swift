@@ -8,27 +8,6 @@
 import SwiftUI
 import SnabblePay
 
-struct AddFirstAccount: View {
-    @ObservedObject var viewModel: AccountsViewModel
-
-    var body: some View {
-        VStack(spacing: 10) {
-            Text("Add your first account now!")
-                .frame(maxWidth: .infinity)
-                .font(.title3)
-                .foregroundColor(.white)
-                .shadow(radius: 2)
-            Button(action: {
-                viewModel.startAccountCheck()
-            }) {
-                Image(systemName: "plus")
-                    .font(.system(size: 64))
-            }
-        }
-        .cardStyle()
-    }
-}
-
 struct CardView: View {
     @ObservedObject var model: AccountViewModel
     @Environment(\.scenePhase) var scenePhase
@@ -64,8 +43,11 @@ struct CardView: View {
     
     @ViewBuilder
     var qrImage: some View {
-        if let qrCode = model.token?.value {
-            QRCodeView(code: qrCode)
+        if let token = model.token {
+            VStack {
+                QRCodeView(code: token.value)
+                CountDownView(from: token.createdAt, to: token.refreshAt, height: 4)
+            }
         } else {
             Image(systemName: "qrcode")
                 .resizable()

@@ -12,6 +12,11 @@
 		764E08B829B634C2001190FD /* HTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E08B729B634C2001190FD /* HTMLView.swift */; };
 		769026E029A9BB3200D39218 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769026DF29A9BB3200D39218 /* Modifiers.swift */; };
 		76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */; };
+		76D16BCA29DC6AC1006DAC37 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BC929DC6AC1006DAC37 /* CountDownView.swift */; };
+		76D16BCC29DC6B22006DAC37 /* AddFirstAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */; };
+		76D16BCE29DC6BA3006DAC37 /* AccountStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */; };
+		76D16BD029DC6D6A006DAC37 /* AccountViewModel+Mandate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCF29DC6D6A006DAC37 /* AccountViewModel+Mandate.swift */; };
+		76D16BD229DC70F6006DAC37 /* AccountViewModel+IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BD129DC70F6006DAC37 /* AccountViewModel+IBAN.swift */; };
 		76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */; };
 		76E4727E29A7804500BBCCC9 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4727D29A7804500BBCCC9 /* CardView.swift */; };
 		76E4728229A780B000BBCCC9 /* AccountsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */; };
@@ -55,6 +60,11 @@
 		764E08B729B634C2001190FD /* HTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLView.swift; sourceTree = "<group>"; };
 		769026DF29A9BB3200D39218 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
+		76D16BC929DC6AC1006DAC37 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
+		76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFirstAccountView.swift; sourceTree = "<group>"; };
+		76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStateView.swift; sourceTree = "<group>"; };
+		76D16BCF29DC6D6A006DAC37 /* AccountViewModel+Mandate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountViewModel+Mandate.swift"; sourceTree = "<group>"; };
+		76D16BD129DC70F6006DAC37 /* AccountViewModel+IBAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountViewModel+IBAN.swift"; sourceTree = "<group>"; };
 		76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		76E4727D29A7804500BBCCC9 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsViewModel.swift; sourceTree = "<group>"; };
@@ -108,6 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				76E4727B29A7803B00BBCCC9 /* AccountViewModel.swift */,
+				76D16BD129DC70F6006DAC37 /* AccountViewModel+IBAN.swift */,
+				76D16BCF29DC6D6A006DAC37 /* AccountViewModel+Mandate.swift */,
 				76E4728129A780B000BBCCC9 /* AccountsViewModel.swift */,
 				76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */,
 			);
@@ -120,7 +132,10 @@
 				76344CFC29A86FAC00211A1B /* BackgroundView.swift */,
 				E1C20595297FC70E00D4F894 /* AccountsView.swift */,
 				E1F9993929A62F2B00904912 /* AccountView.swift */,
+				76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */,
+				76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */,
 				76E4727D29A7804500BBCCC9 /* CardView.swift */,
+				76D16BC929DC6AC1006DAC37 /* CountDownView.swift */,
 				764E08B729B634C2001190FD /* HTMLView.swift */,
 				E1C205AA2982A6EC00D4F894 /* QRCodeView.swift */,
 			);
@@ -377,6 +392,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76D16BD229DC70F6006DAC37 /* AccountViewModel+IBAN.swift in Sources */,
 				E1F9993A29A62F2B00904912 /* AccountView.swift in Sources */,
 				76E4728429A781F200BBCCC9 /* MotionManager.swift in Sources */,
 				76344CFD29A86FAC00211A1B /* BackgroundView.swift in Sources */,
@@ -384,11 +400,15 @@
 				76E4727C29A7803B00BBCCC9 /* AccountViewModel.swift in Sources */,
 				769026E029A9BB3200D39218 /* Modifiers.swift in Sources */,
 				76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */,
+				76D16BD029DC6D6A006DAC37 /* AccountViewModel+Mandate.swift in Sources */,
 				E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */,
+				76D16BCA29DC6AC1006DAC37 /* CountDownView.swift in Sources */,
+				76D16BCE29DC6BA3006DAC37 /* AccountStateView.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E1C205AB2982A6EC00D4F894 /* QRCodeView.swift in Sources */,
 				E1C20596297FC70E00D4F894 /* AccountsView.swift in Sources */,
 				76E4727E29A7804500BBCCC9 /* CardView.swift in Sources */,
+				76D16BCC29DC6B22006DAC37 /* AddFirstAccountView.swift in Sources */,
 				76E4728229A780B000BBCCC9 /* AccountsViewModel.swift in Sources */,
 				E193765A2941E7AA001C8866 /* SnabblePayExampleApp.swift in Sources */,
 			);
