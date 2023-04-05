@@ -8,7 +8,7 @@
 import Foundation
 
 public extension String {
-    static let htmlHeader = """
+    private static let htmlHeader = """
 <html>
     <head>
         <meta charset="utf-8" />
@@ -28,7 +28,7 @@ public extension String {
     </head>
     <body>
 """
-    static let htmlFooter = """
+    private static let htmlFooter = """
     </body>
 </html>
 """
