@@ -16,6 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Xcode Plugin
+        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+
       - name: Set ImageVersion environment variable
         run: echo "ImageVersion=$ImageVersion"  >> $GITHUB_ENV
 
@@ -34,6 +37,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Xcode Plugin
+        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
 
       - name: Set ImageVersion environment variable
         run: echo "ImageVersion=$ImageVersion"  >> $GITHUB_ENV
