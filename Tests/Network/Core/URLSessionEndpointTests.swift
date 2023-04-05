@@ -48,7 +48,11 @@ final class URLSessionEndpointTests: XCTestCase {
             }
             .store(in: &cancellables)
 
+#if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 5)
+#else
+        wait(for: [expectation], timeout: 5.0)
+#endif
     }
 
     func testDecodableCombineError() async throws {
@@ -71,7 +75,11 @@ final class URLSessionEndpointTests: XCTestCase {
             }
             .store(in: &cancellables)
 
+#if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 5)
+#else
+        wait(for: [expectation], timeout: 5.0)
+#endif
     }
 
     func testDecodableCombineInvalidResponse() async throws {
@@ -108,7 +116,11 @@ final class URLSessionEndpointTests: XCTestCase {
             }
             .store(in: &cancellables)
 
+#if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 5)
+#else
+        wait(for: [expectation], timeout: 5.0)
+#endif
     }
 
     func testDecodableCombineInvalidResponseWithErrorObject() async throws {
@@ -139,6 +151,10 @@ final class URLSessionEndpointTests: XCTestCase {
             }
             .store(in: &cancellables)
 
+#if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 5)
+#else
+        wait(for: [expectation], timeout: 5.0)
+#endif
     }
 }
