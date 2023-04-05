@@ -23,6 +23,8 @@
 "Your account" = "Dein Konto";
 "Account Name" = "Kontobezeichnung";
 "Give this account a name." = "Gib deinem Konto einen Namen.";
+"Delete account" = "Karte löschen";
+"Delete" = "Löschen";
 
 /* Error handling */
 "Error for action" = "Fehler beim %@";

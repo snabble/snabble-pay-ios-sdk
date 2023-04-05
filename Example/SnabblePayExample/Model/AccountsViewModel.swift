@@ -5,8 +5,9 @@
 //  Created by Uwe Tilemann on 23.02.23.
 //
 import Foundation
-import SnabblePay
 import Combine
+import SnabblePay
+import SnabbleLogger
 
 class AccountsViewModel: ObservableObject {
     private var snabblePay: SnabblePay {
@@ -104,6 +105,20 @@ class AccountsViewModel: ObservableObject {
                 ErrorHandler.shared.error = ErrorInfo(error: error, action: "Loading Accounts")
             }
        }
+    }
+    func delete(account: Account) {
+        snabblePay.deleteAccount(withId: account.id) { [weak self] result in
+            switch result {
+            case .success(let account):
+                Logger.shared.debug("Account deleted: \(account.id)")
+                self?.loadAccounts()
+                
+            case .failure(let error):
+                ErrorHandler.shared.error = ErrorInfo(error: error, action: "Loading Accounts")
+
+            }
+            
+        }
     }
 }
 
