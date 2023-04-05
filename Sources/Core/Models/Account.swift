@@ -75,5 +75,3 @@ extension SnabblePayNetwork.Account: ToModel {
         .init(fromDTO: self)
     }
 }
-
-

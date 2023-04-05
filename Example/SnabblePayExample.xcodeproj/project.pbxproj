@@ -229,7 +229,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E1EBB92229DDA538004919E5 /* PBXTargetDependency */,
+				E1EBB92429DDADA1004919E5 /* PBXTargetDependency */,
 			);
 			name = SnabblePayExample;
 			packageProductDependencies = (
@@ -403,9 +403,9 @@
 			target = E19376552941E7AA001C8866 /* SnabblePayExample */;
 			targetProxy = E19376712941E7AB001C8866 /* PBXContainerItemProxy */;
 		};
-		E1EBB92229DDA538004919E5 /* PBXTargetDependency */ = {
+		E1EBB92429DDADA1004919E5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = E1EBB92129DDA538004919E5 /* SwiftLintPlugin */;
+			productRef = E1EBB92329DDADA1004919E5 /* SwiftLintPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -753,7 +753,7 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SnabblePay;
 		};
-		E1EBB92129DDA538004919E5 /* SwiftLintPlugin */ = {
+		E1EBB92329DDADA1004919E5 /* SwiftLintPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "plugin:SwiftLintPlugin";
 		};
