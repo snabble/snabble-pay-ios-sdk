@@ -311,6 +311,7 @@
 			mainGroup = E193764D2941E7AA001C8866;
 			packageReferences = (
 				E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
+				E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = E19376572941E7AA001C8866 /* Products */;
 			projectDirPath = "";
@@ -368,7 +369,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which mint > /dev/null; then\n  cd ..\n  mint run swiftlint lint\nelse\n  echo \"warning: Mint not installed, download from https://github.com/yonaskolb/Mint\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# export PATH=\"$PATH:/opt/homebrew/bin\"\n#if which mint > /dev/null; then\n#  cd ..\n#  mint run swiftlint lint\n#else\n#  echo \"warning: Mint not installed, download from https://github.com/yonaskolb/Mint\"\n#fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -748,6 +749,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.4.1;
+			};
+		};
+		E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.51.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
