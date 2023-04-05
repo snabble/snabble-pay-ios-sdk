@@ -60,6 +60,6 @@ private extension String {
 
 struct QRCodeView_Previews: PreviewProvider {
     static var previews: some View {
-        QRCodeView(code: "Hallo")
+        QRCodeView(code: "Hello, World!")
     }
 }

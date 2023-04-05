@@ -12,7 +12,7 @@ struct CountDownView: View {
     let to: Date
     let height: CGFloat
     
-    init(from: Date, to: Date, height: CGFloat = 2.0) {
+    init(from: Date, to: Date, height: CGFloat = 4.0) {
         self.from = from
         self.to = to
         self.height = height
@@ -32,5 +32,11 @@ struct CountDownView: View {
             }
         }
         .frame(height: height)
+    }
+}
+
+struct CountDownView_Previews: PreviewProvider {
+    static var previews: some View {
+        CountDownView(from: .now, to: .now + 10.0)
     }
 }
