@@ -126,16 +126,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SnabblePayUITests"
-               BuildableName = "SnabblePayUITests"
-               BlueprintName = "SnabblePayUITests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "SnabblePayNetworkTests"
                BuildableName = "SnabblePayNetworkTests"
                BlueprintName = "SnabblePayNetworkTests"

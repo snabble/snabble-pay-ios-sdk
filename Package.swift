@@ -17,6 +17,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/realm/SwiftLint", exact: "0.51.0"),
     ],
     targets: [
         .target(
@@ -40,7 +41,8 @@ let package = Package(
                 "SnabblePayNetwork",
                 "SnabbleLogger",
             ],
-            path: "Sources/Core"
+            path: "Sources/Core",
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
         .target(
             name: "TestHelper",
