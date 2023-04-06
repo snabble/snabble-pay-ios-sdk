@@ -225,11 +225,11 @@
 				E19376522941E7AA001C8866 /* Sources */,
 				E19376532941E7AA001C8866 /* Frameworks */,
 				E19376542941E7AA001C8866 /* Resources */,
-				7612D5A629AB3BD000E32C6D /* Swiftlint */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E1EBB92429DDADA1004919E5 /* PBXTargetDependency */,
 			);
 			name = SnabblePayExample;
 			packageProductDependencies = (
@@ -311,6 +311,7 @@
 			mainGroup = E193764D2941E7AA001C8866;
 			packageReferences = (
 				E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
+				E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = E19376572941E7AA001C8866 /* Products */;
 			projectDirPath = "";
@@ -349,28 +350,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7612D5A629AB3BD000E32C6D /* Swiftlint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = Swiftlint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which mint > /dev/null; then\n  cd ..\n  mint run swiftlint lint\nelse\n  echo \"warning: Mint not installed, download from https://github.com/yonaskolb/Mint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E19376522941E7AA001C8866 /* Sources */ = {
@@ -423,6 +402,10 @@
 			isa = PBXTargetDependency;
 			target = E19376552941E7AA001C8866 /* SnabblePayExample */;
 			targetProxy = E19376712941E7AB001C8866 /* PBXContainerItemProxy */;
+		};
+		E1EBB92429DDADA1004919E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = E1EBB92329DDADA1004919E5 /* SwiftLintPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -750,6 +733,14 @@
 				minimumVersion = 2.4.1;
 			};
 		};
+		E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.51.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -761,6 +752,10 @@
 		E19376852941E7CA001C8866 /* SnabblePay */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SnabblePay;
+		};
+		E1EBB92329DDADA1004919E5 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:SwiftLintPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

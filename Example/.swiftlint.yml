@@ -1,5 +1,5 @@
 included:
- - Sources
+ - SnabblePayExample
 
 disabled_rules:
  - todo
