@@ -30,6 +30,7 @@ extension Endpoints {
             case sessionNotFound = "session_not_found"
             case transactionNotFound = "transaction_not_found"
             case customerNotFound = "customer_not_found"
+            case mandateNotFound = "mandate_not_found"
             case validationError = "validation_error"
             case sessionTokenExpired = "session_token_expired"
             case mandateNotAccepted = "mandate_not_accepted"
