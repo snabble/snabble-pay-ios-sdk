@@ -109,10 +109,11 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertEqual(instance.transaction?.state, .preauthorizationSuccessful)
         XCTAssertEqual(instance.transaction?.amount, 399)
         XCTAssertEqual(instance.transaction?.currencyCode, "EUR")
+        XCTAssertNotNil(instance.account)
     }
 
     func testTransactionState() throws {
-        var state: Session.Transaction.State = .preauthorizationFailed
+        var state: Transaction.State = .preauthorizationFailed
         XCTAssertEqual(state.rawValue, "PREAUTHORIZATION_FAILED")
         state = .aborted
         XCTAssertEqual(state.rawValue, "ABORTED")
