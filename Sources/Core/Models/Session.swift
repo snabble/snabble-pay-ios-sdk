@@ -21,6 +21,8 @@ public struct Session {
     public let createdAt: Date
     /// If a token has been presented at the point of sale a transaction might have been started
     public let transaction: Transaction?
+    /// After this date the session cannot be used to create a transaction
+    public let expiresAt: Date
 
     /// Type Safe Identifier
     public typealias ID = Tagged<Session, String>
@@ -37,8 +39,8 @@ extension Session {
         public let createdAt: Date
         /// Date as soon as the token should be updated. See `SnabblePay.refreshToken(withSessionId:)`.
         public let refreshAt: Date
-        /// Date until the token can be used to be shown at a point of sale
-        public let validUntil: Date
+        /// After this date the token can be used to find the linked session
+        public let expiresAt: Date
 
         /// Type Safe Identifier
         public typealias ID = Tagged<Token, String>
@@ -51,7 +53,7 @@ extension Session.Token: FromDTO {
         self.value = dto.value
         self.createdAt = dto.createdAt
         self.refreshAt = dto.refreshAt
-        self.validUntil = dto.validUntil
+        self.expiresAt = dto.expiresAt
     }
 }
 
@@ -61,6 +63,7 @@ extension Session: FromDTO {
         self.token = .init(fromDTO: dto.token)
         self.account = .init(fromDTO: dto.account)
         self.createdAt = dto.createdAt
+        self.expiresAt = dto.expiresAt
         if let transaction = dto.transaction {
             self.transaction = .init(fromDTO: transaction)
         } else {

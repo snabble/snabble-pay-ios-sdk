@@ -12,6 +12,7 @@ public struct Session: Decodable {
     public let token: Session.Token
     public let account: Account
     public let createdAt: Date
+    public let expiresAt: Date
     public let transaction: Transaction?
 }
 
@@ -21,6 +22,6 @@ extension Session {
         public let value: String
         public let createdAt: Date
         public let refreshAt: Date
-        public let validUntil: Date
+        public let expiresAt: Date
     }
 }
