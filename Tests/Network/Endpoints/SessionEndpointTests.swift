@@ -77,7 +77,7 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
         XCTAssertEqual(instance.token.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
         XCTAssertEqual(instance.token.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
-        XCTAssertEqual(instance.token.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
+        XCTAssertEqual(instance.token.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
         XCTAssertNil(instance.transaction)
     }
 
@@ -101,9 +101,10 @@ final class SessionEndpointTests: XCTestCase {
         XCTAssertEqual(instance.id, "1")
         XCTAssertEqual(instance.token.value, "token")
         XCTAssertEqual(instance.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
+        XCTAssertEqual(instance.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
         XCTAssertEqual(instance.token.createdAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:24:38Z"))
         XCTAssertEqual(instance.token.refreshAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:34:38Z"))
-        XCTAssertEqual(instance.token.validUntil, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
+        XCTAssertEqual(instance.token.expiresAt, TestingDefaults.dateFormatter.date(from: "2022-12-22T09:44:38Z"))
         XCTAssertNotNil(instance.transaction)
         XCTAssertEqual(instance.transaction?.id, "1")
         XCTAssertEqual(instance.transaction?.state, .preauthorizationSuccessful)
