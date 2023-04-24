@@ -52,7 +52,7 @@ extension SnabblePay: SnabblePayDelegate {
 ### Example Flow for a new account, new mandate and a session start
 The following sequence displays the basic flow (happy path) from creating a new account up to starting a new session.
 
-![Flow](https://github.com/snabble/snabble-pay-android-sdk/blob/main/assets/intergration_guide_sequenz.png)
+![Flow](https://github.com/snabble/snabble-pay-ios-sdk/blob/main/.github/assets/ios_sequenz_intergration_guide.png)
 
 Use `accountCheck` to receive an `AccountCheck` holding the validation link.
 ```swift
@@ -88,3 +88,5 @@ After the mandate has been accepted successfully, a `Session` can be started to 
 ```swift
 snabblePay.startSession(withAccountId: accountId)
 ```
+
+The `Session` has a variable `Token`. Please use the `value` variable of the `Token` to display a QR-Code.
