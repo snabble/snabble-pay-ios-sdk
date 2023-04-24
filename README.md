@@ -55,6 +55,7 @@ The following sequence displays the basic flow (happy path) from creating a new 
 ![Flow](https://github.com/snabble/snabble-pay-ios-sdk/blob/main/.github/assets/ios_sequenz_intergration_guide.png)
 
 Use `accountCheck` to receive an `AccountCheck` holding the validation link.
+
 ```swift
 snabblePay.accountCheck(
     withAppUri: "snabble-pay://account/check", // Callback URLScheme to inform the app that the process is completed
