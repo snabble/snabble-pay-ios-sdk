@@ -52,7 +52,7 @@ extension SnabblePay: SnabblePayDelegate {
 ### Example Flow for a new account, new mandate and a session start
 The following sequence displays the basic flow (happy path) from creating a new account up to starting a new session.
 
-![Flow](https://github.com/snabble/snabble-pay-ios-sdk/blob/main/.github/assets/ios_sequenz_intergration_guide.png)
+![Flow](.github/assets/ios_sequenz_integration_guide.png)
 
 Use `accountCheck` to receive an `AccountCheck` holding the validation link.
 
