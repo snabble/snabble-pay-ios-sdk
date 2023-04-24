@@ -48,26 +48,6 @@ extension SnabblePay: SnabblePayDelegate {
     }
 }
 
-extension Credentials: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let identifier = try container.decode(Credentials.Identifier.self, forKey: .identifier)
-        let secret = try container.decode(Credentials.Secret.self, forKey: .secret)
-        self.init(identifier: identifier, secret: secret)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.identifier, forKey: .identifier)
-        try container.encode(self.secret, forKey: .secret)
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case identifier
-        case secret
-    }
-}
-
 extension UserDefaults {
     private enum Keys {
         static let selectedAccount = "account"
@@ -76,7 +56,7 @@ extension UserDefaults {
 
     class var credentials: Data? {
         get {
-            return UserDefaults.standard.data(forKey: Keys.credentials)
+            UserDefaults.standard.data(forKey: Keys.credentials)
         }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.credentials)
@@ -86,7 +66,7 @@ extension UserDefaults {
     
     class var selectedAccount: String? {
         get {
-            return UserDefaults.standard.string(forKey: Keys.selectedAccount)
+            UserDefaults.standard.string(forKey: Keys.selectedAccount)
         }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.selectedAccount)
