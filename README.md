@@ -14,6 +14,9 @@
     <a href="https://docs.snabble.io/snabble-pay-ios-sdk/documentation/snabblepay/">
         <img src="https://github.com/snabble/snabble-pay-ios-sdk/actions/workflows/documentation.yml/badge.svg"/>
     </a>
+    <a href="https://docs.snabble.io/payment-service/">
+        <img src="https://img.shields.io/static/v1?label=API%20Documentation&message=available&color=#8CA1AF&logo=readthedocs"/>
+    </a>
 </p>
 
 ## Getting Started
