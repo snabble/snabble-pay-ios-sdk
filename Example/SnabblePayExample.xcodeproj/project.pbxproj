@@ -13,7 +13,6 @@
 		768650EF29DD391C00026921 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768650EE29DD391C00026921 /* String+Extensions.swift */; };
 		769026E029A9BB3200D39218 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769026DF29A9BB3200D39218 /* Modifiers.swift */; };
 		76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */; };
-		76D16BCA29DC6AC1006DAC37 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BC929DC6AC1006DAC37 /* CountDownView.swift */; };
 		76D16BCC29DC6B22006DAC37 /* AddFirstAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */; };
 		76D16BCE29DC6BA3006DAC37 /* AccountStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */; };
 		76D16BD029DC6D6A006DAC37 /* AccountViewModel+Mandate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D16BCF29DC6D6A006DAC37 /* AccountViewModel+Mandate.swift */; };
@@ -62,7 +61,6 @@
 		768650EE29DD391C00026921 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		769026DF29A9BB3200D39218 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		76C3ACBA29AF664D009A0AA9 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
-		76D16BC929DC6AC1006DAC37 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
 		76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFirstAccountView.swift; sourceTree = "<group>"; };
 		76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStateView.swift; sourceTree = "<group>"; };
 		76D16BCF29DC6D6A006DAC37 /* AccountViewModel+Mandate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountViewModel+Mandate.swift"; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 				76D16BCD29DC6BA3006DAC37 /* AccountStateView.swift */,
 				76D16BCB29DC6B22006DAC37 /* AddFirstAccountView.swift */,
 				76E4727D29A7804500BBCCC9 /* CardView.swift */,
-				76D16BC929DC6AC1006DAC37 /* CountDownView.swift */,
 				764E08B729B634C2001190FD /* HTMLView.swift */,
 				E1C205AA2982A6EC00D4F894 /* QRCodeView.swift */,
 			);
@@ -385,7 +382,6 @@
 				76C3ACBB29AF664D009A0AA9 /* ErrorHandler.swift in Sources */,
 				76D16BD029DC6D6A006DAC37 /* AccountViewModel+Mandate.swift in Sources */,
 				E1C205A92982700E00D4F894 /* SnabblePay+Shared.swift in Sources */,
-				76D16BCA29DC6AC1006DAC37 /* CountDownView.swift in Sources */,
 				76D16BCE29DC6BA3006DAC37 /* AccountStateView.swift in Sources */,
 				E17B7550297550B200392861 /* AppDelegate.swift in Sources */,
 				E1C205AB2982A6EC00D4F894 /* QRCodeView.swift in Sources */,

@@ -44,10 +44,7 @@ struct CardView: View {
     @ViewBuilder
     var qrImage: some View {
         if let token = model.token {
-            VStack {
-                QRCodeView(code: token.value)
-                CountDownView(from: token.createdAt, to: token.refreshAt, height: 4)
-            }
+            QRCodeView(code: token.value)
         } else {
             Image(systemName: "qrcode")
                 .resizable()
