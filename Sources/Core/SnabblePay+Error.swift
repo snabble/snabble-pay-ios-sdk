@@ -75,6 +75,8 @@ public struct ValidationError {
         case transactionNotFound = "transaction_not_found"
         /// Customer not found
         case customerNotFound = "customer_not_found"
+        /// Mandate not found
+        case mandateNotFound = "mandate_not_found"
         /// Validation Error
         case validationError = "validation_error"
         /// Session token has expired
@@ -128,6 +130,8 @@ extension Endpoints.Error.Reason: ToModel {
             return .transactionNotFound
         case .customerNotFound:
             return .customerNotFound
+        case .mandateNotFound:
+            return .mandateNotFound
         case .validationError:
             return .validationError
         case .sessionTokenExpired:
