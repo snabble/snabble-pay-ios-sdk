@@ -44,3 +44,9 @@ public struct HTMLView: View {
         }
     }
 }
+
+struct HTMLView_Previews: PreviewProvider {
+    static var previews: some View {
+        HTMLView(string: "Hello, World!".htmlString())
+    }
+}
