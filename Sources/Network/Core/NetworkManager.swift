@@ -40,7 +40,7 @@ public class NetworkManager {
             .flatMap { [self] endpoint in
                 urlSession.publisher(for: endpoint)
             }
-            .retry(1, when: { apiError in
+            .retryOnce(if: { apiError in
                 switch apiError {
                 case .validationError(let httpStatusCode, _):
                     return httpStatusCode == .unauthorized

@@ -1,5 +1,5 @@
 //
-//  Publisher+RetryWhenDoBefore.swift
+//  Publisher+RetryOnceIfDoBefore.swift
 //  
 //
 //  Created by Andreas Osberghaus on 2023-02-27.
@@ -8,31 +8,40 @@
 import Foundation
 import Combine
 
-extension Publisher {
-   func retryOnly<Upstream: Publisher>(
-         upstream: Upstream,
-         retries: Int,
-         when predicate: @escaping (Upstream.Failure) -> Bool,
-         doBefore handler: () -> Void
-      ) -> AnyPublisher<Upstream.Output, Upstream.Failure> {
+extension Publishers {
+    struct RetryOnceIf<P: Publisher>: Publisher {
+        typealias Output = P.Output
+        typealias Failure = P.Failure
 
-      upstream
-         .map { output -> Result<Upstream.Output, Upstream.Failure> in .success(output) }
-         .catch { error -> AnyPublisher<Result<Upstream.Output, Upstream.Failure>, Upstream.Failure> in
-            if predicate(error) {
-               return Fail(error: error).eraseToAnyPublisher()
-            } else {
-               return Just(.failure(error))
-                  .setFailureType(to: Upstream.Failure.self)
-                  .eraseToAnyPublisher()
+        let publisher: P
+        let times: Int
+        let condition: (P.Failure) -> Bool
+        let doBefore: () -> Void
+
+        func receive<S>(subscriber: S) where S : Subscriber, Failure == S.Failure, Output == S.Input {
+            guard times > 0 else {
+                return publisher.receive(subscriber: subscriber)
             }
-         }
-         .retry(retries)
-         .flatMap { result in result.publisher }
-         .eraseToAnyPublisher()
-   }
 
-    func retry(_ retries: Int, when predicate: @escaping (Failure) -> Bool, doBefore handler: () -> Void) -> AnyPublisher<Output, Failure> {
-      return retryOnly(upstream: self, retries: retries, when: predicate, doBefore: handler)
-   }
+            publisher.catch { (error: P.Failure) -> AnyPublisher<Output, Failure> in
+                if condition(error)  {
+                    doBefore()
+                    return RetryOnceIf(
+                        publisher: publisher,
+                        times: times - 1,
+                        condition: condition,
+                        doBefore: doBefore
+                    ).eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }.receive(subscriber: subscriber)
+        }
+    }
+}
+
+extension Publisher {
+    func retryOnce(if condition: @escaping (Failure) -> Bool, doBefore: @escaping () -> Void) -> Publishers.RetryOnceIf<Self> {
+        Publishers.RetryOnceIf(publisher: self, times: 1, condition: condition, doBefore: doBefore)
+    }
 }
