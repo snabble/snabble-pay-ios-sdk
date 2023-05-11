@@ -25,7 +25,7 @@ extension Endpoints {
                                                                     method: .post(data),
                                                                     environment: environment
             )
-            endpoint.headerFields = ["Content-Type": "application/x-www-form-urlencoded"]
+            endpoint.headerFields.updateValue("application/x-www-form-urlencoded", forKey: "Content-Type")
             return endpoint
         }
     }
