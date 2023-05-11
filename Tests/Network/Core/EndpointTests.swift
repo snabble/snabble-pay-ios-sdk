@@ -18,7 +18,7 @@ final class EndpointTests: XCTestCase {
         XCTAssertEqual(endpoint.method, .get(nil))
         XCTAssertEqual(endpoint.path, "/apps/mock")
         XCTAssertEqual(endpoint.environment, .production)
-        XCTAssertEqual(endpoint.headerFields, [:])
+        XCTAssertNil(endpoint.headerFields)
         XCTAssertNil(endpoint.token)
     }
 

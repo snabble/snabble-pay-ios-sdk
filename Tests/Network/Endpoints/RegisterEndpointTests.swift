@@ -14,7 +14,7 @@ final class RegisterEndpointTests: XCTestCase {
         let endpoint = Endpoints.Register.post(apiKeyValue: "123456")
         XCTAssertEqual(endpoint.path, "/apps/register")
         XCTAssertEqual(endpoint.method, .post(nil))
-        XCTAssertEqual(endpoint.headerFields["snabblePayKey"], "123456")
+        XCTAssertEqual(endpoint.headerFields?["snabblePayKey"], "123456")
         XCTAssertEqual(endpoint.environment, .production)
     }
 

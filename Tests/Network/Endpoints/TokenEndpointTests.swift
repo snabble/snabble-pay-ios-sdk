@@ -13,18 +13,24 @@ final class TokenEndpointTests: XCTestCase {
     func testEndpoint() throws {
         let endpoint = Endpoints.Token.get(withCredentials: .init(identifier: "random_app_identifier", secret: "random_app_secret"))
         XCTAssertEqual(endpoint.path, "/apps/token")
-        XCTAssertEqual(endpoint.method, .get(
-            [
-               .init(name: "grant_type", value: "client_credentials"),
-               .init(name: "client_id", value: "random_app_identifier"),
-               .init(name: "client_secret", value: "random_app_secret"),
-               .init(name: "scope", value: "all")
-            ]
-        ))
+        let jsonObject = [
+            "grant_type": "client_credentials",
+            "client_id": "random_app_identifier",
+            "client_secret": "random_app_secret",
+            "scope": Token.Scope.all.rawValue
+        ]
+        switch endpoint.method {
+        case .post(let data):
+            XCTAssertNotNil(data)
+            XCTAssertEqual(jsonObject, try JSONSerialization.jsonObject(with: data!) as? [String: String])
+        default:
+            XCTFail("wrong method")
+        }
         XCTAssertEqual(endpoint.environment, .production)
+        XCTAssertEqual(endpoint.headerFields, ["Content-Type": "application/x-www-form-urlencoded"])
         XCTAssertNoThrow(try endpoint.urlRequest())
         let urlRequest = try! endpoint.urlRequest()
-        XCTAssertEqual(urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/token?client_id=random_app_identifier&client_secret=random_app_secret&grant_type=client_credentials&scope=all")
+        XCTAssertEqual(urlRequest.url?.absoluteString, "https://payment.snabble.io/apps/token")
     }
 
     func testEnvironment() throws {
