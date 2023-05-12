@@ -11,7 +11,9 @@ import SnabbleLogger
 /// A namespace for types that serve as `Endpoint`.
 ///
 /// The various endpoints defined as extensions on ``Endpoint``.
-public enum Endpoints {}
+public enum Endpoints {
+    
+}
 
 public struct Endpoint<Response> {
     public let method: HTTPMethod
