@@ -34,7 +34,9 @@ public struct Endpoint<Response> {
         }
     }
 
-    var headerFields: [String: String] = [:]
+    var headerFields: [String: String] = [
+        "Content-Type": "application/json"
+    ]
 
     public init(path: String, method: HTTPMethod, environment: Environment = .production) {
         self.path = path
@@ -73,9 +75,7 @@ extension Endpoint {
             request.httpBody = nil
         }
 
-        let headerFields = environment.headerFields.merging(headerFields, uniquingKeysWith: { _, new in new })
         request.allHTTPHeaderFields = headerFields
-        Logger.shared.debug("Endpoint \(self.path) uses headerFields: \(headerFields)")
 
         if let token = token {
             request.setValue("\(token.type.rawValue) \(token.value)", forHTTPHeaderField: "Authorization")

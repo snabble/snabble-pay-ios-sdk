@@ -14,14 +14,19 @@ extension Endpoints {
             scope: SnabblePayNetwork.Token.Scope = .all,
             onEnvironment environment: Environment = .production
         ) -> Endpoint<SnabblePayNetwork.Token> {
-            return .init(path: "/apps/token",
-                         method: .get([
-                            .init(name: "grant_type", value: "client_credentials"),
-                            .init(name: "client_id", value: credentials.identifier),
-                            .init(name: "client_secret", value: credentials.secret),
-                            .init(name: "scope", value: scope.rawValue)
-                         ]),
-                         environment: environment)
+            let jsonObject = [
+                "grant_type": "client_credentials",
+                "client_id": credentials.identifier,
+                "client_secret": credentials.secret,
+                "scope": scope.rawValue
+            ]
+            let data = try! JSONSerialization.data(withJSONObject: jsonObject)
+            var endpoint: Endpoint<SnabblePayNetwork.Token> = .init(path: "/apps/token",
+                                                                    method: .post(data),
+                                                                    environment: environment
+            )
+            endpoint.headerFields.updateValue("application/x-www-form-urlencoded", forKey: "Content-Type")
+            return endpoint
         }
     }
 }

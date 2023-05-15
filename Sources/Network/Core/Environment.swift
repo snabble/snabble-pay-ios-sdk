@@ -12,12 +12,6 @@ public enum Environment {
     case staging
     case production
 
-    var headerFields: [String: String] {
-        return [
-            "Content-Type": "application/json"
-        ]
-    }
-
     var baseURL: URL {
         switch self {
         case .development:

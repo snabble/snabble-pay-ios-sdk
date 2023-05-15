@@ -13,7 +13,7 @@ extension Endpoints {
         static func post(apiKeyValue: String, onEnvironment environment: Environment = .production) -> Endpoint<Credentials> {
             Logger.shared.debug("Uses apiKey: \(apiKeyValue)")
             var endpoint: Endpoint<Credentials> = .init(path: "/apps/register", method: .post(nil), environment: environment)
-            endpoint.headerFields = ["snabblePayKey": apiKeyValue]
+            endpoint.headerFields.updateValue(apiKeyValue, forKey: "snabblePayKey")
             return endpoint
         }
     }
