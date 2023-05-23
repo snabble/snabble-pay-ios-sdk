@@ -13,16 +13,17 @@ final class TokenEndpointTests: XCTestCase {
     func testEndpoint() throws {
         let endpoint = Endpoints.Token.get(withCredentials: .init(identifier: "random_app_identifier", secret: "random_app_secret"))
         XCTAssertEqual(endpoint.path, "/apps/token")
-        let jsonObject = [
-            "grant_type": "client_credentials",
-            "client_id": "random_app_identifier",
-            "client_secret": "random_app_secret",
-            "scope": Token.Scope.all.rawValue
+        var urlComponents = URLComponents()
+        urlComponents.queryItems = [
+            .init(name: "grant_type", value: "client_credentials"),
+            .init(name: "client_id", value: "random_app_identifier"),
+            .init(name: "client_secret", value: "random_app_secret"),
+            .init(name: "scope", value: Token.Scope.all.rawValue)
         ]
         switch endpoint.method {
         case .post(let data):
             XCTAssertNotNil(data)
-            XCTAssertEqual(jsonObject, try JSONSerialization.jsonObject(with: data!) as? [String: String])
+            XCTAssertEqual(urlComponents.query, String(data: data!, encoding: .utf8))
         default:
             XCTFail("wrong method")
         }
