@@ -237,10 +237,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E193767A2941E7AB001C8866 /* Build configuration list for PBXNativeTarget "SnabblePayExample" */;
 			buildPhases = (
+				E1BF2EB12ABC4EDE0028300C /* SwiftLint */,
 				E19376522941E7AA001C8866 /* Sources */,
 				E19376532941E7AA001C8866 /* Frameworks */,
 				E19376542941E7AA001C8866 /* Resources */,
-				E1BF2EB12ABC4EDE0028300C /* SwiftLint */,
 			);
 			buildRules = (
 			);
