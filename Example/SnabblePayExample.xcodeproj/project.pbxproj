@@ -240,6 +240,7 @@
 				E19376522941E7AA001C8866 /* Sources */,
 				E19376532941E7AA001C8866 /* Frameworks */,
 				E19376542941E7AA001C8866 /* Resources */,
+				E1BF2EB12ABC4EDE0028300C /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -326,7 +327,6 @@
 			mainGroup = E193764D2941E7AA001C8866;
 			packageReferences = (
 				E17B754C2975474E00392861 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
-				E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = E19376572941E7AA001C8866 /* Products */;
 			projectDirPath = "";
@@ -365,6 +365,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E1BF2EB12ABC4EDE0028300C /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -z \"$CI_XCODE_CLOUD\" ]]; then\n    if which mint > /dev/null; then\n        mint run swiftlint\n    else\n        echo \"warning: Mint not installed, download from https://github.com/yonaskolb/Mint\"\n    fi\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E19376522941E7AA001C8866 /* Sources */ = {
@@ -751,14 +773,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.4.1;
-			};
-		};
-		E1E8E23429DD94BC004E8A3C /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.51.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
