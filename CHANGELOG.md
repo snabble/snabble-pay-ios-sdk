@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 * apple/swift-log 1.5.3 (was 1.5.2)
+* realm/SwiftLint 0.53.0 (was 0.52.4)
 
 ## [1.1.0] - 2023-05-23
 
