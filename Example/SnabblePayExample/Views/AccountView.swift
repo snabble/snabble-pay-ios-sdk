@@ -31,23 +31,35 @@ struct AccountView: View {
     var body: some View {
         ZStack {
             BackgroundView()
-            
             VStack(spacing: 24) {
-                ZStack(alignment: .topTrailing) {
-                    CardView(model: viewModel, expand: true)
-                    Button(action: {
-                        delete.toggle()
-                    }) {
-                        Image(systemName: "trash")
-                    }
-                    .padding(.trailing, 30)
-                    .padding(.top, 10)
-                }
+                Spacer()
+                CardView(model: viewModel, expand: true)
                 AccountStateView(viewModel: viewModel)
                 Spacer()
+                Button {
+                    name = viewModel.customName
+                    edit.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "pencil")
+                        Text("Titel bearbeiten")
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.white, lineWidth: 2)
+                    )
+                }
+                Button {
+                    delete.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Karte löschen")
+                    }
+                }
             }
-            .padding([.top], 100)
-            .padding([.bottom], 20)
             .onAppear {
                 viewModel.createMandate()
             }
@@ -57,7 +69,6 @@ struct AccountView: View {
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(viewModel.customName)
         .alert("Your account", isPresented: $edit) {
@@ -70,16 +81,6 @@ struct AccountView: View {
             Button("Delete", role: .destructive) {
                 accountsModel.delete(account: viewModel.account)
                 self.presentationMode.wrappedValue.dismiss()
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    name = viewModel.customName
-                    edit.toggle()
-                }) {
-                    Image(systemName: "square.and.pencil")
-                }
             }
         }
     }
