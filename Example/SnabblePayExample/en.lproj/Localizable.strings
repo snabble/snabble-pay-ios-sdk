@@ -19,6 +19,7 @@
 "Account Name" = "Account Name";
 "Give this account a name." = "Give this account a name.";
 "Delete account" = "Delete account";
+"Edit name" = "Edit name";
 "Delete" = "Delete";
 
 /* Error handling */

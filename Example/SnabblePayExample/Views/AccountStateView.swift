@@ -35,7 +35,6 @@ struct AccountStateView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                     }
-                    .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
                     .padding([.leading, .trailing])
                     Button {
                         viewModel.decline(mandateId: mandate.id)
@@ -45,12 +44,10 @@ struct AccountStateView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                     }
-                    .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
                     .padding([.leading, .trailing])
                 }
                 .padding(.bottom)
            }
-            .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
             .padding([.leading, .trailing])
         }
     }
@@ -106,7 +103,6 @@ struct AccountStateView: View {
                 }
             }
         }
-        .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
         .padding([.leading, .trailing])
     }
 
@@ -118,7 +114,6 @@ struct AccountStateView: View {
                     .foregroundColor(.red)
                     .padding()
             }
-            .background(viewModel.backgroundMaterial, in: RoundedRectangle(cornerRadius: 12))
             .padding([.leading, .trailing])
         } else {
             if viewModel.mandateState == .pending {
