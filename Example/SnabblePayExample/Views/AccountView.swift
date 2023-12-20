@@ -31,7 +31,7 @@ struct AccountView: View {
     var body: some View {
         ZStack {
             BackgroundView()
-            VStack(spacing: 24) {
+            VStack(spacing: 16) {
                 Spacer()
                 CardView(model: viewModel, expand: true)
                 AccountStateView(viewModel: viewModel)
@@ -42,7 +42,7 @@ struct AccountView: View {
                 } label: {
                     HStack {
                         Image(systemName: "pencil")
-                        Text("Titel bearbeiten")
+                        Text("Edit name")
                     }
                     .padding(.horizontal, 24)
                     .padding(.vertical, 8)
@@ -56,7 +56,7 @@ struct AccountView: View {
                 } label: {
                     HStack {
                         Image(systemName: "trash")
-                        Text("Karte löschen")
+                        Text("Delete account")
                     }
                 }
             }
