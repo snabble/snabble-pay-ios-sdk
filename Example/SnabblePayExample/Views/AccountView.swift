@@ -69,6 +69,7 @@ struct AccountView: View {
                 }
             }
         }
+        .padding(.bottom, 16)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(viewModel.customName)
         .alert("Your account", isPresented: $edit) {
