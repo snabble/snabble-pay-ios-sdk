@@ -60,28 +60,32 @@ struct CardView: View {
                 .padding([.top])
                 .frame(width: toggleSize ? 160 : 60)
             Spacer()
-            
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(model.ibanString)
+                    .font(.headline)
+                    .fontWeight(.bold)
                 HStack {
                     Text(model.account.holderName)
+                        .font(.caption)
                     Spacer()
                     if topAnimation {
                         ZStack(alignment: .trailing) {
                             Text(model.customName)
+                                .font(.caption)
                                 .opacity(opactiyOn)
                             Text(model.account.bank)
+                                .font(.caption)
                                 .opacity(opactiyOff)
                         }
                    } else {
                        Text(expand || !model.hasCustomName ? model.account.bank : model.customName)
+                           .font(.caption)
                     }
                 }
-                Text(model.ibanString)
-                    .font(.custom("Menlo", size: 16))
-                    .fontWeight(.bold)
+                
             }
             .padding([.leading, .trailing])
-            .padding([.bottom], model.autostart ? 20 : 10)
+            .padding([.bottom], model.autostart ? 16 : 8)
             .foregroundColor(model.autostart ? .primary : .secondary)
         }
         .cardStyle(top: model.autostart)
