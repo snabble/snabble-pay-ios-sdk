@@ -62,7 +62,7 @@ struct CardView: View {
             Spacer()
             VStack(alignment: .leading, spacing: 8) {
                 Text(model.ibanString)
-                    .font(.headline)
+                    .font(.custom("Menlo", size: 16))
                     .fontWeight(.bold)
                 HStack {
                     Text(model.account.holderName)
