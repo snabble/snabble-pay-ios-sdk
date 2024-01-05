@@ -60,7 +60,7 @@ struct CardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(minWidth: 320, minHeight: 220, maxHeight: 220)
-            .background(self.top ? Self.topMaterial : Self.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .background(Color(white: 1, opacity: 0.66), in: RoundedRectangle(cornerRadius: 12))
             .rotation3DEffect(.degrees(motionManager.xCoordinate * 20), axis: (x: 0, y: 1, z: 0))
             .padding([.leading, .trailing])
             .shadow(radius: 4, y: 2)

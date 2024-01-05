@@ -86,7 +86,7 @@ struct CardView: View {
             }
             .padding([.leading, .trailing])
             .padding([.bottom], model.autostart ? 16 : 8)
-            .foregroundColor(model.autostart ? .primary : .secondary)
+            .foregroundColor(Color.black)
         }
         .cardStyle(top: model.autostart)
         .onChange(of: scenePhase) { newPhase in
