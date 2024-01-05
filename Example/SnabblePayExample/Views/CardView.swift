@@ -49,7 +49,7 @@ struct CardView: View {
             Image(systemName: "qrcode")
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(colorScheme == .dark ? .white : .black)
+                .foregroundColor(.secondary)
         }
     }
     var body: some View {
@@ -60,34 +60,32 @@ struct CardView: View {
                 .padding([.top])
                 .frame(width: toggleSize ? 160 : 60)
             Spacer()
-            VStack(alignment: .leading, spacing: 8) {
+
+            VStack(alignment: .leading, spacing: 2) {
                 Text(model.ibanString)
-                    .font(.headline)
+                    .font(.custom("Menlo", size: 16))
                     .fontWeight(.bold)
                 HStack {
                     Text(model.account.holderName)
-                        .font(.caption)
                     Spacer()
                     if topAnimation {
                         ZStack(alignment: .trailing) {
                             Text(model.customName)
-                                .font(.caption)
                                 .opacity(opactiyOn)
                             Text(model.account.bank)
-                                .font(.caption)
                                 .opacity(opactiyOff)
                         }
+                        
                    } else {
                        Text(expand || !model.hasCustomName ? model.account.bank : model.customName)
-                           .font(.caption)
                     }
                 }
-                
+                .font(.caption)
             }
-            .padding([.leading, .trailing])
-            .padding([.bottom], model.autostart ? 16 : 8)
-            .foregroundColor(model.autostart ? .primary : .secondary)
+            .padding([.leading, .trailing], 20)
+            .padding([.bottom], 10)
         }
+        .foregroundColor(Color.black)
         .cardStyle(top: model.autostart)
         .onChange(of: scenePhase) { newPhase in
             guard model.autostart else {
