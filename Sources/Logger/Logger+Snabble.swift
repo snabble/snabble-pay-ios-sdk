@@ -10,7 +10,7 @@ import Logging
 
 public class Logger {
     let label: String
-    
+
     public static var shared: Logger = {
         .init(label: "io.snabble.paysdk")
     }()

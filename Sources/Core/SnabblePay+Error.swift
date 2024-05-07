@@ -112,6 +112,7 @@ extension Endpoints.Error: ToModel {
 }
 
 extension Endpoints.Error.Reason: ToModel {
+    // swiftlint:disable:next cyclomatic_complexity
     func toModel() -> ValidationError.Reason {
         switch self {
         case .internalError:
